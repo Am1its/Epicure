@@ -1,0 +1,27 @@
+{
+  "kind": "collectionType",
+  "collectionName": "chefs",
+  "info": {
+    "singularName": "chef",
+    "pluralName": "chefs",
+    "displayName": "Chef"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "name": {
+      "type": "string",
+      "required": true
+    },
+    "image": {
+      "type": "media",
+      "multiple": false,
+      "allowedTypes": [
+        "images",
+        "files"
+      ]
+    }
+  }
+}
