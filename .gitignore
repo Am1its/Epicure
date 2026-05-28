@@ -50,6 +50,7 @@ Thumbs.db
 opencode.json
 AGENTS.md
 CLAUDE.md
+docs/superpowers/
 
 # TypeScript & compiler caches
 tsconfig.tsbuildinfo
