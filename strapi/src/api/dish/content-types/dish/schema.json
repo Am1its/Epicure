@@ -34,8 +34,7 @@
       "type": "media",
       "multiple": false,
       "allowedTypes": [
-        "images",
-        "files"
+        "images"
       ]
     },
     "restaurant": {
@@ -47,8 +46,8 @@
     "mealTime": {
       "type": "enumeration",
       "enum": [
-        "Breakfast ",
-        "Lunch ",
+        "Breakfast",
+        "Lunch",
         "Dinner"
       ]
     },
