@@ -440,7 +440,7 @@ export interface AdminUser extends Struct.CollectionTypeSchema {
   };
 }
 
-export interface ApiChefChef extends Struct.CollectionTypeSchema {
+export interface ApiChef extends Struct.CollectionTypeSchema {
   collectionName: 'chefs';
   info: {
     displayName: 'Chef';
@@ -466,7 +466,7 @@ export interface ApiChefChef extends Struct.CollectionTypeSchema {
   };
 }
 
-export interface ApiDishDish extends Struct.CollectionTypeSchema {
+export interface ApiDish extends Struct.CollectionTypeSchema {
   collectionName: 'dishes';
   info: {
     displayName: 'Dish';
@@ -501,7 +501,7 @@ export interface ApiDishDish extends Struct.CollectionTypeSchema {
   };
 }
 
-export interface ApiRestaurantRestaurant extends Struct.CollectionTypeSchema {
+export interface ApiRestaurant extends Struct.CollectionTypeSchema {
   collectionName: 'restaurants';
   info: {
     displayName: 'Restaurant';
@@ -1053,9 +1053,9 @@ declare module '@strapi/strapi' {
       'admin::transfer-token': AdminTransferToken;
       'admin::transfer-token-permission': AdminTransferTokenPermission;
       'admin::user': AdminUser;
-      'api::chef.chef': ApiChefChef;
-      'api::dish.dish': ApiDishDish;
-      'api::restaurant.restaurant': ApiRestaurantRestaurant;
+      'api::chef.chef': ApiChef;
+      'api::dish.dish': ApiDish;
+      'api::restaurant.restaurant': ApiRestaurant;
       'plugin::content-releases.release': PluginContentReleasesRelease;
       'plugin::content-releases.release-action': PluginContentReleasesReleaseAction;
       'plugin::i18n.locale': PluginI18NLocale;
