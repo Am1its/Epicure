@@ -61,8 +61,10 @@ test.describe('Restaurant detail page', () => {
   });
 
   test('clicking Lunch tab switches dish list', async ({ page }) => {
-    await page.getByRole('tab', { name: 'Lunch' }).click();
-    await expect(page.getByRole('tab', { name: 'Lunch' })).toHaveAttribute('aria-selected', 'true');
+    const lunchTab = page.getByRole('tab', { name: 'Lunch' });
+    await expect(lunchTab).toBeVisible();
+    await lunchTab.click();
+    await expect(lunchTab).toHaveAttribute('aria-selected', 'true');
   });
 
   test('renders dish cards', async ({ page }) => {
