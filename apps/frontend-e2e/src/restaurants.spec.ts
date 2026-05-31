@@ -43,7 +43,8 @@ test.describe('Restaurants list page', () => {
 test.describe('Restaurant detail page', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto('/restaurants');
-    await page.locator('.epicure-restaurant-card').first().click();
+    const href = await page.locator('.epicure-restaurant-card').first().getAttribute('href');
+    await page.goto(href!);
   });
 
   test('renders restaurant name', async ({ page }) => {
