@@ -1,18 +1,7 @@
 import { Injectable } from '@nestjs/common';
-import type { Dish, StrapiImage } from '@org/shared-types';
+import type { Dish } from '@org/shared-types';
 import { StrapiClientService } from '../strapi-client/strapi-client.service';
-
-interface StrapiDish {
-  id: number;
-  name: string;
-  description?: string;
-  price: number;
-  type?: 'Spicy' | 'Vegan' | 'Vegetarian';
-  image?: StrapiImage;
-  mealTime?: 'Breakfast' | 'Lunch' | 'Dinner';
-  isSignatureDish?: boolean;
-  [key: string]: unknown;
-}
+import type { StrapiDish } from '../strapi-client/strapi-types';
 
 @Injectable()
 export class DishesService {

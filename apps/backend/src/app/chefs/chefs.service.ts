@@ -1,13 +1,7 @@
 import { Injectable } from '@nestjs/common';
-import type { Chef, StrapiImage } from '@org/shared-types';
+import type { Chef } from '@org/shared-types';
 import { StrapiClientService } from '../strapi-client/strapi-client.service';
-
-interface StrapiChef {
-  id: number;
-  name: string;
-  image?: StrapiImage;
-  [key: string]: unknown;
-}
+import type { StrapiChef } from '../strapi-client/strapi-types';
 
 @Injectable()
 export class ChefsService {

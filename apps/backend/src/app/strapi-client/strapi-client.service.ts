@@ -4,7 +4,7 @@ import {
   ServiceUnavailableException,
 } from '@nestjs/common';
 
-const STRAPI_URL = 'http://localhost:1337';
+const STRAPI_URL = process.env['STRAPI_URL'] ?? 'http://localhost:1337';
 
 interface StrapiListResponse<T> {
   data: T[];
@@ -31,6 +31,8 @@ export class StrapiClientService {
     return body.data ?? [];
   }
 
+  // Assumes path uses a filter that matches at most one record (e.g. filters[id][$eq]).
+  // Safe for numeric ID lookups since Strapi IDs are unique.
   async getOne<T>(path: string): Promise<T> {
     const items = await this.get<T>(path);
     if (!items.length) {
