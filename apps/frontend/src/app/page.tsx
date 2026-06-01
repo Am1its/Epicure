@@ -1,14 +1,11 @@
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import { fetchApi } from '../lib/api';
-import type { Chef, Restaurant } from '@org/shared-types';
+import type { Restaurant } from '@org/shared-types';
 import { RestaurantCard } from '@org/ui-components';
 
 export default async function HomePage() {
-  const [chefs, restaurants] = await Promise.all([
-    fetchApi<Chef[]>('/api/chefs'),
-    fetchApi<Restaurant[]>('/api/restaurants'),
-  ]);
+  const restaurants = await fetchApi<Restaurant[]>('/api/restaurants');
 
   return (
     <div>
@@ -24,21 +21,13 @@ export default async function HomePage() {
         {/* Mobile hero — hidden on desktop via CSS */}
         <section className="epicure-hero--mobile">
           <div className="epicure-mobile-hero">
-            <div className="epicure-mobile-hero__overlay" />
-            <div className="epicure-mobile-hero__chef-circles">
-              {chefs.map(chef => (
-                <div key={chef.id} className="epicure-mobile-hero__chef-circle">
-                  {chef.name.charAt(0).toUpperCase()}
-                </div>
-              ))}
-            </div>
-            <div className="epicure-mobile-hero__content">
+            <div className="epicure-mobile-hero__panel">
               <h2 className="epicure-mobile-hero__headline">
                 Epicure works with the top chef restaurants in Tel Aviv
               </h2>
               <div className="epicure-mobile-hero__search">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src="/icons/search.svg" alt="" aria-hidden="true" width={18} height={18} />
+                <img src="/icons/search.svg" alt="" aria-hidden="true" width={16} height={16} />
                 <span className="epicure-mobile-hero__search-placeholder">
                   Search for restaurant cuisine, chef
                 </span>
@@ -55,6 +44,9 @@ export default async function HomePage() {
               <RestaurantCard key={restaurant.id} restaurant={restaurant} />
             ))}
           </div>
+          <a href="/restaurants" className="epicure-popular__all-link">
+            All Restaurants <span aria-hidden="true">&raquo;&raquo;</span>
+          </a>
         </section>
       </main>
       <Footer />

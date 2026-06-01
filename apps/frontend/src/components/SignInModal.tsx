@@ -13,30 +13,40 @@ export function SignInModal({ onClose }: SignInModalProps) {
         aria-label="Close sign in"
       />
       <div className="epicure-signin-modal" role="dialog" aria-label="Sign in">
-        <div className="epicure-signin-modal__field">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="/icons/user.svg" alt="" aria-hidden="true" width={18} height={18} />
-          <input
-            type="email"
-            placeholder="Email address"
-            className="epicure-signin-modal__input"
-          />
-        </div>
-        <div className="epicure-signin-modal__field">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
-            <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
-            <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+        <button
+          className="epicure-signin-modal__close"
+          onClick={onClose}
+          aria-label="Close sign in panel"
+        >
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
+            <line x1="19.3" y1="4.7" x2="4.7" y2="19.3" />
+            <line x1="4.7" y1="4.7" x2="19.3" y2="19.3" />
           </svg>
+        </button>
+        <h2 className="epicure-signin-modal__title">SIGN IN</h2>
+        <p className="epicure-signin-modal__subtitle">To continue the order, please sign in</p>
+        <div className="epicure-signin-modal__field">
+          <label htmlFor="signin-email" className="epicure-signin-modal__label">Email address</label>
           <input
-            type="password"
-            placeholder="Password"
+            id="signin-email"
+            type="email"
+            placeholder=""
             className="epicure-signin-modal__input"
           />
         </div>
-        <button className="epicure-signin-modal__submit">Sign In</button>
-        <p className="epicure-signin-modal__register">
-          Don&apos;t have an account? <a href="#">Register</a>
-        </p>
+        <div className="epicure-signin-modal__field">
+          <label htmlFor="signin-password" className="epicure-signin-modal__label">Password</label>
+          <input
+            id="signin-password"
+            type="password"
+            placeholder=""
+            className="epicure-signin-modal__input"
+          />
+        </div>
+        <button className="epicure-signin-modal__submit">LOGIN</button>
+        <a href="#" className="epicure-signin-modal__forgot">Forget password?</a>
+        <div className="epicure-signin-modal__divider"><span>or</span></div>
+        <button className="epicure-signin-modal__signup">SIGN UP</button>
       </div>
     </>
   );

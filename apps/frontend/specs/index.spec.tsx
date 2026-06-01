@@ -40,4 +40,9 @@ describe('HomePage', () => {
     render(await Page());
     expect(screen.getByText(/popular restaurant in epicure/i)).toBeInTheDocument();
   });
+
+  it('renders All Restaurants link', async () => {
+    render(await Page());
+    expect(screen.getByRole('link', { name: /all restaurants/i })).toBeInTheDocument();
+  });
 });
