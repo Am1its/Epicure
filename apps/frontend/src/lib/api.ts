@@ -8,7 +8,7 @@ export async function fetchApi<T>(path: string): Promise<T> {
 }
 
 export function strapiImageUrl(url?: string): string {
-  if (!url) return '/icons/placeholder.jpg';
+  if (!url) return '/icons/logo.svg';
   if (url.startsWith('http')) return url;
   return `${STRAPI_URL}${url}`;
 }

@@ -1,10 +1,10 @@
 import type { Restaurant } from '@org/shared-types';
 import { StarRating } from '../star-rating/StarRating';
 
-const STRAPI_URL = 'http://localhost:1337';
+const STRAPI_URL = process.env['NEXT_PUBLIC_STRAPI_URL'] ?? 'http://localhost:1337';
 
 function imageUrl(url?: string): string {
-  if (!url) return '/icons/placeholder.jpg';
+  if (!url) return '/icons/logo.svg';
   if (url.startsWith('http')) return url;
   return `${STRAPI_URL}${url}`;
 }

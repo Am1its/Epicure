@@ -33,6 +33,6 @@ describe('RestaurantCard', () => {
   it('shows placeholder image when no image provided', () => {
     render(<RestaurantCard restaurant={mockRestaurant} />);
     const img = screen.getByRole('img', { name: /claro/i });
-    expect(img).toHaveAttribute('src', '/icons/placeholder.jpg');
+    expect(img).toHaveAttribute('src', '/icons/logo.svg');
   });
 });
