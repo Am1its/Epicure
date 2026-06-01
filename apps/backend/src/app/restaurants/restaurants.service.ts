@@ -9,14 +9,14 @@ export class RestaurantsService {
 
   async findAll(): Promise<Restaurant[]> {
     const items = await this.strapiClient.get<StrapiRestaurant>(
-      '/api/restaurants?populate[image]=*&populate[chef]=*&populate[dishes]=*',
+      '/api/restaurants?populate=*',
     );
     return items.map(item => this.transform(item));
   }
 
   async findOne(id: number): Promise<Restaurant> {
     const item = await this.strapiClient.getOne<StrapiRestaurant>(
-      `/api/restaurants?filters[id][$eq]=${id}&populate[image]=*&populate[chef]=*&populate[dishes][populate][image]=*`,
+      `/api/restaurants?filters[id][$eq]=${id}&populate[dishes][populate]=*&populate[chef][fields][0]=name&populate[chef][fields][1]=id&populate[image][fields][0]=url&populate[image][fields][1]=alternativeText`,
     );
     return this.transform(item);
   }

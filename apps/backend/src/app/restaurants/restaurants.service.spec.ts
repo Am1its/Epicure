@@ -48,7 +48,7 @@ describe('RestaurantsService', () => {
       await service.findAll();
 
       expect(mockStrapiClient.get).toHaveBeenCalledWith(
-        '/api/restaurants?populate[image]=*&populate[chef]=*&populate[dishes]=*',
+        '/api/restaurants?populate=*',
       );
     });
 
@@ -88,7 +88,7 @@ describe('RestaurantsService', () => {
       await service.findOne(1);
 
       expect(mockStrapiClient.getOne).toHaveBeenCalledWith(
-        '/api/restaurants?filters[id][$eq]=1&populate[image]=*&populate[chef]=*&populate[dishes][populate][image]=*',
+        '/api/restaurants?filters[id][$eq]=1&populate[dishes][populate]=*&populate[chef][fields][0]=name&populate[chef][fields][1]=id&populate[image][fields][0]=url&populate[image][fields][1]=alternativeText',
       );
     });
 
