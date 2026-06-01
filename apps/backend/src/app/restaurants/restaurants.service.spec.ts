@@ -47,7 +47,29 @@ describe('RestaurantsService', () => {
 
       await service.findAll();
 
-      expect(mockStrapiClient.get).toHaveBeenCalledWith('/api/restaurants?populate=*');
+      expect(mockStrapiClient.get).toHaveBeenCalledWith(
+        '/api/restaurants?populate[image]=*&populate[chef]=*&populate[dishes]=*',
+      );
+    });
+
+    it('maps dish prices in findAll', async () => {
+      mockStrapiClient.get.mockResolvedValue([
+        {
+          id: 1,
+          name: 'Claro',
+          rating: 4,
+          dishes: [
+            { id: 10, name: 'Pad Ki Mao', price: 88 },
+            { id: 11, name: 'Red Farm', price: 98 },
+          ],
+        },
+      ]);
+
+      const result = await service.findAll();
+
+      expect(result[0].dishes).toHaveLength(2);
+      expect(result[0].dishes?.[0].price).toBe(88);
+      expect(result[0].dishes?.[1].price).toBe(98);
     });
   });
 
@@ -66,8 +88,31 @@ describe('RestaurantsService', () => {
       await service.findOne(1);
 
       expect(mockStrapiClient.getOne).toHaveBeenCalledWith(
-        '/api/restaurants?filters[id][$eq]=1&populate=*',
+        '/api/restaurants?filters[id][$eq]=1&populate[image]=*&populate[chef]=*&populate[dishes][populate][image]=*',
       );
+    });
+
+    it('maps dish image url from nested populate', async () => {
+      mockStrapiClient.getOne.mockResolvedValue({
+        id: 1,
+        name: 'Claro',
+        rating: 4,
+        dishes: [
+          {
+            id: 10,
+            name: 'Pad Ki Mao',
+            price: 88,
+            image: { url: '/uploads/pad-ki-mao.png', alternativeText: 'Pad Ki Mao' },
+          },
+        ],
+      });
+
+      const result = await service.findOne(1);
+
+      expect(result.dishes?.[0].image).toEqual({
+        url: '/uploads/pad-ki-mao.png',
+        alternativeText: 'Pad Ki Mao',
+      });
     });
   });
 });
