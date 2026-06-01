@@ -1,27 +1,12 @@
 'use client';
 
 import { useState, useMemo } from 'react';
+import Slider from 'rc-slider';
+import 'rc-slider/assets/index.css';
 import type { Restaurant } from '@org/shared-types';
 import { RestaurantCard, StarRating } from '@org/ui-components';
 
 type Tab = 'all' | 'new' | 'popular' | 'open' | 'map';
-
-type PriceTier = '₪' | '₪₪' | '₪₪₪';
-
-const PRICE_TIERS: PriceTier[] = ['₪', '₪₪', '₪₪₪'];
-
-const DISTANCE_OPTIONS = ['Under 1 km', '1–3 km', '3–5 km', 'Over 5 km'] as const;
-
-function getPriceTier(restaurant: Restaurant): PriceTier {
-  const prices = (restaurant.dishes ?? [])
-    .map(d => d.price)
-    .filter((p): p is number => p != null && isFinite(p));
-  if (!prices.length) return '₪₪';
-  const avg = prices.reduce((a, b) => a + b, 0) / prices.length;
-  if (avg < 80) return '₪';
-  if (avg <= 150) return '₪₪';
-  return '₪₪₪';
-}
 
 interface RestaurantsGridProps {
   restaurants: Restaurant[];
@@ -30,25 +15,28 @@ interface RestaurantsGridProps {
 export function RestaurantsGrid({ restaurants }: RestaurantsGridProps) {
   const [activeTab, setActiveTab] = useState<Tab>('all');
   const [selectedRatings, setSelectedRatings] = useState<Set<number>>(new Set());
-  const [selectedPriceTiers, setSelectedPriceTiers] = useState<Set<PriceTier>>(new Set());
+  const [priceRange, setPriceRange] = useState<[number, number] | null>(null);
+  const [distanceKm, setDistanceKm] = useState<number>(4);
   const [ratingOpen, setRatingOpen] = useState(false);
   const [priceOpen, setPriceOpen] = useState(false);
   const [distanceOpen, setDistanceOpen] = useState(false);
 
+  const globalPrices = useMemo(() => {
+    const all = restaurants.flatMap(r =>
+      (r.dishes ?? []).map(d => d.price).filter((p): p is number => p != null && isFinite(p))
+    );
+    return {
+      min: all.length ? Math.min(...all) : 0,
+      max: all.length ? Math.max(...all) : 500,
+    };
+  }, [restaurants]);
+
+  const sliderValue: [number, number] = priceRange ?? [globalPrices.min, globalPrices.max];
+
   const toggleRating = (r: number) => {
     setSelectedRatings(prev => {
       const next = new Set(prev);
-      if (next.has(r)) next.delete(r);
-      else next.add(r);
-      return next;
-    });
-  };
-
-  const togglePriceTier = (tier: PriceTier) => {
-    setSelectedPriceTiers(prev => {
-      const next = new Set(prev);
-      if (next.has(tier)) next.delete(tier);
-      else next.add(tier);
+      if (next.has(r)) next.delete(r); else next.add(r);
       return next;
     });
   };
@@ -57,7 +45,15 @@ export function RestaurantsGrid({ restaurants }: RestaurantsGridProps) {
     () =>
       restaurants
         .filter(r => selectedRatings.size === 0 || selectedRatings.has(r.rating))
-        .filter(r => selectedPriceTiers.size === 0 || selectedPriceTiers.has(getPriceTier(r)))
+        .filter(r => {
+          if (!priceRange) return true;
+          const [lo, hi] = priceRange;
+          if (lo === globalPrices.min && hi === globalPrices.max) return true;
+          const prices = (r.dishes ?? []).map(d => d.price).filter((p): p is number => p != null && isFinite(p));
+          if (!prices.length) return true;
+          const avg = prices.reduce((a, b) => a + b, 0) / prices.length;
+          return avg >= lo && avg <= hi;
+        })
         .sort((a, b) => {
           if (activeTab === 'popular') return b.rating - a.rating;
           if (activeTab === 'new') {
@@ -65,7 +61,7 @@ export function RestaurantsGrid({ restaurants }: RestaurantsGridProps) {
           }
           return 0;
         }),
-    [restaurants, selectedRatings, selectedPriceTiers, activeTab],
+    [restaurants, selectedRatings, priceRange, globalPrices, activeTab],
   );
 
   const tabs: { id: Tab; label: string }[] = [
@@ -101,20 +97,23 @@ export function RestaurantsGrid({ restaurants }: RestaurantsGridProps) {
             className={`epicure-filter-btn${priceOpen ? ' epicure-filter-btn--active' : ''}`}
             onClick={() => { setPriceOpen(o => !o); setDistanceOpen(false); setRatingOpen(false); }}
           >
-            Price Range ▾
+            Price Range ∨
           </button>
           {priceOpen && (
-            <div className="epicure-filter-dropdown">
-              {PRICE_TIERS.map(tier => (
-                <label key={tier}>
-                  <input
-                    type="checkbox"
-                    checked={selectedPriceTiers.has(tier)}
-                    onChange={() => togglePriceTier(tier)}
-                  />
-                  {tier}
-                </label>
-              ))}
+            <div className="epicure-filter-dropdown epicure-filter-dropdown--slider">
+              <p className="epicure-filter-dropdown__title">Price Range Selected</p>
+              <p className="epicure-filter-dropdown__sublabel">₪{sliderValue[0]} – ₪{sliderValue[1]}</p>
+              <div className="epicure-filter-slider-wrap">
+                <span className="epicure-filter-slider-edge">₪{globalPrices.min}</span>
+                <Slider
+                  range
+                  min={globalPrices.min}
+                  max={globalPrices.max}
+                  value={sliderValue}
+                  onChange={(v) => setPriceRange(v as [number, number])}
+                />
+                <span className="epicure-filter-slider-edge">₪{globalPrices.max}</span>
+              </div>
             </div>
           )}
         </div>
@@ -125,16 +124,22 @@ export function RestaurantsGrid({ restaurants }: RestaurantsGridProps) {
             className={`epicure-filter-btn${distanceOpen ? ' epicure-filter-btn--active' : ''}`}
             onClick={() => { setDistanceOpen(o => !o); setPriceOpen(false); setRatingOpen(false); }}
           >
-            Distance ▾
+            Distance ∨
           </button>
           {distanceOpen && (
-            <div className="epicure-filter-dropdown">
-              {DISTANCE_OPTIONS.map(opt => (
-                <label key={opt} className="epicure-filter-label--muted">
-                  <input type="checkbox" disabled />
-                  {opt}
-                </label>
-              ))}
+            <div className="epicure-filter-dropdown epicure-filter-dropdown--slider">
+              <p className="epicure-filter-dropdown__title">Distance</p>
+              <div className="epicure-filter-slider-wrap">
+                <span className="epicure-filter-slider-edge">My location</span>
+                <Slider
+                  min={0}
+                  max={4}
+                  step={0.5}
+                  value={distanceKm}
+                  onChange={(v) => setDistanceKm(v as number)}
+                />
+                <span className="epicure-filter-slider-edge">{distanceKm}km</span>
+              </div>
             </div>
           )}
         </div>
@@ -145,10 +150,11 @@ export function RestaurantsGrid({ restaurants }: RestaurantsGridProps) {
             className={`epicure-filter-btn${ratingOpen ? ' epicure-filter-btn--active' : ''}`}
             onClick={() => { setRatingOpen(o => !o); setPriceOpen(false); setDistanceOpen(false); }}
           >
-            Rating ▾
+            Rating ∨
           </button>
           {ratingOpen && (
             <div className="epicure-filter-dropdown">
+              <p className="epicure-filter-dropdown__title">Rating</p>
               {[1, 2, 3, 4, 5].map(r => (
                 <label key={r}>
                   <input
