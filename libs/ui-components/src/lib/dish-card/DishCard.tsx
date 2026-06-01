@@ -22,14 +22,12 @@ export function DishCard({ dish }: DishCardProps) {
   return (
     <div className="epicure-dish-card">
       <div className="epicure-dish-card__image-wrap">
-        {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
           src={imageUrl(dish.image?.url)}
           alt={dish.name}
           className="epicure-dish-card__image"
         />
         {dish.type && TYPE_ICONS[dish.type] && (
-          // eslint-disable-next-line @next/next/no-img-element
           <img
             src={TYPE_ICONS[dish.type]}
             alt={dish.type}

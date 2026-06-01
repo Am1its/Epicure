@@ -16,7 +16,6 @@ interface RestaurantCardProps {
 export function RestaurantCard({ restaurant }: RestaurantCardProps) {
   return (
     <a href={`/restaurants/${restaurant.id}`} className="epicure-restaurant-card">
-      {/* eslint-disable-next-line @next/next/no-img-element */}
       <img
         src={imageUrl(restaurant.image?.url)}
         alt={restaurant.name}
