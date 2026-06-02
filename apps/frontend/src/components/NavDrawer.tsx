@@ -1,5 +1,7 @@
 'use client';
 
+import Link from 'next/link';
+
 interface NavDrawerProps {
   onClose: () => void;
 }
@@ -19,8 +21,8 @@ export function NavDrawer({ onClose }: NavDrawerProps) {
       </button>
       <nav>
         <ul className="epicure-nav-drawer__main-links">
-          <li><a href="/restaurants">Restaurants</a></li>
-          <li><a href="/chefs">Chefs</a></li>
+          <li><Link href="/restaurants">Restaurants</Link></li>
+          <li><Link href="/chefs">Chefs</Link></li>
         </ul>
         <ul className="epicure-nav-drawer__footer-links">
           <li><a href="#">Contact Us</a></li>

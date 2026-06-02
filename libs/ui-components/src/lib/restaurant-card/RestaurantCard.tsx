@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import type { Restaurant } from '@org/shared-types';
 import { StarRating } from '../star-rating/StarRating';
 
@@ -15,7 +16,7 @@ interface RestaurantCardProps {
 
 export function RestaurantCard({ restaurant }: RestaurantCardProps) {
   return (
-    <a href={`/restaurants/${restaurant.id}`} className="epicure-restaurant-card">
+    <Link href={`/restaurants/${restaurant.id}`} className="epicure-restaurant-card">
       <img
         src={imageUrl(restaurant.image?.url)}
         alt={restaurant.name}
@@ -28,6 +29,6 @@ export function RestaurantCard({ restaurant }: RestaurantCardProps) {
         )}
         <StarRating rating={restaurant.rating} />
       </div>
-    </a>
+    </Link>
   );
 }

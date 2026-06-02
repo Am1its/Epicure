@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import { fetchApi } from '../lib/api';
@@ -44,9 +45,9 @@ export default async function HomePage() {
               <RestaurantCard key={restaurant.id} restaurant={restaurant} />
             ))}
           </div>
-          <a href="/restaurants" className="epicure-popular__all-link">
+          <Link href="/restaurants" className="epicure-popular__all-link">
             All Restaurants <span aria-hidden="true">&raquo;&raquo;</span>
-          </a>
+          </Link>
         </section>
       </main>
       <Footer />
