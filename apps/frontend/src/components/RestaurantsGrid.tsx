@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useRef, useEffect } from 'react';
 import Slider from 'rc-slider';
 import 'rc-slider/assets/index.css';
 import type { Restaurant } from '@org/shared-types';
@@ -20,6 +20,20 @@ export function RestaurantsGrid({ restaurants }: RestaurantsGridProps) {
   const [ratingOpen, setRatingOpen] = useState(false);
   const [priceOpen, setPriceOpen] = useState(false);
   const [distanceOpen, setDistanceOpen] = useState(false);
+
+  const priceRef = useRef<HTMLDivElement>(null);
+  const distanceRef = useRef<HTMLDivElement>(null);
+  const ratingRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    function handleClickOutside(e: MouseEvent) {
+      if (priceOpen && priceRef.current && !priceRef.current.contains(e.target as Node)) setPriceOpen(false);
+      if (distanceOpen && distanceRef.current && !distanceRef.current.contains(e.target as Node)) setDistanceOpen(false);
+      if (ratingOpen && ratingRef.current && !ratingRef.current.contains(e.target as Node)) setRatingOpen(false);
+    }
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, [priceOpen, distanceOpen, ratingOpen]);
 
   const globalPrices = useMemo(() => {
     const all = restaurants.flatMap(r =>
@@ -92,7 +106,7 @@ export function RestaurantsGrid({ restaurants }: RestaurantsGridProps) {
 
       <div className="epicure-filter-row">
         {/* Price Range */}
-        <div className="epicure-filter-wrap">
+        <div className="epicure-filter-wrap" ref={priceRef}>
           <button
             className={`epicure-filter-btn${priceOpen ? ' epicure-filter-btn--active' : ''}`}
             onClick={() => { setPriceOpen(o => !o); setDistanceOpen(false); setRatingOpen(false); }}
@@ -119,7 +133,7 @@ export function RestaurantsGrid({ restaurants }: RestaurantsGridProps) {
         </div>
 
         {/* Distance */}
-        <div className="epicure-filter-wrap">
+        <div className="epicure-filter-wrap" ref={distanceRef}>
           <button
             className={`epicure-filter-btn${distanceOpen ? ' epicure-filter-btn--active' : ''}`}
             onClick={() => { setDistanceOpen(o => !o); setPriceOpen(false); setRatingOpen(false); }}
@@ -145,7 +159,7 @@ export function RestaurantsGrid({ restaurants }: RestaurantsGridProps) {
         </div>
 
         {/* Rating */}
-        <div className="epicure-filter-wrap">
+        <div className="epicure-filter-wrap" ref={ratingRef}>
           <button
             className={`epicure-filter-btn${ratingOpen ? ' epicure-filter-btn--active' : ''}`}
             onClick={() => { setRatingOpen(o => !o); setPriceOpen(false); setDistanceOpen(false); }}
