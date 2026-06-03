@@ -1,12 +1,22 @@
 'use client';
 
-import { useState, useMemo } from 'react';
+import { useState, useMemo, type ReactNode } from 'react';
 import type { Restaurant } from '@org/shared-types';
 import { RestaurantCard } from '@org/ui-components';
 import { Filter } from './Filter';
 import { PriceFilter } from './PriceFilter';
 import { DistanceFilter } from './DistanceFilter';
 import { RatingFilter } from './RatingFilter';
+
+interface FilterConfig {
+  id: string;
+  label: string;
+  isOpen: boolean;
+  onToggle: () => void;
+  onClose: () => void;
+  dropdownClassName?: string;
+  content: ReactNode;
+}
 
 type Tab = 'all' | 'new' | 'popular' | 'open' | 'map';
 
@@ -74,6 +84,35 @@ export function RestaurantsGrid({ restaurants }: RestaurantsGridProps) {
     { id: 'map', label: 'Map View' },
   ];
 
+  const filterConfigs: FilterConfig[] = [
+    {
+      id: 'price',
+      label: 'Price Range',
+      isOpen: priceOpen,
+      onToggle: () => { setPriceOpen(o => !o); setDistanceOpen(false); setRatingOpen(false); },
+      onClose: () => setPriceOpen(false),
+      dropdownClassName: 'epicure-filter-dropdown--slider',
+      content: <PriceFilter globalPrices={globalPrices} value={sliderValue} onChange={setPriceRange} />,
+    },
+    {
+      id: 'distance',
+      label: 'Distance',
+      isOpen: distanceOpen,
+      onToggle: () => { setDistanceOpen(o => !o); setPriceOpen(false); setRatingOpen(false); },
+      onClose: () => setDistanceOpen(false),
+      dropdownClassName: 'epicure-filter-dropdown--slider',
+      content: <DistanceFilter value={distanceKm} onChange={setDistanceKm} />,
+    },
+    {
+      id: 'rating',
+      label: 'Rating',
+      isOpen: ratingOpen,
+      onToggle: () => { setRatingOpen(o => !o); setPriceOpen(false); setDistanceOpen(false); },
+      onClose: () => setRatingOpen(false),
+      content: <RatingFilter selectedRatings={selectedRatings} onToggle={toggleRating} />,
+    },
+  ];
+
   return (
     <>
       <div className="epicure-page-tabs-wrap">
@@ -93,34 +132,9 @@ export function RestaurantsGrid({ restaurants }: RestaurantsGridProps) {
       </div>
 
       <div className="epicure-filter-row">
-        <Filter
-          label="Price Range"
-          isOpen={priceOpen}
-          onToggle={() => { setPriceOpen(o => !o); setDistanceOpen(false); setRatingOpen(false); }}
-          onClose={() => setPriceOpen(false)}
-          dropdownClassName="epicure-filter-dropdown--slider"
-        >
-          <PriceFilter globalPrices={globalPrices} value={sliderValue} onChange={setPriceRange} />
-        </Filter>
-
-        <Filter
-          label="Distance"
-          isOpen={distanceOpen}
-          onToggle={() => { setDistanceOpen(o => !o); setPriceOpen(false); setRatingOpen(false); }}
-          onClose={() => setDistanceOpen(false)}
-          dropdownClassName="epicure-filter-dropdown--slider"
-        >
-          <DistanceFilter value={distanceKm} onChange={setDistanceKm} />
-        </Filter>
-
-        <Filter
-          label="Rating"
-          isOpen={ratingOpen}
-          onToggle={() => { setRatingOpen(o => !o); setPriceOpen(false); setDistanceOpen(false); }}
-          onClose={() => setRatingOpen(false)}
-        >
-          <RatingFilter selectedRatings={selectedRatings} onToggle={toggleRating} />
-        </Filter>
+        {filterConfigs.map(({ id, content, ...props }) => (
+          <Filter key={id} {...props}>{content}</Filter>
+        ))}
       </div>
 
       {activeTab === 'map' ? (
