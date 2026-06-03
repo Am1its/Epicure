@@ -33,18 +33,18 @@ export default function Header() {
             </svg>
           </button>
 
-          {/* Desktop: left side (logo + links) */}
-          <div className="epicure-nav__left">
-            <div className="epicure-nav__logo">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src="/icons/logo.svg" alt="" aria-hidden="true" width={34} height={34} className="epicure-nav__logo-icon" />
-              <span>EPICURE</span>
-            </div>
-            <ul className="epicure-nav__links">
-              <li><Link href="/restaurants">Restaurants</Link></li>
-              <li><Link href="/chefs">Chefs</Link></li>
-            </ul>
-          </div>
+          {/* Logo — centered on mobile, left on desktop */}
+          <Link href="/" className="epicure-nav__logo" aria-label="Epicure home">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src="/icons/logo.svg" alt="" aria-hidden="true" width={34} height={34} className="epicure-nav__logo-icon" />
+            <span>EPICURE</span>
+          </Link>
+
+          {/* Desktop nav links — hidden on mobile */}
+          <ul className="epicure-nav__links">
+            <li><Link href="/restaurants">Restaurants</Link></li>
+            <li><Link href="/chefs">Chefs</Link></li>
+          </ul>
 
           {/* Action icons — both mobile and desktop */}
           <div className="epicure-nav__actions">

@@ -1,10 +1,17 @@
 @use '../setup/variables' as *;
 @use '../setup/placeholders' as *;
 
+.epicure-search-overlay__backdrop {
+  position: fixed;
+  inset: 0;
+  background: transparent;
+  z-index: 149;
+  cursor: default;
+}
+
 .epicure-search-overlay {
   @extend %overlay-panel;
   width: 100%;
-  max-width: 377px;
   height: 413px;
   display: flex;
   flex-direction: column;
