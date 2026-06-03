@@ -13,8 +13,8 @@ export class DishesService {
   }
 
   async findOne(id: number): Promise<Dish> {
-    const item = await this.strapiClient.getOne<StrapiDish>(
-      `/api/dishes?filters[id][$eq]=${id}&populate=*`,
+    const item = await this.strapiClient.getById<StrapiDish>(
+      `/api/dishes/${id}?populate=*`,
     );
     return this.transform(item);
   }

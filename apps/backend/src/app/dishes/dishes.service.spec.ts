@@ -5,10 +5,10 @@ import { StrapiClientService } from '../strapi-client/strapi-client.service';
 
 describe('DishesService', () => {
   let service: DishesService;
-  let mockStrapiClient: { get: jest.Mock; getOne: jest.Mock };
+  let mockStrapiClient: { get: jest.Mock; getById: jest.Mock };
 
   beforeEach(async () => {
-    mockStrapiClient = { get: jest.fn(), getOne: jest.fn() };
+    mockStrapiClient = { get: jest.fn(), getById: jest.fn() };
     const module = await Test.createTestingModule({
       providers: [
         DishesService,
@@ -53,7 +53,7 @@ describe('DishesService', () => {
 
   describe('findOne()', () => {
     it('returns a single transformed dish', async () => {
-      mockStrapiClient.getOne.mockResolvedValue({
+      mockStrapiClient.getById.mockResolvedValue({
         id: 1, name: 'Pad Ki Mao', price: 88,
       });
 
@@ -63,17 +63,17 @@ describe('DishesService', () => {
     });
 
     it('calls strapiClient with id filter path', async () => {
-      mockStrapiClient.getOne.mockResolvedValue({ id: 1, name: 'Pad Ki Mao', price: 88 });
+      mockStrapiClient.getById.mockResolvedValue({ id: 1, name: 'Pad Ki Mao', price: 88 });
 
       await service.findOne(1);
 
-      expect(mockStrapiClient.getOne).toHaveBeenCalledWith(
-        '/api/dishes?filters[id][$eq]=1&populate=*',
+      expect(mockStrapiClient.getById).toHaveBeenCalledWith(
+        '/api/dishes/1?populate=*',
       );
     });
 
     it('propagates NotFoundException when dish is not found', async () => {
-      mockStrapiClient.getOne.mockRejectedValue(new NotFoundException());
+      mockStrapiClient.getById.mockRejectedValue(new NotFoundException());
 
       await expect(service.findOne(999)).rejects.toThrow(NotFoundException);
     });

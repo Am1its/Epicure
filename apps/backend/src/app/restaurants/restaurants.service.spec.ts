@@ -2,7 +2,7 @@ import { Test } from '@nestjs/testing';
 import { RestaurantsService } from './restaurants.service';
 import { StrapiClientService } from '../strapi-client/strapi-client.service';
 
-const mockStrapiClient = { get: jest.fn(), getOne: jest.fn() };
+const mockStrapiClient = { get: jest.fn(), getById: jest.fn() };
 
 describe('RestaurantsService', () => {
   let service: RestaurantsService;
@@ -75,7 +75,7 @@ describe('RestaurantsService', () => {
 
   describe('findOne()', () => {
     it('returns a single transformed restaurant', async () => {
-      mockStrapiClient.getOne.mockResolvedValue({ id: 1, name: 'Claro', rating: 4 });
+      mockStrapiClient.getById.mockResolvedValue({ id: 1, name: 'Claro', rating: 4 });
 
       const result = await service.findOne(1);
 
@@ -83,17 +83,17 @@ describe('RestaurantsService', () => {
     });
 
     it('calls strapiClient with id filter path', async () => {
-      mockStrapiClient.getOne.mockResolvedValue({ id: 1, name: 'Claro', rating: 4 });
+      mockStrapiClient.getById.mockResolvedValue({ id: 1, name: 'Claro', rating: 4 });
 
       await service.findOne(1);
 
-      expect(mockStrapiClient.getOne).toHaveBeenCalledWith(
-        '/api/restaurants?filters[id][$eq]=1&populate[dishes][populate]=*&populate[chef][fields][0]=name&populate[chef][fields][1]=id&populate[image][fields][0]=url&populate[image][fields][1]=alternativeText',
+      expect(mockStrapiClient.getById).toHaveBeenCalledWith(
+        '/api/restaurants/1?populate[dishes][populate]=*&populate[chef][fields][0]=name&populate[chef][fields][1]=id&populate[image][fields][0]=url&populate[image][fields][1]=alternativeText',
       );
     });
 
     it('maps dish image url from nested populate', async () => {
-      mockStrapiClient.getOne.mockResolvedValue({
+      mockStrapiClient.getById.mockResolvedValue({
         id: 1,
         name: 'Claro',
         rating: 4,

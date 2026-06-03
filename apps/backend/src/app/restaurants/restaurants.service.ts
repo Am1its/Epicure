@@ -15,8 +15,8 @@ export class RestaurantsService {
   }
 
   async findOne(id: number): Promise<Restaurant> {
-    const item = await this.strapiClient.getOne<StrapiRestaurant>(
-      `/api/restaurants?filters[id][$eq]=${id}&populate[dishes][populate]=*&populate[chef][fields][0]=name&populate[chef][fields][1]=id&populate[image][fields][0]=url&populate[image][fields][1]=alternativeText`,
+    const item = await this.strapiClient.getById<StrapiRestaurant>(
+      `/api/restaurants/${id}?populate[dishes][populate]=*&populate[chef][fields][0]=name&populate[chef][fields][1]=id&populate[image][fields][0]=url&populate[image][fields][1]=alternativeText`,
     );
     return this.transform(item);
   }

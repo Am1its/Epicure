@@ -1,10 +1,12 @@
 'use client';
 
-import { useState, useMemo, useRef, useEffect } from 'react';
-import Slider from 'rc-slider';
-import 'rc-slider/assets/index.css';
+import { useState, useMemo } from 'react';
 import type { Restaurant } from '@org/shared-types';
-import { RestaurantCard, StarRating } from '@org/ui-components';
+import { RestaurantCard } from '@org/ui-components';
+import { Filter } from './Filter';
+import { PriceFilter } from './PriceFilter';
+import { DistanceFilter } from './DistanceFilter';
+import { RatingFilter } from './RatingFilter';
 
 type Tab = 'all' | 'new' | 'popular' | 'open' | 'map';
 
@@ -20,20 +22,6 @@ export function RestaurantsGrid({ restaurants }: RestaurantsGridProps) {
   const [ratingOpen, setRatingOpen] = useState(false);
   const [priceOpen, setPriceOpen] = useState(false);
   const [distanceOpen, setDistanceOpen] = useState(false);
-
-  const priceRef = useRef<HTMLDivElement>(null);
-  const distanceRef = useRef<HTMLDivElement>(null);
-  const ratingRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    function handleClickOutside(e: MouseEvent) {
-      if (priceOpen && priceRef.current && !priceRef.current.contains(e.target as Node)) setPriceOpen(false);
-      if (distanceOpen && distanceRef.current && !distanceRef.current.contains(e.target as Node)) setDistanceOpen(false);
-      if (ratingOpen && ratingRef.current && !ratingRef.current.contains(e.target as Node)) setRatingOpen(false);
-    }
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, [priceOpen, distanceOpen, ratingOpen]);
 
   const globalPrices = useMemo(() => {
     const all = restaurants.flatMap(r =>
@@ -105,83 +93,34 @@ export function RestaurantsGrid({ restaurants }: RestaurantsGridProps) {
       </div>
 
       <div className="epicure-filter-row">
-        {/* Price Range */}
-        <div className="epicure-filter-wrap" ref={priceRef}>
-          <button
-            className={`epicure-filter-btn${priceOpen ? ' epicure-filter-btn--active' : ''}`}
-            onClick={() => { setPriceOpen(o => !o); setDistanceOpen(false); setRatingOpen(false); }}
-          >
-            Price Range ∨
-          </button>
-          {priceOpen && (
-            <div className="epicure-filter-dropdown epicure-filter-dropdown--slider">
-              <p className="epicure-filter-dropdown__title">Price Range Selected</p>
-              <p className="epicure-filter-dropdown__sublabel">₪{sliderValue[0]} – ₪{sliderValue[1]}</p>
-              <div className="epicure-filter-slider-wrap">
-                <span className="epicure-filter-slider-edge">₪{globalPrices.min}</span>
-                <Slider
-                  range
-                  min={globalPrices.min}
-                  max={globalPrices.max}
-                  value={sliderValue}
-                  onChange={(v) => setPriceRange(v as [number, number])}
-                />
-                <span className="epicure-filter-slider-edge">₪{globalPrices.max}</span>
-              </div>
-            </div>
-          )}
-        </div>
+        <Filter
+          label="Price Range"
+          isOpen={priceOpen}
+          onToggle={() => { setPriceOpen(o => !o); setDistanceOpen(false); setRatingOpen(false); }}
+          onClose={() => setPriceOpen(false)}
+          dropdownClassName="epicure-filter-dropdown--slider"
+        >
+          <PriceFilter globalPrices={globalPrices} value={sliderValue} onChange={setPriceRange} />
+        </Filter>
 
-        {/* Distance */}
-        <div className="epicure-filter-wrap" ref={distanceRef}>
-          <button
-            className={`epicure-filter-btn${distanceOpen ? ' epicure-filter-btn--active' : ''}`}
-            onClick={() => { setDistanceOpen(o => !o); setPriceOpen(false); setRatingOpen(false); }}
-          >
-            Distance ∨
-          </button>
-          {distanceOpen && (
-            <div className="epicure-filter-dropdown epicure-filter-dropdown--slider">
-              <p className="epicure-filter-dropdown__title">Distance</p>
-              <div className="epicure-filter-slider-wrap">
-                <span className="epicure-filter-slider-edge">My location</span>
-                <Slider
-                  min={0}
-                  max={4}
-                  step={0.5}
-                  value={distanceKm}
-                  onChange={(v) => setDistanceKm(v as number)}
-                />
-                <span className="epicure-filter-slider-edge">{distanceKm}km</span>
-              </div>
-            </div>
-          )}
-        </div>
+        <Filter
+          label="Distance"
+          isOpen={distanceOpen}
+          onToggle={() => { setDistanceOpen(o => !o); setPriceOpen(false); setRatingOpen(false); }}
+          onClose={() => setDistanceOpen(false)}
+          dropdownClassName="epicure-filter-dropdown--slider"
+        >
+          <DistanceFilter value={distanceKm} onChange={setDistanceKm} />
+        </Filter>
 
-        {/* Rating */}
-        <div className="epicure-filter-wrap" ref={ratingRef}>
-          <button
-            className={`epicure-filter-btn${ratingOpen ? ' epicure-filter-btn--active' : ''}`}
-            onClick={() => { setRatingOpen(o => !o); setPriceOpen(false); setDistanceOpen(false); }}
-          >
-            Rating ∨
-          </button>
-          {ratingOpen && (
-            <div className="epicure-filter-dropdown">
-              <p className="epicure-filter-dropdown__title">Rating</p>
-              {[1, 2, 3, 4, 5].map(r => (
-                <label key={r}>
-                  <input
-                    type="checkbox"
-                    checked={selectedRatings.has(r)}
-                    onChange={() => toggleRating(r)}
-                  />
-                  <StarRating rating={r} />
-                </label>
-              ))}
-            </div>
-          )}
-        </div>
+        <Filter
+          label="Rating"
+          isOpen={ratingOpen}
+          onToggle={() => { setRatingOpen(o => !o); setPriceOpen(false); setDistanceOpen(false); }}
+          onClose={() => setRatingOpen(false)}
+        >
+          <RatingFilter selectedRatings={selectedRatings} onToggle={toggleRating} />
+        </Filter>
       </div>
 
       {activeTab === 'map' ? (

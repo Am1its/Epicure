@@ -13,8 +13,8 @@ export class ChefsService {
   }
 
   async findOne(id: number): Promise<Chef> {
-    const item = await this.strapiClient.getOne<StrapiChef>(
-      `/api/chefs?filters[id][$eq]=${id}&populate=*`,
+    const item = await this.strapiClient.getById<StrapiChef>(
+      `/api/chefs/${id}?populate=*`,
     );
     return this.transform(item);
   }
