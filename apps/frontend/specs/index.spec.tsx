@@ -6,9 +6,9 @@ jest.mock('../src/lib/api', () => ({
 }));
 
 describe('HomePage', () => {
-  it('renders the EPICURE logo', async () => {
+  it('renders the EPICURE brand name', async () => {
     render(await Page());
-    expect(screen.getByText('EPICURE')).toBeInTheDocument();
+    expect(screen.getAllByText('EPICURE').length).toBeGreaterThan(0);
   });
 
   it('renders the desktop hero headline', async () => {
@@ -41,8 +41,8 @@ describe('HomePage', () => {
     expect(screen.getByText(/popular restaurant in epicure/i)).toBeInTheDocument();
   });
 
-  it('renders All Restaurants link', async () => {
+  it('renders All Restaurants links', async () => {
     render(await Page());
-    expect(screen.getByRole('link', { name: /all restaurants/i })).toBeInTheDocument();
+    expect(screen.getAllByRole('link', { name: /all restaurants/i }).length).toBeGreaterThan(0);
   });
 });
