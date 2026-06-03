@@ -69,27 +69,47 @@ describe('StrapiClientService', () => {
     });
   });
 
-  describe('getOne()', () => {
-    it('returns first item from data array', async () => {
+  describe('getById()', () => {
+    it('returns unwrapped single item', async () => {
       fetchSpy.mockResolvedValue({
         ok: true,
-        json: async () => ({ data: [{ id: 1, name: 'Claro' }] }),
+        status: 200,
+        json: async () => ({ data: { id: 1, name: 'Claro' } }),
       } as any);
 
-      const result = await service.getOne('/api/restaurants?filters[id][$eq]=1');
+      const result = await service.getById('/api/restaurants/1');
 
       expect(result).toEqual({ id: 1, name: 'Claro' });
     });
 
-    it('throws NotFoundException when data array is empty', async () => {
+    it('calls Strapi with the correct full URL', async () => {
       fetchSpy.mockResolvedValue({
         ok: true,
-        json: async () => ({ data: [] }),
+        status: 200,
+        json: async () => ({ data: { id: 1, name: 'Claro' } }),
       } as any);
 
-      await expect(
-        service.getOne('/api/restaurants?filters[id][$eq]=999'),
-      ).rejects.toThrow(NotFoundException);
+      await service.getById('/api/restaurants/1?populate=*');
+
+      expect(fetchSpy).toHaveBeenCalledWith(
+        'http://localhost:1337/api/restaurants/1?populate=*',
+      );
+    });
+
+    it('throws NotFoundException on 404', async () => {
+      fetchSpy.mockResolvedValue({ ok: false, status: 404 } as any);
+
+      await expect(service.getById('/api/restaurants/999')).rejects.toThrow(
+        NotFoundException,
+      );
+    });
+
+    it('throws ServiceUnavailableException when Strapi is unreachable', async () => {
+      fetchSpy.mockRejectedValue(new Error('ECONNREFUSED'));
+
+      await expect(service.getById('/api/restaurants/1')).rejects.toThrow(
+        ServiceUnavailableException,
+      );
     });
   });
 });

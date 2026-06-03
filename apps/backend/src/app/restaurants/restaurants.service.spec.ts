@@ -2,7 +2,7 @@ import { Test } from '@nestjs/testing';
 import { RestaurantsService } from './restaurants.service';
 import { StrapiClientService } from '../strapi-client/strapi-client.service';
 
-const mockStrapiClient = { get: jest.fn(), getOne: jest.fn() };
+const mockStrapiClient = { get: jest.fn(), getById: jest.fn() };
 
 describe('RestaurantsService', () => {
   let service: RestaurantsService;
@@ -47,13 +47,35 @@ describe('RestaurantsService', () => {
 
       await service.findAll();
 
-      expect(mockStrapiClient.get).toHaveBeenCalledWith('/api/restaurants?populate=*');
+      expect(mockStrapiClient.get).toHaveBeenCalledWith(
+        '/api/restaurants?populate=*',
+      );
+    });
+
+    it('maps dish prices in findAll', async () => {
+      mockStrapiClient.get.mockResolvedValue([
+        {
+          id: 1,
+          name: 'Claro',
+          rating: 4,
+          dishes: [
+            { id: 10, name: 'Pad Ki Mao', price: 88 },
+            { id: 11, name: 'Red Farm', price: 98 },
+          ],
+        },
+      ]);
+
+      const result = await service.findAll();
+
+      expect(result[0].dishes).toHaveLength(2);
+      expect(result[0].dishes?.[0].price).toBe(88);
+      expect(result[0].dishes?.[1].price).toBe(98);
     });
   });
 
   describe('findOne()', () => {
     it('returns a single transformed restaurant', async () => {
-      mockStrapiClient.getOne.mockResolvedValue({ id: 1, name: 'Claro', rating: 4 });
+      mockStrapiClient.getById.mockResolvedValue({ id: 1, name: 'Claro', rating: 4 });
 
       const result = await service.findOne(1);
 
@@ -61,13 +83,36 @@ describe('RestaurantsService', () => {
     });
 
     it('calls strapiClient with id filter path', async () => {
-      mockStrapiClient.getOne.mockResolvedValue({ id: 1, name: 'Claro', rating: 4 });
+      mockStrapiClient.getById.mockResolvedValue({ id: 1, name: 'Claro', rating: 4 });
 
       await service.findOne(1);
 
-      expect(mockStrapiClient.getOne).toHaveBeenCalledWith(
-        '/api/restaurants?filters[id][$eq]=1&populate=*',
+      expect(mockStrapiClient.getById).toHaveBeenCalledWith(
+        '/api/restaurants/1?populate[dishes][populate]=*&populate[chef][fields][0]=name&populate[chef][fields][1]=id&populate[image][fields][0]=url&populate[image][fields][1]=alternativeText',
       );
+    });
+
+    it('maps dish image url from nested populate', async () => {
+      mockStrapiClient.getById.mockResolvedValue({
+        id: 1,
+        name: 'Claro',
+        rating: 4,
+        dishes: [
+          {
+            id: 10,
+            name: 'Pad Ki Mao',
+            price: 88,
+            image: { url: '/uploads/pad-ki-mao.png', alternativeText: 'Pad Ki Mao' },
+          },
+        ],
+      });
+
+      const result = await service.findOne(1);
+
+      expect(result.dishes?.[0].image).toEqual({
+        url: '/uploads/pad-ki-mao.png',
+        alternativeText: 'Pad Ki Mao',
+      });
     });
   });
 });

@@ -4,10 +4,10 @@ import { StrapiClientService } from '../strapi-client/strapi-client.service';
 
 describe('ChefsService', () => {
   let service: ChefsService;
-  let mockStrapiClient: { get: jest.Mock; getOne: jest.Mock };
+  let mockStrapiClient: { get: jest.Mock; getById: jest.Mock };
 
   beforeEach(async () => {
-    mockStrapiClient = { get: jest.fn(), getOne: jest.fn() };
+    mockStrapiClient = { get: jest.fn(), getById: jest.fn() };
     const module = await Test.createTestingModule({
       providers: [
         ChefsService,
@@ -48,7 +48,7 @@ describe('ChefsService', () => {
 
   describe('findOne()', () => {
     it('returns a single transformed chef', async () => {
-      mockStrapiClient.getOne.mockResolvedValue({ id: 1, name: 'Ran Shmueli' });
+      mockStrapiClient.getById.mockResolvedValue({ id: 1, name: 'Ran Shmueli' });
 
       const result = await service.findOne(1);
 
@@ -56,18 +56,18 @@ describe('ChefsService', () => {
     });
 
     it('calls strapiClient with id filter path', async () => {
-      mockStrapiClient.getOne.mockResolvedValue({ id: 1, name: 'Ran Shmueli' });
+      mockStrapiClient.getById.mockResolvedValue({ id: 1, name: 'Ran Shmueli' });
 
       await service.findOne(1);
 
-      expect(mockStrapiClient.getOne).toHaveBeenCalledWith(
-        '/api/chefs?filters[id][$eq]=1&populate=*',
+      expect(mockStrapiClient.getById).toHaveBeenCalledWith(
+        '/api/chefs/1?populate=*',
       );
     });
 
     it('propagates NotFoundException when chef is not found', async () => {
       const { NotFoundException } = await import('@nestjs/common');
-      mockStrapiClient.getOne.mockRejectedValue(new NotFoundException());
+      mockStrapiClient.getById.mockRejectedValue(new NotFoundException());
 
       await expect(service.findOne(999)).rejects.toThrow(NotFoundException);
     });

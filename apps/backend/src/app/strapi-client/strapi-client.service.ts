@@ -10,6 +10,10 @@ interface StrapiListResponse<T> {
   data: T[];
 }
 
+interface StrapiSingleResponse<T> {
+  data: T;
+}
+
 @Injectable()
 export class StrapiClientService {
   async get<T>(path: string): Promise<T[]> {
@@ -31,13 +35,25 @@ export class StrapiClientService {
     return body.data ?? [];
   }
 
-  // Assumes path uses a filter that matches at most one record (e.g. filters[id][$eq]).
-  // Safe for numeric ID lookups since Strapi IDs are unique.
-  async getOne<T>(path: string): Promise<T> {
-    const items = await this.get<T>(path);
-    if (!items.length) {
+  async getById<T>(path: string): Promise<T> {
+    let res: Response;
+    try {
+      res = await fetch(`${STRAPI_URL}${path}`);
+    } catch {
+      throw new ServiceUnavailableException('Strapi is unreachable');
+    }
+    if (res.status === 404) {
       throw new NotFoundException('Resource not found');
     }
-    return items[0];
+    if (!res.ok) {
+      throw new ServiceUnavailableException(`Strapi returned ${res.status}`);
+    }
+    let body: StrapiSingleResponse<T>;
+    try {
+      body = (await res.json()) as StrapiSingleResponse<T>;
+    } catch {
+      throw new ServiceUnavailableException('Strapi returned invalid JSON');
+    }
+    return body.data;
   }
 }
