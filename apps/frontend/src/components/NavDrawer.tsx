@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import { TEXT } from '../lib/text';
 
 interface NavDrawerProps {
   onClose: () => void;
@@ -14,11 +15,11 @@ export function NavDrawer({ onClose }: NavDrawerProps) {
         onClick={onClose}
         aria-hidden="true"
       />
-      <div className="epicure-nav-drawer" role="dialog" aria-label="Navigation menu">
+      <div className="epicure-nav-drawer" role="dialog" aria-label={TEXT.navDrawer.dialogAriaLabel}>
         <button
           className="epicure-nav-drawer__close"
           onClick={onClose}
-          aria-label="Close navigation"
+          aria-label={TEXT.navDrawer.closeAriaLabel}
         >
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
             <line x1="19.3" y1="4.7" x2="4.7" y2="19.3" />
@@ -27,13 +28,13 @@ export function NavDrawer({ onClose }: NavDrawerProps) {
         </button>
         <nav>
           <ul className="epicure-nav-drawer__main-links">
-            <li><Link href="/restaurants">Restaurants</Link></li>
-            <li><Link href="/chefs">Chefs</Link></li>
+            <li><Link href="/restaurants">{TEXT.shared.restaurants}</Link></li>
+            <li><Link href="/chefs">{TEXT.shared.chefs}</Link></li>
           </ul>
           <ul className="epicure-nav-drawer__footer-links">
-            <li><a href="#">Contact Us</a></li>
-            <li><a href="#">Term of Use</a></li>
-            <li><a href="#">Privacy Policy</a></li>
+            <li><a href="#">{TEXT.shared.contactUs}</a></li>
+            <li><a href="#">{TEXT.shared.termOfUse}</a></li>
+            <li><a href="#">{TEXT.shared.privacyPolicy}</a></li>
           </ul>
         </nav>
       </div>

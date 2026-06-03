@@ -3,6 +3,7 @@ import Footer from '../../../components/Footer';
 import { DishGrid } from '../../../components/DishGrid';
 import { fetchApi, strapiImageUrl } from '../../../lib/api';
 import type { Restaurant } from '@org/shared-types';
+import { TEXT } from '../../../lib/text';
 
 export default async function RestaurantDetailPage({
   params,
@@ -23,7 +24,7 @@ export default async function RestaurantDetailPage({
       <div>
         <Header />
         <main style={{ padding: '4rem 2rem', textAlign: 'center' }}>
-          <p>Restaurant not found.</p>
+          <p>{TEXT.restaurantDetail.notFound}</p>
         </main>
         <Footer />
       </div>
@@ -46,7 +47,7 @@ export default async function RestaurantDetailPage({
             <p className="epicure-detail-chef">{restaurant.chef.name}</p>
           )}
           <span className="epicure-detail-open">
-            🕐 Open now
+            {TEXT.restaurantDetail.openNow}
           </span>
         </div>
         <DishGrid dishes={restaurant.dishes ?? []} />

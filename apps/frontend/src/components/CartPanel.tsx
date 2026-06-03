@@ -1,5 +1,7 @@
 'use client';
 
+import { TEXT } from '../lib/text';
+
 interface CartPanelProps {
   onClose: () => void;
 }
@@ -10,11 +12,11 @@ export function CartPanel({ onClose }: CartPanelProps) {
       <button
         className="epicure-cart-backdrop"
         onClick={onClose}
-        aria-label="Close cart"
+        aria-label={TEXT.cart.closeAriaLabel}
       />
-      <div className="epicure-cart-panel" role="dialog" aria-label="Shopping cart">
+      <div className="epicure-cart-panel" role="dialog" aria-label={TEXT.cart.dialogAriaLabel}>
         <img src="/icons/cart.svg" alt="cart" width={48} height={48} className="epicure-cart-panel__icon" />
-        <p className="epicure-cart-panel__empty">YOUR BAG IS EMPTY</p>
+        <p className="epicure-cart-panel__empty">{TEXT.cart.empty}</p>
       </div>
     </>
   );

@@ -6,6 +6,7 @@ import { NavDrawer } from './NavDrawer';
 import { SearchOverlay } from './SearchOverlay';
 import { CartPanel } from './CartPanel';
 import { SignInModal } from './SignInModal';
+import { TEXT } from '../lib/text';
 
 type ActivePanel = 'none' | 'drawer' | 'search' | 'cart' | 'signin';
 
@@ -23,7 +24,7 @@ export default function Header() {
           {/* Mobile: hamburger left */}
           <button
             className="epicure-nav__hamburger"
-            aria-label="Open navigation"
+            aria-label={TEXT.nav.openNavAriaLabel}
             onClick={() => toggle('drawer')}
           >
             <svg width="22" height="16" viewBox="0 0 22 16" fill="none" aria-hidden="true">
@@ -34,29 +35,29 @@ export default function Header() {
           </button>
 
           {/* Logo — centered on mobile, left on desktop */}
-          <Link href="/" className="epicure-nav__logo" aria-label="Epicure home">
+          <Link href="/" className="epicure-nav__logo" aria-label={TEXT.nav.logoAriaLabel}>
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img src="/icons/logo.svg" alt="" aria-hidden="true" width={34} height={34} className="epicure-nav__logo-icon" />
-            <span>EPICURE</span>
+            <span>{TEXT.nav.brandName}</span>
           </Link>
 
           {/* Desktop nav links — hidden on mobile */}
           <ul className="epicure-nav__links">
-            <li><Link href="/restaurants">Restaurants</Link></li>
-            <li><Link href="/chefs">Chefs</Link></li>
+            <li><Link href="/restaurants">{TEXT.shared.restaurants}</Link></li>
+            <li><Link href="/chefs">{TEXT.shared.chefs}</Link></li>
           </ul>
 
           {/* Action icons — both mobile and desktop */}
           <div className="epicure-nav__actions">
-            <button aria-label="Search" onClick={() => toggle('search')}>
+            <button aria-label={TEXT.nav.searchAriaLabel} onClick={() => toggle('search')}>
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img src="/icons/search.svg" alt="" aria-hidden="true" width={22} height={22} />
             </button>
-            <button aria-label="Account" onClick={() => toggle('signin')}>
+            <button aria-label={TEXT.nav.accountAriaLabel} onClick={() => toggle('signin')}>
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img src="/icons/user.svg" alt="" aria-hidden="true" width={22} height={22} />
             </button>
-            <button aria-label="Cart" onClick={() => toggle('cart')}>
+            <button aria-label={TEXT.nav.cartAriaLabel} onClick={() => toggle('cart')}>
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img src="/icons/cart.svg" alt="" aria-hidden="true" width={22} height={22} />
             </button>
