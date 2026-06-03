@@ -1,0 +1,50 @@
+@use '../setup/variables' as *;
+@use '../setup/placeholders' as *;
+
+.epicure-nav-drawer {
+  @extend %overlay-panel;
+  width: 100%;
+  max-width: 377px;
+  height: 413px;
+  display: flex;
+  flex-direction: column;
+  padding: 1rem;
+  overflow-y: auto;
+
+  &__close {
+    align-self: flex-start;
+    padding: 0.5rem;
+    color: $black-primary;
+    opacity: 0.7;
+
+    &:hover { opacity: 1; }
+  }
+
+  &__main-links {
+    padding: 2rem 0 1rem;
+
+    li { border-bottom: 1px solid rgba(0, 0, 0, 0.06); }
+
+    a {
+      display: block;
+      padding: 1rem 0.5rem;
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: $black-primary;
+    }
+  }
+
+  &__footer-links {
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid rgba(0, 0, 0, 0.08);
+
+    li { padding: 0.5rem 0; }
+
+    a {
+      font-size: 0.875rem;
+      color: $black-primary;
+      opacity: 0.55;
+    }
+  }
+}

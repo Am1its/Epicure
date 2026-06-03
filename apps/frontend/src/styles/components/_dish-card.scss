@@ -1,0 +1,65 @@
+@use '../setup/variables' as *;
+
+.epicure-dish-card {
+  background: $white;
+  border-radius: 4px;
+  overflow: hidden;
+
+  &__image-wrap { position: relative; }
+
+  &__image {
+    width: 100%;
+    aspect-ratio: 1;
+    object-fit: cover;
+    display: block;
+  }
+
+  &__type-icon {
+    position: absolute;
+    bottom: 0.5rem;
+    left: 0.5rem;
+    width: 20px;
+    height: 20px;
+  }
+
+  &__info {
+    background: $cream-secondary;
+    padding: 0.875rem 0.875rem 1rem;
+    text-align: center;
+  }
+
+  &__signature {
+    font-size: 0.6875rem;
+    font-weight: 600;
+    color: $gold-secondary;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin-bottom: 0.25rem;
+  }
+
+  &__name {
+    font-size: 1.0625rem;
+    font-weight: 400;
+    margin-bottom: 0.5rem;
+  }
+
+  &__description {
+    font-size: 0.8125rem;
+    color: $black-primary;
+    opacity: 0.55;
+    line-height: 1.4;
+    margin-bottom: 0.625rem;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  &__price {
+    font-size: 0.875rem;
+    font-weight: 400;
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+    padding-top: 0.625rem;
+    margin-top: 0.125rem;
+  }
+}

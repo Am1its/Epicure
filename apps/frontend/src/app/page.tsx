@@ -6,7 +6,7 @@ export default function HomePage() {
           <div className="epicure-nav__left">
             <div className="epicure-nav__logo">
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src="/icons/header-logo.png" alt="" aria-hidden="true" width={34} height={34} className="epicure-nav__logo-icon" />
+              <img src="/icons/logo.svg" alt="" aria-hidden="true" width={34} height={34} className="epicure-nav__logo-icon" />
               <span>EPICURE</span>
             </div>
             <ul className="epicure-nav__links">

@@ -1,0 +1,16 @@
+@use 'variables' as *;
+
+@mixin for-normal-layout {
+  @media (min-width: $break-normal) { @content; }
+}
+
+@mixin for-wide-layout {
+  @media (min-width: $break-wide) { @content; }
+}
+
+@mixin flex-align($main, $cross, $dir: row) {
+  display: flex;
+  align-items: $main;
+  justify-content: $cross;
+  flex-direction: $dir;
+}

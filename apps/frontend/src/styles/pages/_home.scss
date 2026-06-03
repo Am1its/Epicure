@@ -1,0 +1,146 @@
+@use '../setup/variables' as *;
+@use '../setup/mixins' as *;
+
+// Desktop hero — hidden on mobile
+.epicure-hero {
+  display: none;
+
+  &__title {
+    font-size: clamp(2.5rem, 6vw, 4.5rem);
+    font-weight: 300;
+    line-height: 1.1;
+    color: $black-primary;
+    margin-bottom: 1.25rem;
+  }
+
+  &__subtitle {
+    font-size: 1.125rem;
+    color: $black-primary;
+    opacity: 0.65;
+    margin-bottom: 2rem;
+  }
+
+  &__cta {
+    background-color: $black-primary;
+    color: $white;
+    padding: 0.875rem 2rem;
+    font-size: 0.9375rem;
+    font-weight: 300;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+    transition: opacity 200ms;
+
+    &:hover { opacity: 0.85; }
+  }
+}
+
+// Mobile hero — shown by default
+.epicure-hero--mobile { display: block; }
+
+.epicure-mobile-hero {
+  position: relative;
+  width: 100%;
+  height: 340px;
+  background: url(/images/hero.png) center/cover no-repeat;
+  overflow: hidden;
+
+  &__panel {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 315px;
+    background: #FFFFFFE0;
+    display: flex;
+    flex-direction: column;
+    padding: 1.25rem 1.25rem 1rem;
+    z-index: 3;
+  }
+
+  &__headline {
+    font-size: 1.5rem;
+    font-weight: 300;
+    color: $black-primary;
+    line-height: 1.3;
+    margin-bottom: 0.75rem;
+  }
+
+  &__search {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    width: 100%;
+    height: 30px;
+    border: 1px solid rgba(0, 0, 0, 0.25);
+    background: $white;
+    padding: 0 0.625rem;
+  }
+
+  &__search-placeholder {
+    font-size: 0.8125rem;
+    color: $black-primary;
+    opacity: 0.4;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+}
+
+// Popular restaurants carousel — mobile only
+.epicure-popular {
+  display: block;
+  padding: 1.5rem 1rem 2rem;
+
+  &__title {
+    font-size: 1rem;
+    font-weight: 300;
+    letter-spacing: 0.04em;
+    color: $black-primary;
+    margin-bottom: 1rem;
+    text-transform: uppercase;
+  }
+
+  &__cards {
+    display: flex;
+    gap: 1rem;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    padding-bottom: 0.5rem;
+
+    &::-webkit-scrollbar { display: none; }
+
+    .epicure-restaurant-card {
+      flex: 0 0 160px;
+      scroll-snap-align: start;
+    }
+  }
+
+  &__all-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    margin-top: 1.25rem;
+    font-size: 0.9375rem;
+    color: $black-primary;
+    text-decoration: none;
+
+    &:hover { opacity: 0.7; }
+  }
+}
+
+@include for-normal-layout {
+  .epicure-hero {
+    display: flex;
+    background-color: $cream-secondary;
+    padding: 5rem 2rem;
+    flex-direction: column;
+    align-items: flex-start;
+    max-width: $max-width;
+    margin: 0 auto;
+  }
+
+  .epicure-hero--mobile { display: none; }
+  .epicure-popular { display: none; }
+}
