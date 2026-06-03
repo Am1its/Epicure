@@ -53,7 +53,28 @@ export const TEXT = {
     mobileHeadline: 'Epicure works with the top chef restaurants in Tel Aviv',
     mobileSearchPlaceholder: 'Search for restaurant cuisine, chef',
     popularTitle: 'POPULAR RESTAURANT IN EPICURE:',
+    signatureDishTitle: 'SIGNATURE DISH OF:',
+    iconsTitle: 'THE MEANING OF OUR ICONS:',
     allRestaurantsLink: 'All Restaurants',
+  },
+  icons: [
+    { src: '/icons/spicy.svg', label: 'Spicy' },
+    { src: '/icons/vegetarian.svg', label: 'Vegetarian' },
+    { src: '/icons/vegan.svg', label: 'Vegan' },
+  ],
+  chefOfTheWeek: {
+    sectionTitle: 'CHEF OF THE WEEK:',
+    restaurantsLabel: "CHEF'S RESTAURANTS",
+    allRestaurantsLink: 'All Restaurants',
+    bioPlaceholder: 'Chef bio coming soon.',
+    namePlaceholder: 'Chef Name',
+  },
+  appSection: {
+    brandName: 'EPICURE',
+    googlePlay: { line1: 'Get it on', line2: 'Google Play' },
+    appStore: { line1: 'Download on the', line2: 'App Store' },
+    aboutTitle: 'ABOUT US:',
+    aboutText: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. In a lacus vel justo fermentum bibendum non eu ipsum. Cras porta malesuada eros, eget blandit turpis suscipit at. Vestibulum sed massa in magna sodales porta. Vivamus elit urna, dignissim a vestibulum. Lorem ipsum dolor sit amet, consectetur adipiscing elit. In a lacus vel justo fermentum bibendum no eu ipsum. Cras porta malesuada eros.',
   },
   restaurantDetail: {
     notFound: 'Restaurant not found.',

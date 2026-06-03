@@ -1,0 +1,97 @@
+@use '../setup/variables' as *;
+@use '../setup/mixins' as *;
+
+.epicure-mobile-section {
+  padding: 1.5rem 1rem 2rem;
+
+  &__title {
+    font-size: 1rem;
+    font-weight: 300;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: $black-primary;
+    margin-bottom: 1rem;
+  }
+
+  &__row {
+    display: flex;
+    gap: 1rem;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    padding-bottom: 0.5rem;
+
+    &::-webkit-scrollbar { display: none; }
+
+    .epicure-restaurant-card {
+      flex: 0 0 160px;
+      scroll-snap-align: start;
+    }
+
+    .epicure-dish-card {
+      flex: 0 0 245px;
+      scroll-snap-align: start;
+
+      .epicure-dish-card__image {
+        aspect-ratio: unset;
+        height: 125px;
+      }
+    }
+  }
+
+  &__link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    margin-top: 1.25rem;
+    font-size: 0.9375rem;
+    color: $black-primary;
+    text-decoration: none;
+
+    &:hover { opacity: 0.7; }
+  }
+
+  @include for-normal-layout { display: none; }
+}
+
+.epicure-icons-legend {
+  padding: 2rem 1rem;
+  background: $bg-light;
+
+  &__title {
+    font-size: 1rem;
+    font-weight: 300;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: $black-primary;
+    margin-bottom: 2rem;
+  }
+
+  &__list {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2.5rem;
+  }
+
+  &__item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  &__icon {
+    width: 80px;
+    height: 80px;
+  }
+
+  &__label {
+    font-size: 0.9375rem;
+    font-weight: 300;
+    color: $black-primary;
+  }
+
+  @include for-normal-layout { display: none; }
+}
