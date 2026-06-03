@@ -20,10 +20,7 @@ export function SignInModal({ onClose }: SignInModalProps) {
           onClick={onClose}
           aria-label={TEXT.signIn.closePanelAriaLabel}
         >
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
-            <line x1="19.3" y1="4.7" x2="4.7" y2="19.3" />
-            <line x1="4.7" y1="4.7" x2="19.3" y2="19.3" />
-          </svg>
+          <img src="/icons/x.svg" alt="" aria-hidden="true" width={20} height={20} />
         </button>
         <h2 className="epicure-signin-modal__title">{TEXT.signIn.title}</h2>
         <p className="epicure-signin-modal__subtitle">{TEXT.signIn.subtitle}</p>

@@ -27,11 +27,7 @@ export default function Header() {
             aria-label={TEXT.nav.openNavAriaLabel}
             onClick={() => toggle('drawer')}
           >
-            <svg width="22" height="16" viewBox="0 0 22 16" fill="none" aria-hidden="true">
-              <line x1="0" y1="1" x2="22" y2="1" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
-              <line x1="0" y1="8" x2="22" y2="8" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
-              <line x1="0" y1="15" x2="22" y2="15" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
-            </svg>
+            <img src="/icons/Hamburger.svg" alt="" aria-hidden="true" width={22} height={16} />
           </button>
 
           {/* Logo — centered on mobile, left on desktop */}
