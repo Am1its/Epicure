@@ -1,1 +1,3 @@
-export * from './lib/ui-components';
+export { StarRating } from './lib/star-rating/StarRating';
+export { RestaurantCard } from './lib/restaurant-card/RestaurantCard';
+export { DishCard } from './lib/dish-card/DishCard';

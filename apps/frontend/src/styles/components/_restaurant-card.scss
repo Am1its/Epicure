@@ -1,0 +1,52 @@
+@use '../setup/variables' as *;
+
+.epicure-restaurant-card {
+  display: block;
+  text-decoration: none;
+  color: inherit;
+  background: $white;
+  border-radius: 4px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  transition: box-shadow 200ms;
+
+  &:hover { box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12); }
+
+  &__image {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    object-fit: cover;
+    display: block;
+  }
+
+  &__info {
+    background: $cream-secondary;
+    padding: 1rem 1.25rem 1.25rem;
+  }
+
+  &__name {
+    font-size: 1.375rem;
+    font-weight: 400;
+    margin-bottom: 0.25rem;
+  }
+
+  &__chef {
+    font-size: 0.875rem;
+    opacity: 0.55;
+    margin-bottom: 0.5rem;
+  }
+}
+
+.epicure-star-rating {
+  display: flex;
+  gap: 0.125rem;
+}
+
+.epicure-star {
+  font-size: 1.25rem;
+  color: $gold-secondary;
+  line-height: 1;
+
+  &--filled { color: $gold-secondary; }
+  &--empty  { color: $gold-secondary; opacity: 0.35; }
+}

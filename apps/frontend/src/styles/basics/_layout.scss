@@ -1,0 +1,18 @@
+@use '../setup/variables' as *;
+@use '../setup/mixins' as *;
+
+.app-layout {
+  max-width: $max-width;
+  margin: 0 auto;
+}
+
+.main-layout {
+  display: grid;
+  grid-template-columns: 20px 1fr 20px;
+
+  @include for-normal-layout {
+    grid-template-columns: 128px 1fr 128px;
+  }
+
+  .full { grid-column: 1 / -1; }
+}

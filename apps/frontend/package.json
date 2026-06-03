@@ -6,6 +6,7 @@
     "@org/shared-types": "^0.0.1",
     "next": "~16.1.6",
     "react": "^19.0.0",
-    "react-dom": "^19.0.0"
+    "react-dom": "^19.0.0",
+    "sass": "^1.100.0"
   }
 }

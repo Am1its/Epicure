@@ -1,0 +1,35 @@
+@use '../setup/variables' as *;
+
+.epicure-page-tabs-wrap {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+  background: $white;
+}
+
+.epicure-page-tabs {
+  display: flex;
+  justify-content: center;
+  gap: 2.5rem;
+  max-width: $max-width;
+  margin: 0 auto;
+  padding: 0 2rem;
+}
+
+.epicure-page-tab {
+  padding: 1rem 0;
+  font-size: 0.9375rem;
+  color: $black-primary;
+  opacity: 0.55;
+  border: none;
+  border-bottom: 2px solid transparent;
+  background: none;
+  cursor: pointer;
+  transition: opacity 150ms;
+  white-space: nowrap;
+
+  &:hover { opacity: 0.85; }
+
+  &--active {
+    opacity: 1;
+    border-bottom-color: $gold-secondary;
+  }
+}
