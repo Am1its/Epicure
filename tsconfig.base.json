@@ -17,6 +17,7 @@
     "strict": true,
     "target": "es2022",
     "customConditions": ["@org/source"],
+    "ignoreDeprecations": "5.0",
     "baseUrl": ".",
     "paths": {
       "@org/shared-types": ["libs/shared-types/src/index.ts"],
