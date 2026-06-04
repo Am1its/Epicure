@@ -27,13 +27,6 @@ export function DishCard({ dish }: DishCardProps) {
           alt={dish.name}
           className="epicure-dish-card__image"
         />
-        {dish.type && TYPE_ICONS[dish.type] && (
-          <img
-            src={TYPE_ICONS[dish.type]}
-            alt={dish.type}
-            className="epicure-dish-card__type-icon"
-          />
-        )}
       </div>
       <div className="epicure-dish-card__info">
         {dish.isSignatureDish && (
@@ -43,7 +36,17 @@ export function DishCard({ dish }: DishCardProps) {
         {dish.description && (
           <p className="epicure-dish-card__description">{dish.description}</p>
         )}
-        <p className="epicure-dish-card__price">₪{dish.price}</p>
+        {dish.type && TYPE_ICONS[dish.type] && (
+          <img
+            src={TYPE_ICONS[dish.type]}
+            alt={dish.type}
+            className="epicure-dish-card__type-icon"
+          />
+        )}
+        <div className="epicure-dish-card__price-row">
+          <img src="/icons/Shekel.svg" alt="₪" aria-hidden="true" className="epicure-dish-card__shekel-icon" />
+          <span className="epicure-dish-card__price">{dish.price}</span>
+        </div>
       </div>
     </div>
   );

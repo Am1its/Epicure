@@ -102,7 +102,7 @@ export default async function HomePage() {
         <div className="epicure-app-section">
           <div className="epicure-app-section__brand">
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src="/icons/logo.svg" alt="" aria-hidden="true" width={60} height={60} />
+            <img src="/icons/logo.svg" alt="" aria-hidden="true" width={102} height={102} />
             <span>{TEXT.appSection.brandName}</span>
           </div>
           <a href="#" className="epicure-app-section__store-btn">

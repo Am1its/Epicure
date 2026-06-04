@@ -15,17 +15,19 @@
   }
 
   &__type-icon {
-    position: absolute;
-    bottom: 0.5rem;
-    left: 0.5rem;
-    width: 20px;
-    height: 20px;
+    width: 30px;
+    height: 24px;
+    display: block;
+    margin-top: auto;
+    margin-bottom: 0.5rem;
   }
 
   &__info {
     background: $cream-secondary;
-    padding: 0.875rem 0.875rem 1rem;
+    padding: 0.875rem 1.125rem 1rem;
     text-align: center;
+    display: flex;
+    flex-direction: column;
   }
 
   &__signature {
@@ -38,13 +40,13 @@
   }
 
   &__name {
-    font-size: 1.0625rem;
+    font-size: 1.125rem;
     font-weight: 400;
     margin-bottom: 0.5rem;
   }
 
   &__description {
-    font-size: 0.8125rem;
+    font-size: 1rem;
     color: $black-primary;
     opacity: 0.55;
     line-height: 1.4;
@@ -55,11 +57,20 @@
     overflow: hidden;
   }
 
+  &__price-row {
+    display: flex;
+    align-items: baseline;
+    gap: 4px;
+    margin-top: 0.625rem;
+  }
+
+  &__shekel-icon {
+    width: 7.5px;
+    height: 7.5px;
+  }
+
   &__price {
     font-size: 0.875rem;
     font-weight: 400;
-    border-top: 1px solid rgba(0, 0, 0, 0.1);
-    padding-top: 0.625rem;
-    margin-top: 0.125rem;
   }
 }

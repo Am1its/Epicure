@@ -2,15 +2,15 @@
 @use '../setup/mixins' as *;
 
 .epicure-mobile-section {
-  padding: 1.5rem 1rem 2rem;
+  padding: 3rem 1.25rem 2rem;
 
   &__title {
-    font-size: 1rem;
+    font-size: 1.125rem;
     font-weight: 300;
-    letter-spacing: 0.04em;
+    letter-spacing: 1.25px;
     text-transform: uppercase;
     color: $black-primary;
-    margin-bottom: 1rem;
+    margin-bottom: 17px;
   }
 
   &__row {
@@ -25,17 +25,38 @@
     &::-webkit-scrollbar { display: none; }
 
     .epicure-restaurant-card {
-      flex: 0 0 160px;
+      flex: 0 0 245px;
+      height: 233px;
       scroll-snap-align: start;
+
+      .epicure-restaurant-card__image { height: 152px; }
+      .epicure-restaurant-card__info { height: 81px; }
+      .epicure-star-rating { display: none; }
     }
 
     .epicure-dish-card {
       flex: 0 0 245px;
+      height: 388px;
+      display: flex;
+      flex-direction: column;
       scroll-snap-align: start;
 
       .epicure-dish-card__image {
         aspect-ratio: unset;
-        height: 125px;
+        height: 152px;
+      }
+
+      .epicure-dish-card__info {
+        flex: 1;
+        text-align: left;
+      }
+      .epicure-dish-card__signature { display: none; }
+      .epicure-dish-card__description {
+        display: block;
+        -webkit-line-clamp: unset;
+        line-clamp: unset;
+        overflow: visible;
+        opacity: 1;
       }
     }
   }
@@ -56,15 +77,18 @@
 }
 
 .epicure-icons-legend {
-  padding: 2rem 1rem;
+  margin-top: 46px;
+  padding: 0 1.25rem 1.5rem;
   background: $bg-light;
 
   &__title {
-    font-size: 1rem;
+    font-size: 1.125rem;
     font-weight: 300;
-    letter-spacing: 0.04em;
+    letter-spacing: 1.25px;
     text-transform: uppercase;
     color: $black-primary;
+    text-align: center;
+    margin-top: 39px;
     margin-bottom: 2rem;
   }
 
@@ -72,25 +96,26 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 2.5rem;
+    gap: 56px;
   }
 
   &__item {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 0.75rem;
+    gap: 2rem;
   }
 
   &__icon {
-    width: 80px;
-    height: 80px;
+    width: 56px;
+    height: 56px;
   }
 
   &__label {
-    font-size: 0.9375rem;
+    font-size: 1.125rem;
     font-weight: 300;
     color: $black-primary;
+    letter-spacing: 1.97px;
   }
 
   @include for-normal-layout { display: none; }
