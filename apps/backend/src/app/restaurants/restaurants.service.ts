@@ -9,7 +9,7 @@ export class RestaurantsService {
 
   async findAll(): Promise<Restaurant[]> {
     const items = await this.strapiClient.get<StrapiRestaurant>(
-      '/api/restaurants?populate=*',
+      '/api/restaurants?populate[image][fields][0]=url&populate[image][fields][1]=alternativeText&populate[chef][fields][0]=name&populate[chef][fields][1]=id&populate[dishes][populate]=*',
     );
     return items.map(item => this.transform(item));
   }
@@ -31,6 +31,7 @@ export class RestaurantsService {
       chef: item.chef
         ? { id: item.chef.id, name: item.chef.name, image: item.chef.image }
         : undefined,
+      isPopular: item.isPopular,
       dishes: item.dishes?.map(
         (d): Dish => ({
           id: d.id,

@@ -7,6 +7,9 @@ import { Filter } from './Filter';
 import { PriceFilter } from './PriceFilter';
 import { DistanceFilter } from './DistanceFilter';
 import { RatingFilter } from './RatingFilter';
+import { TEXT } from '../lib/text';
+
+type Tab = (typeof TEXT.restaurantsGrid.tabs)[number]['id'];
 
 interface FilterConfig {
   id: string;
@@ -17,8 +20,6 @@ interface FilterConfig {
   dropdownClassName?: string;
   content: ReactNode;
 }
-
-type Tab = 'all' | 'new' | 'popular' | 'open' | 'map';
 
 interface RestaurantsGridProps {
   restaurants: Restaurant[];
@@ -76,18 +77,10 @@ export function RestaurantsGrid({ restaurants }: RestaurantsGridProps) {
     [restaurants, selectedRatings, priceRange, globalPrices, activeTab],
   );
 
-  const tabs: { id: Tab; label: string }[] = [
-    { id: 'all', label: 'All' },
-    { id: 'new', label: 'New' },
-    { id: 'popular', label: 'Most Popular' },
-    { id: 'open', label: 'Open Now' },
-    { id: 'map', label: 'Map View' },
-  ];
-
   const filterConfigs: FilterConfig[] = [
     {
       id: 'price',
-      label: 'Price Range',
+      label: TEXT.restaurantsGrid.priceFilter,
       isOpen: priceOpen,
       onToggle: () => { setPriceOpen(o => !o); setDistanceOpen(false); setRatingOpen(false); },
       onClose: () => setPriceOpen(false),
@@ -96,7 +89,7 @@ export function RestaurantsGrid({ restaurants }: RestaurantsGridProps) {
     },
     {
       id: 'distance',
-      label: 'Distance',
+      label: TEXT.restaurantsGrid.distanceFilter,
       isOpen: distanceOpen,
       onToggle: () => { setDistanceOpen(o => !o); setPriceOpen(false); setRatingOpen(false); },
       onClose: () => setDistanceOpen(false),
@@ -105,7 +98,7 @@ export function RestaurantsGrid({ restaurants }: RestaurantsGridProps) {
     },
     {
       id: 'rating',
-      label: 'Rating',
+      label: TEXT.restaurantsGrid.ratingFilter,
       isOpen: ratingOpen,
       onToggle: () => { setRatingOpen(o => !o); setPriceOpen(false); setDistanceOpen(false); },
       onClose: () => setRatingOpen(false),
@@ -117,7 +110,7 @@ export function RestaurantsGrid({ restaurants }: RestaurantsGridProps) {
     <>
       <div className="epicure-page-tabs-wrap">
         <div className="epicure-page-tabs" role="tablist">
-          {tabs.map(tab => (
+          {TEXT.restaurantsGrid.tabs.map(tab => (
             <button
               key={tab.id}
               role="tab"
@@ -138,7 +131,7 @@ export function RestaurantsGrid({ restaurants }: RestaurantsGridProps) {
       </div>
 
       {activeTab === 'map' ? (
-        <div className="epicure-map-placeholder">Map view coming soon</div>
+        <div className="epicure-map-placeholder">{TEXT.restaurantsGrid.mapPlaceholder}</div>
       ) : (
         <div className="epicure-restaurant-grid">
           {filtered.map(restaurant => (

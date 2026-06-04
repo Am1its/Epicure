@@ -11,6 +11,7 @@
 
 .epicure-nav {
   @include flex-align(center, space-between);
+  position: relative;
   padding: 0 1rem;
   height: $nav-height-mobile;
 
@@ -22,22 +23,18 @@
   }
 
   &__logo {
-    @include flex-align(center, flex-start);
-    gap: 0.625rem;
-    font-size: 1.1rem;
-    font-weight: 600;
-    letter-spacing: 0.15em;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    @include flex-align(center, center);
+    gap: 0.5rem;
+    text-decoration: none;
     color: $black-primary;
 
     span { display: none; }
   }
 
   &__logo-icon { display: block; }
-
-  &__left {
-    @include flex-align(center, flex-start);
-    gap: 2rem;
-  }
 
   &__links {
     display: none;
@@ -47,6 +44,7 @@
       color: $black-primary;
       opacity: 0.7;
       transition: opacity 150ms;
+      text-decoration: none;
 
       &:hover { opacity: 1; }
     }
@@ -74,8 +72,22 @@
     height: $nav-height;
 
     &__hamburger { display: none; }
-    &__logo span { display: inline; }
-    &__links { display: flex; gap: 2rem; }
+
+    &__logo {
+      position: static;
+      transform: none;
+      font-size: 1.1rem;
+      font-weight: 300;
+      letter-spacing: 0.15em;
+
+      span { display: inline; }
+    }
+
+    &__links {
+      display: flex;
+      gap: 2rem;
+    }
+
     &__actions { gap: 1rem; }
   }
 }

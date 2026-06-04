@@ -4,6 +4,8 @@ export interface StrapiChef {
   id: number;
   name: string;
   image?: StrapiImage;
+  bio?: string;
+  chefOfTheWeek?: boolean;
   [key: string]: unknown;
 }
 
@@ -27,5 +29,6 @@ export interface StrapiRestaurant {
   image?: StrapiImage;
   chef?: StrapiChef;
   dishes?: StrapiDish[];
+  isPopular?: boolean;
   [key: string]: unknown;
 }

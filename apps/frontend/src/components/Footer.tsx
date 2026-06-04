@@ -1,10 +1,12 @@
+import { TEXT } from '../lib/text';
+
 export default function Footer() {
   return (
     <footer className="epicure-footer">
-      <nav className="epicure-footer__links" aria-label="Footer">
-        <a href="/contact">Contact Us</a>
-        <a href="/terms">Term of Use</a>
-        <a href="/privacy">Privacy Policy</a>
+      <nav className="epicure-footer__links" aria-label={TEXT.footer.navAriaLabel}>
+        <a href="/contact">{TEXT.shared.contactUs}</a>
+        <a href="/terms">{TEXT.shared.termOfUse}</a>
+        <a href="/privacy">{TEXT.shared.privacyPolicy}</a>
       </nav>
     </footer>
   );

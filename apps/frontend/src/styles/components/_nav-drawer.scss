@@ -1,10 +1,17 @@
 @use '../setup/variables' as *;
 @use '../setup/placeholders' as *;
 
+.epicure-nav-drawer__backdrop {
+  position: fixed;
+  inset: 0;
+  background: transparent;
+  z-index: 149;
+  cursor: default;
+}
+
 .epicure-nav-drawer {
   @extend %overlay-panel;
   width: 100%;
-  max-width: 377px;
   height: 413px;
   display: flex;
   flex-direction: column;
@@ -13,7 +20,7 @@
 
   &__close {
     align-self: flex-start;
-    padding: 0.5rem;
+    padding: 0.25rem;
     color: $black-primary;
     opacity: 0.7;
 
@@ -21,16 +28,16 @@
   }
 
   &__main-links {
-    padding: 2rem 0 1rem;
+    padding: 1.5rem 0 1rem;
 
-    li { border-bottom: 1px solid rgba(0, 0, 0, 0.06); }
+    li { padding: 0.5rem 0; }
 
     a {
       display: block;
-      padding: 1rem 0.5rem;
-      font-size: 1.25rem;
-      font-weight: 600;
+      padding: 0.25rem 0.5rem;
+      font-size: 0.875rem;
       color: $black-primary;
+      opacity: 0.55;
     }
   }
 

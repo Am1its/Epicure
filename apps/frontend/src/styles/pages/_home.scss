@@ -38,69 +38,124 @@
 .epicure-hero--mobile { display: block; }
 
 .epicure-mobile-hero {
-  position: relative;
   width: 100%;
-  height: 340px;
+  height: 273px;
   background: url(/images/hero.png) center/cover no-repeat;
-  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
   &__panel {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 315px;
-    background: #FFFFFFE0;
+    width: 335px;
+    height: 144px;
+    background: rgba(255, 255, 255, 0.88);
     display: flex;
     flex-direction: column;
-    padding: 1.25rem 1.25rem 1rem;
-    z-index: 3;
+    align-items: center;
+    justify-content: center;
+    gap: 18px;
   }
 
   &__headline {
     font-size: 1.5rem;
     font-weight: 300;
     color: $black-primary;
-    line-height: 1.3;
-    margin-bottom: 0.75rem;
+    line-height: 2rem;
+    letter-spacing: 0.123rem;
+    text-align: center;
   }
 
   &__search {
     display: flex;
     align-items: center;
     gap: 0.5rem;
-    width: 100%;
+    width: 315px;
     height: 30px;
-    border: 1px solid rgba(0, 0, 0, 0.25);
-    background: $white;
+    border: 1px solid $gray-primary;
+    background: transparent;
     padding: 0 0.625rem;
   }
 
-  &__search-placeholder {
+  &__search-input {
+    flex: 1;
+    border: none;
+    outline: none;
+    background: transparent;
     font-size: 0.8125rem;
     color: $black-primary;
-    opacity: 0.4;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+    font-family: inherit;
+
+    &::placeholder {
+      color: $black-primary;
+      opacity: 0.6;
+    }
   }
 }
 
-// Popular restaurants carousel — mobile only
-.epicure-popular {
-  display: block;
-  padding: 1.5rem 1rem 2rem;
+
+// Chef of the week — mobile only
+.epicure-chef-week {
+  padding: 3rem 1.25rem 2rem;
+  max-width: 500px;
+  margin: 0 auto;
 
   &__title {
-    font-size: 1rem;
+    font-size: 1.125rem;
     font-weight: 300;
-    letter-spacing: 0.04em;
+    letter-spacing: 1.25px;
+    text-transform: uppercase;
     color: $black-primary;
     margin-bottom: 1rem;
-    text-transform: uppercase;
   }
 
-  &__cards {
+  &__photo-wrap {
+    position: relative;
+    width: 100%;
+    margin-bottom: 1.25rem;
+  }
+
+  &__photo {
+    width: 100%;
+    height: 282px;
+    object-fit: cover;
+    display: block;
+  }
+
+  &__name-bar {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: rgba(255, 255, 255, 0.88);
+    padding: 0.625rem 1rem;
+    text-align: center;
+  }
+
+  &__name {
+    font-size: 1rem;
+    font-weight: 400;
+    color: $black-primary;
+  }
+
+  &__bio {
+    font-size: 0.9375rem;
+    font-weight: 300;
+    color: $black-primary;
+    line-height: 1.6;
+    text-align: justify;
+    margin-bottom: 1.5rem;
+  }
+
+  &__restaurants-label {
+    font-size: 0.875rem;
+    font-weight: 300;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: $black-primary;
+    margin-bottom: 1rem;
+  }
+
+  &__cards-row {
     display: flex;
     gap: 1rem;
     overflow-x: auto;
@@ -108,12 +163,17 @@
     -webkit-overflow-scrolling: touch;
     scrollbar-width: none;
     padding-bottom: 0.5rem;
-
     &::-webkit-scrollbar { display: none; }
 
     .epicure-restaurant-card {
-      flex: 0 0 160px;
+      flex: 0 0 245px;
+      height: 233px;
       scroll-snap-align: start;
+
+      .epicure-restaurant-card__image { height: 152px; }
+      .epicure-restaurant-card__info { height: 81px; }
+      .epicure-restaurant-card__chef { display: none; }
+      .epicure-star-rating { display: none; }
     }
   }
 
@@ -130,6 +190,74 @@
   }
 }
 
+// App download + about — mobile only
+.epicure-app-section {
+  padding: 2rem 1.25rem 2.5rem;
+  background: $bg-light;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+
+  &__brand {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0;
+    margin-bottom: 0.5rem;
+
+    span {
+      font-size: 0.75rem;
+      letter-spacing: 0.2em;
+      color: $black-primary;
+    }
+  }
+
+  &__store-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+    width: 200px;
+    padding: 0.625rem 1rem;
+    border: 1px solid $black-primary;
+    border-radius: 6px;
+    color: $black-primary;
+    text-decoration: none;
+
+    span {
+      display: flex;
+      flex-direction: column;
+      line-height: 1.2;
+      font-size: 0.9375rem;
+      font-weight: 500;
+    }
+
+    small {
+      font-size: 0.6875rem;
+      font-weight: 400;
+    }
+  }
+
+  &__about {
+    margin-top: 1rem;
+  }
+
+  &__about-title {
+    font-size: 1.125rem;
+    font-weight: 400;
+    letter-spacing: 1.25px;
+    color: $black-primary;
+    margin-bottom: 0.75rem;
+  }
+
+  &__about-text {
+    font-size: 1.125rem;
+    font-weight: 300;
+    color: $black-primary;
+    line-height: 1.75rem;
+    letter-spacing: 2.14px;
+  }
+}
+
 @include for-normal-layout {
   .epicure-hero {
     display: flex;
@@ -142,5 +270,6 @@
   }
 
   .epicure-hero--mobile { display: none; }
-  .epicure-popular { display: none; }
+  .epicure-chef-week { display: none; }
+  .epicure-app-section { display: none; }
 }

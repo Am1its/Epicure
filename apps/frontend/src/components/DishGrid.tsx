@@ -3,8 +3,9 @@
 import { useState } from 'react';
 import type { Dish } from '@org/shared-types';
 import { DishCard } from '@org/ui-components';
+import { TEXT } from '../lib/text';
 
-type MealTime = 'Breakfast' | 'Lunch' | 'Dinner';
+type MealTime = (typeof TEXT.dishGrid.tabs)[number];
 
 interface DishGridProps {
   dishes: Dish[];
@@ -17,7 +18,7 @@ export function DishGrid({ dishes }: DishGridProps) {
     d => d.mealTime?.trim() === activeTab
   );
 
-  const tabs: MealTime[] = ['Breakfast', 'Lunch', 'Dinner'];
+  const tabs = [...TEXT.dishGrid.tabs] as MealTime[];
 
   return (
     <>

@@ -1,31 +1,70 @@
-import Link from 'next/link';
+'use client';
 
+import { useState } from 'react';
+import Link from 'next/link';
+import { NavDrawer } from './NavDrawer';
+import { SearchOverlay } from './SearchOverlay';
+import { CartPanel } from './CartPanel';
+import { SignInModal } from './SignInModal';
+import { TEXT } from '../lib/text';
+
+type ActivePanel = 'none' | 'drawer' | 'search' | 'cart' | 'signin';
 
 export default function Header() {
+  const [activePanel, setActivePanel] = useState<ActivePanel>('none');
+
+  function toggle(panel: Exclude<ActivePanel, 'none'>) {
+    setActivePanel(prev => (prev === panel ? 'none' : panel));
+  }
+
   return (
-    <header className="epicure-header">
-      <nav className="epicure-nav">
-        <div className="epicure-nav__left">
-          <div className="epicure-nav__logo">
+    <>
+      <header className="epicure-header">
+        <nav className="epicure-nav">
+          {/* Mobile: hamburger left */}
+          <button
+            className="epicure-nav__hamburger"
+            aria-label={TEXT.nav.openNavAriaLabel}
+            onClick={() => toggle('drawer')}
+          >
+            <img src="/icons/Hamburger.svg" alt="" aria-hidden="true" width={22} height={16} />
+          </button>
+
+          {/* Logo — centered on mobile, left on desktop */}
+          <Link href="/" className="epicure-nav__logo" aria-label={TEXT.nav.logoAriaLabel}>
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img src="/icons/logo.svg" alt="" aria-hidden="true" width={34} height={34} className="epicure-nav__logo-icon" />
-            <span>EPICURE</span>
-          </div>
-          <ul className="epicure-nav__links">
-            <li><Link href="/restaurants">Restaurants</Link></li>
-            <li><Link href="/chefs">Chefs</Link></li>
-          </ul>
-        </div>
+            <span>{TEXT.nav.brandName}</span>
+          </Link>
 
-        <div className="epicure-nav__actions">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <button aria-label="Search"><img src="/icons/search.svg" alt="" aria-hidden="true" width={22} height={22} /></button>
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <button aria-label="Account"><img src="/icons/user.svg" alt="" aria-hidden="true" width={22} height={22} /></button>
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <button aria-label="Cart"><img src="/icons/cart.svg" alt="" aria-hidden="true" width={22} height={22} /></button>
-        </div>
-      </nav>
-    </header>
+          {/* Desktop nav links — hidden on mobile */}
+          <ul className="epicure-nav__links">
+            <li><Link href="/restaurants">{TEXT.shared.restaurants}</Link></li>
+            <li><Link href="/chefs">{TEXT.shared.chefs}</Link></li>
+          </ul>
+
+          {/* Action icons — both mobile and desktop */}
+          <div className="epicure-nav__actions">
+            <button aria-label={TEXT.nav.searchAriaLabel} onClick={() => toggle('search')}>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src="/icons/search.svg" alt="" aria-hidden="true" width={22} height={22} />
+            </button>
+            <button aria-label={TEXT.nav.accountAriaLabel} onClick={() => toggle('signin')}>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src="/icons/user.svg" alt="" aria-hidden="true" width={22} height={22} />
+            </button>
+            <button aria-label={TEXT.nav.cartAriaLabel} onClick={() => toggle('cart')}>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src="/icons/cart.svg" alt="" aria-hidden="true" width={22} height={22} />
+            </button>
+          </div>
+        </nav>
+      </header>
+
+      {activePanel === 'drawer' && <NavDrawer onClose={() => setActivePanel('none')} />}
+      {activePanel === 'search' && <SearchOverlay onClose={() => setActivePanel('none')} />}
+      {activePanel === 'cart' && <CartPanel onClose={() => setActivePanel('none')} />}
+      {activePanel === 'signin' && <SignInModal onClose={() => setActivePanel('none')} />}
+    </>
   );
 }

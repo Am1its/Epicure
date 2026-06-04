@@ -9,6 +9,8 @@ export interface Chef {
   id: number;
   name: string;
   image?: StrapiImage;
+  bio?: string;
+  chefOfTheWeek?: boolean;
 }
 
 export interface Dish {
@@ -20,6 +22,7 @@ export interface Dish {
   image?: StrapiImage;
   mealTime?: 'Breakfast' | 'Lunch' | 'Dinner';
   isSignatureDish?: boolean;
+  restaurantName?: string;
 }
 
 export interface Restaurant {
@@ -31,4 +34,5 @@ export interface Restaurant {
   rating: number;
   dishes?: Dish[];
   createdAt?: string;
+  isPopular?: boolean;
 }

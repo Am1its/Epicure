@@ -18,9 +18,9 @@ describe('DishCard', () => {
     expect(screen.getByText('Pad Ki Mao')).toBeInTheDocument();
   });
 
-  it('renders price with shekel symbol', () => {
+  it('renders price', () => {
     render(<DishCard dish={mockDish} />);
-    expect(screen.getByText('₪88')).toBeInTheDocument();
+    expect(screen.getByText('88')).toBeInTheDocument();
   });
 
   it('renders description', () => {

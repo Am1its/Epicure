@@ -1,6 +1,7 @@
 'use client';
 
-import { useRef, useEffect, type ReactNode } from 'react';
+import { useRef, type ReactNode } from 'react';
+import { useClickOutside } from '../hooks/useClickOutside';
 
 interface FilterProps {
   label: string;
@@ -13,15 +14,7 @@ interface FilterProps {
 
 export function Filter({ label, isOpen, onToggle, onClose, dropdownClassName, children }: FilterProps) {
   const ref = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    if (!isOpen) return;
-    function handleClickOutside(e: MouseEvent) {
-      if (ref.current && !ref.current.contains(e.target as Node)) onClose();
-    }
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, [isOpen, onClose]);
+  useClickOutside(ref, onClose, isOpen);
 
   return (
     <div className="epicure-filter-wrap" ref={ref}>
