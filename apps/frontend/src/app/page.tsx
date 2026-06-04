@@ -94,7 +94,7 @@ export default async function HomePage() {
               </div>
             </div>
             <p className="epicure-chef-week__bio">{weeklyChef.bio ?? TEXT.chefOfTheWeek.bioPlaceholder}</p>
-            <p className="epicure-chef-week__restaurants-label">{TEXT.chefOfTheWeek.restaurantsLabel}</p>
+            <p className="epicure-chef-week__restaurants-label">{weeklyChef.name.split(' ')[0].toUpperCase()}'S RESTAURANTS</p>
             <div className="epicure-chef-week__cards-row">
               {chefRestaurants.map(restaurant => (
                 <RestaurantCard key={restaurant.id} restaurant={restaurant} />

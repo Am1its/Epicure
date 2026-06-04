@@ -96,6 +96,8 @@
 // Chef of the week — mobile only
 .epicure-chef-week {
   padding: 3rem 1.25rem 2rem;
+  max-width: 500px;
+  margin: 0 auto;
 
   &__title {
     font-size: 1.125rem;
