@@ -32,7 +32,7 @@ export default function Header() {
 
           {/* Logo — centered on mobile, left on desktop */}
           <Link href="/" className="epicure-nav__logo" aria-label={TEXT.nav.logoAriaLabel}>
-            {/* eslint-disable-next-line @next/next/no-img-element */}
+            { }
             <img src="/icons/logo.svg" alt="" aria-hidden="true" width={34} height={34} className="epicure-nav__logo-icon" />
             <span>{TEXT.nav.brandName}</span>
           </Link>
@@ -46,15 +46,15 @@ export default function Header() {
           {/* Action icons — both mobile and desktop */}
           <div className="epicure-nav__actions">
             <button aria-label={TEXT.nav.searchAriaLabel} onClick={() => toggle('search')}>
-              {/* eslint-disable-next-line @next/next/no-img-element */}
+              { }
               <img src="/icons/search.svg" alt="" aria-hidden="true" width={22} height={22} />
             </button>
             <button aria-label={TEXT.nav.accountAriaLabel} onClick={() => toggle('signin')}>
-              {/* eslint-disable-next-line @next/next/no-img-element */}
+              { }
               <img src="/icons/user.svg" alt="" aria-hidden="true" width={22} height={22} />
             </button>
             <button aria-label={TEXT.nav.cartAriaLabel} onClick={() => toggle('cart')}>
-              {/* eslint-disable-next-line @next/next/no-img-element */}
+              { }
               <img src="/icons/cart.svg" alt="" aria-hidden="true" width={22} height={22} />
             </button>
           </div>

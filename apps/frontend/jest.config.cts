@@ -7,6 +7,7 @@ const createJestConfig = nextJest({
 const config = {
   displayName: '@org/frontend',
   preset: '../../jest.preset.js',
+  passWithNoTests: true,
   transform: {
     '^(?!.*\\.(js|jsx|ts|tsx|css|json)$)': '@nx/react/plugins/jest',
   },
