@@ -12,6 +12,7 @@ export default async function HomePage() {
     fetchApi<Chef[]>('/api/chefs'),
   ]);
 
+  const popularRestaurants = restaurants.filter(r => r.isPopular);
   const weeklyChef = chefs.find(c => c.chefOfTheWeek) ?? chefs[0];
   const chefRestaurants = weeklyChef
     ? restaurants.filter(r => r.chef?.id === weeklyChef.id)
@@ -56,7 +57,7 @@ export default async function HomePage() {
           linkLabel={TEXT.home.allRestaurantsLink}
           linkHref="/restaurants"
         >
-          {restaurants.map(restaurant => (
+          {popularRestaurants.map(restaurant => (
             <RestaurantCard key={restaurant.id} restaurant={restaurant} />
           ))}
         </MobileSection>

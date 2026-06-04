@@ -33,4 +33,5 @@ export interface Restaurant {
   rating: number;
   dishes?: Dish[];
   createdAt?: string;
+  isPopular?: boolean;
 }

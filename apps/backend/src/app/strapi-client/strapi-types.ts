@@ -29,5 +29,6 @@ export interface StrapiRestaurant {
   image?: StrapiImage;
   chef?: StrapiChef;
   dishes?: StrapiDish[];
+  isPopular?: boolean;
   [key: string]: unknown;
 }

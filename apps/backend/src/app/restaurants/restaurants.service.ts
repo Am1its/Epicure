@@ -31,6 +31,7 @@ export class RestaurantsService {
       chef: item.chef
         ? { id: item.chef.id, name: item.chef.name, image: item.chef.image }
         : undefined,
+      isPopular: item.isPopular,
       dishes: item.dishes?.map(
         (d): Dish => ({
           id: d.id,
