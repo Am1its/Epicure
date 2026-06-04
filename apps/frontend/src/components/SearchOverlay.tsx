@@ -28,7 +28,7 @@ export function SearchOverlay({ onClose }: SearchOverlayProps) {
         </div>
         <div className="epicure-search-overlay__body">
           <div className="epicure-search-overlay__input-wrap">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
+            { }
             <img src="/icons/search.svg" alt="" aria-hidden="true" width={18} height={18} />
             <input
               type="text"

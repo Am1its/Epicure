@@ -21,8 +21,7 @@
     "baseUrl": ".",
     "paths": {
       "@org/shared-types": ["libs/shared-types/src/index.ts"],
-      "@org/ui-components": ["libs/ui-components/src/index.ts"],
-      "@org/utils": ["libs/utils/src/index.ts"]
+      "@org/ui-components": ["libs/ui-components/src/index.ts"]
     }
   }
 }

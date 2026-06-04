@@ -71,7 +71,7 @@ export default async function HomePage() {
           <ul className="epicure-icons-legend__list">
             {TEXT.icons.map(icon => (
               <li key={icon.label} className="epicure-icons-legend__item">
-                {/* eslint-disable-next-line @next/next/no-img-element */}
+                { }
                 <img src={icon.src} alt="" aria-hidden="true" className="epicure-icons-legend__icon" />
                 <span className="epicure-icons-legend__label">{icon.label}</span>
               </li>
@@ -83,7 +83,7 @@ export default async function HomePage() {
           <section className="epicure-chef-week">
             <h2 className="epicure-chef-week__title">{TEXT.chefOfTheWeek.sectionTitle}</h2>
             <div className="epicure-chef-week__photo-wrap">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
+              { }
               <img
                 src={strapiImageUrl(weeklyChef.image?.url)}
                 alt={weeklyChef.name}
@@ -109,7 +109,7 @@ export default async function HomePage() {
         {/* App download + about — mobile only */}
         <div className="epicure-app-section">
           <div className="epicure-app-section__brand">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
+            { }
             <img src="/icons/about-logo.svg" alt="Epicure" width={102} height={102} />
           </div>
           <a href="#" className="epicure-app-section__store-btn">

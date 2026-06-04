@@ -10,7 +10,7 @@ export function MobileHero() {
           {TEXT.home.mobileHeadline}
         </h2>
         <div className="epicure-mobile-hero__search">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
+          { }
           <img src="/icons/search.svg" alt="" aria-hidden="true" width={16} height={16} />
           <input
             className="epicure-mobile-hero__search-input"

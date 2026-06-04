@@ -35,7 +35,7 @@ export default async function RestaurantDetailPage({
     <div>
       <Header />
       <main>
-        {/* eslint-disable-next-line @next/next/no-img-element */}
+        { }
         <img
           src={strapiImageUrl(restaurant.image?.url)}
           alt={restaurant.name}
