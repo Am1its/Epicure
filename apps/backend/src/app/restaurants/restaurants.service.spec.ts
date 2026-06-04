@@ -48,7 +48,7 @@ describe('RestaurantsService', () => {
       await service.findAll();
 
       expect(mockStrapiClient.get).toHaveBeenCalledWith(
-        '/api/restaurants?populate=*',
+        '/api/restaurants?populate[image][fields][0]=url&populate[image][fields][1]=alternativeText&populate[chef][fields][0]=name&populate[chef][fields][1]=id&populate[dishes][populate]=*',
       );
     });
 

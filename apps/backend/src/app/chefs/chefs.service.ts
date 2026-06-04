@@ -24,6 +24,8 @@ export class ChefsService {
       id: item.id,
       name: item.name,
       image: item.image,
+      bio: item.bio,
+      chefOfTheWeek: item.chefOfTheWeek,
     };
   }
 }

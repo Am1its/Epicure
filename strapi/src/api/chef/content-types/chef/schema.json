@@ -21,6 +21,12 @@
       "allowedTypes": [
         "images"
       ]
+    },
+    "chefOfTheWeek": {
+      "type": "boolean"
+    },
+    "bio": {
+      "type": "text"
     }
   }
 }

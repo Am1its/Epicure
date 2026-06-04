@@ -9,6 +9,8 @@ export interface Chef {
   id: number;
   name: string;
   image?: StrapiImage;
+  bio?: string;
+  chefOfTheWeek?: boolean;
 }
 
 export interface Dish {
