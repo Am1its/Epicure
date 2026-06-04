@@ -1,6 +1,7 @@
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import { MobileSection } from '../components/MobileSection';
+import { MobileHero } from '../components/MobileHero';
 import { fetchApi, strapiImageUrl } from '../lib/api';
 import type { Restaurant, Chef } from '@org/shared-types';
 import { RestaurantCard, DishCard } from '@org/ui-components';
@@ -13,13 +14,15 @@ export default async function HomePage() {
   ]);
 
   const popularRestaurants = restaurants.filter(r => r.isPopular);
-  const weeklyChef = chefs.find(c => c.chefOfTheWeek) ?? chefs[0];
+  const weeklyChef = chefs.find(c => c.chefOfTheWeek);
   const chefRestaurants = weeklyChef
     ? restaurants.filter(r => r.chef?.id === weeklyChef.id)
     : [];
 
   const signatureDishes = restaurants.flatMap(r =>
-    (r.dishes ?? []).filter(d => d.isSignatureDish)
+    (r.dishes ?? [])
+      .filter(d => d.isSignatureDish)
+      .map(d => ({ ...d, restaurantName: r.name }))
   );
 
   return (
@@ -35,20 +38,7 @@ export default async function HomePage() {
 
         {/* Mobile hero — hidden on desktop via CSS */}
         <section className="epicure-hero--mobile">
-          <div className="epicure-mobile-hero">
-            <div className="epicure-mobile-hero__panel">
-              <h2 className="epicure-mobile-hero__headline">
-                {TEXT.home.mobileHeadline}
-              </h2>
-              <div className="epicure-mobile-hero__search">
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src="/icons/search.svg" alt="" aria-hidden="true" width={16} height={16} />
-                <span className="epicure-mobile-hero__search-placeholder">
-                  {TEXT.home.mobileSearchPlaceholder}
-                </span>
-              </div>
-            </div>
-          </div>
+          <MobileHero />
         </section>
 
         {/* Popular restaurants — mobile only */}

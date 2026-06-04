@@ -76,12 +76,19 @@
     padding: 0 0.625rem;
   }
 
-  &__search-placeholder {
+  &__search-input {
+    flex: 1;
+    border: none;
+    outline: none;
+    background: transparent;
     font-size: 0.8125rem;
     color: $black-primary;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+    font-family: inherit;
+
+    &::placeholder {
+      color: $black-primary;
+      opacity: 0.6;
+    }
   }
 }
 

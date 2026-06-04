@@ -22,6 +22,7 @@ export interface Dish {
   image?: StrapiImage;
   mealTime?: 'Breakfast' | 'Lunch' | 'Dinner';
   isSignatureDish?: boolean;
+  restaurantName?: string;
 }
 
 export interface Restaurant {

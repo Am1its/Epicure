@@ -36,7 +36,7 @@
 
   &__title {
     font-size: 1rem;
-    font-weight: 600;
+    font-weight: 300;
     color: $black-primary;
   }
 
@@ -58,6 +58,8 @@
     border: none;
     outline: none;
     font-size: 0.9375rem;
+    font-weight: 300;
+    font-family: inherit;
     color: $black-primary;
     background: transparent;
 

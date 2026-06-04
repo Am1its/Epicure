@@ -33,6 +33,9 @@ export function DishCard({ dish }: DishCardProps) {
           <p className="epicure-dish-card__signature">Signature Dish</p>
         )}
         <p className="epicure-dish-card__name">{dish.name}</p>
+        {dish.restaurantName && (
+          <p className="epicure-dish-card__restaurant">{dish.restaurantName}</p>
+        )}
         {dish.description && (
           <p className="epicure-dish-card__description">{dish.description}</p>
         )}
