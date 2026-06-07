@@ -54,6 +54,25 @@
 
 @include for-normal-layout {
   .epicure-restaurant-card {
+    display: flex;
+    flex-direction: column;
+    height: 405px;
+
+    &__image {
+      flex-shrink: 0;
+      aspect-ratio: unset;
+      height: 236px;
+    }
+
+    &__info {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+    }
+
     &__name {
       font-size: 2.5rem;
       font-weight: 400;
@@ -68,5 +87,10 @@
     }
   }
 
-  .epicure-star { font-size: 1.75rem; }
+  .epicure-star-rating {
+    justify-content: center;
+    gap: 0.25rem;
+  }
+
+  .epicure-star { font-size: 2.5rem; }
 }
