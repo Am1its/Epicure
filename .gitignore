@@ -48,7 +48,6 @@ AGENTS.md
 CLAUDE.md
 docs/
 .superpowers/
-agent-os/
 
 # TypeScript & compiler caches
 tsconfig.tsbuildinfo
