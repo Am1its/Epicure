@@ -1,10 +1,8 @@
 @use '../setup/variables' as *;
 @use '../setup/mixins' as *;
 
-// ---- Mobile Hero ----
-.epicure-hero--mobile { display: block; }
-
-.epicure-mobile-hero {
+// ---- Hero ----
+.epicure-hero {
   width: 100%;
   height: 273px;
   background: url(/images/hero.png) center / cover no-repeat;
@@ -43,6 +41,12 @@
     padding: 0 0.625rem;
   }
 
+  &__search-icon {
+    flex-shrink: 0;
+    width: 16px;
+    height: 16px;
+  }
+
   &__search-input {
     flex: 1;
     border: none;
@@ -59,9 +63,6 @@
     }
   }
 }
-
-// ---- Desktop Hero — hidden on mobile ----
-.epicure-desktop-hero { display: none; }
 
 // ---- Chef of the Week — mobile only ----
 .epicure-chef-week {
@@ -186,19 +187,19 @@
     border-radius: 6px;
     color: $black-primary;
     text-decoration: none;
+  }
 
-    span {
-      display: flex;
-      flex-direction: column;
-      line-height: 1.2;
-      font-size: 0.9375rem;
-      font-weight: 500;
-    }
+  &__store-text {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.2;
+    font-size: 0.9375rem;
+    font-weight: 500;
+  }
 
-    small {
-      font-size: 0.6875rem;
-      font-weight: 400;
-    }
+  &__store-subtext {
+    font-size: 0.6875rem;
+    font-weight: 400;
   }
 
   &__about { margin-top: 1rem; }
@@ -233,43 +234,29 @@
 // ================================================================
 @include for-normal-layout {
   // Hide mobile-only elements
-  .epicure-hero--mobile   { display: none; }
   .epicure-chef-week      { display: none; }
   .epicure-app-section    { display: none; }
 
-  // ---- Desktop Hero ----
-  .epicure-desktop-hero {
-    display: flex;
-    width: 100%;
+  // ---- Hero — desktop overrides ----
+  .epicure-hero {
     height: 500px;
-    background: url(/images/hero.png) center / cover no-repeat;
-    align-items: center;
-    justify-content: center;
 
     &__panel {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 1.5rem;
       width: 480px;
+      height: auto;
       padding: 2.5rem 2rem;
-      background: rgba(255, 255, 255, 0.88);
+      gap: 1.5rem;
     }
 
     &__headline {
       font-size: 2rem;
-      font-weight: 300;
-      text-align: center;
       line-height: 1.35;
-      color: $black-primary;
+      letter-spacing: 0;
     }
 
     &__search {
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
       width: 100%;
-      border: 1px solid $gray-primary;
+      height: auto;
       padding: 0.625rem 1rem;
       background: $white;
     }
@@ -277,20 +264,12 @@
     &__search-icon {
       width: 18px;
       height: 18px;
-      flex-shrink: 0;
     }
 
     &__search-input {
-      flex: 1;
-      border: none;
-      outline: none;
-      background: transparent;
       font-size: 1rem;
-      font-weight: 300;
-      font-family: inherit;
-      color: $black-primary;
 
-      &::placeholder { color: $gray-primary; }
+      &::placeholder { color: $gray-primary; opacity: 1; }
     }
   }
 
@@ -508,19 +487,19 @@
       border-radius: 6px;
       color: $black-primary;
       text-decoration: none;
+    }
 
-      span {
-        display: flex;
-        flex-direction: column;
-        line-height: 1.2;
-        font-size: 0.9375rem;
-        font-weight: 500;
-      }
+    &__store-text {
+      display: flex;
+      flex-direction: column;
+      line-height: 1.2;
+      font-size: 0.9375rem;
+      font-weight: 500;
+    }
 
-      small {
-        font-size: 0.6875rem;
-        font-weight: 400;
-      }
+    &__store-subtext {
+      font-size: 0.6875rem;
+      font-weight: 400;
     }
 
     &__right {
