@@ -12,9 +12,13 @@ type ActivePanel = 'none' | 'drawer' | 'search' | 'cart' | 'signin';
 
 export default function Header() {
   const [activePanel, setActivePanel] = useState<ActivePanel>('none');
+  const [searchQuery, setSearchQuery] = useState('');
 
   function toggle(panel: Exclude<ActivePanel, 'none'>) {
-    setActivePanel(prev => (prev === panel ? 'none' : panel));
+    setActivePanel(prev => {
+      if (prev === panel) { setSearchQuery(''); return 'none'; }
+      return panel;
+    });
   }
 
   return (
@@ -51,8 +55,19 @@ export default function Header() {
                   type="text"
                   placeholder={TEXT.searchOverlay.placeholder}
                   className="epicure-nav__search-input"
+                  value={searchQuery}
+                  onChange={e => setSearchQuery(e.target.value)}
                   autoFocus
                 />
+                {searchQuery && (
+                  <button
+                    className="epicure-nav__search-clear"
+                    onClick={() => setSearchQuery('')}
+                    aria-label={TEXT.home.searchClearAriaLabel}
+                  >
+                    <img src="/icons/x.svg" alt="" aria-hidden="true" width={12} height={12} />
+                  </button>
+                )}
               </div>
             )}
 
