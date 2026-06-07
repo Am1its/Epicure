@@ -1,7 +1,11 @@
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import { MobileSection } from '../components/MobileSection';
-import { MobileHero } from '../components/MobileHero';
+import { Hero } from '../components/Hero';
+import { DesktopPopularRestaurants } from '../components/DesktopPopularRestaurants';
+import { DesktopSignatureDishes } from '../components/DesktopSignatureDishes';
+import { DesktopChefSection } from '../components/DesktopChefSection';
+import { DesktopAboutSection } from '../components/DesktopAboutSection';
 import { fetchApi, strapiImageUrl } from '../lib/api';
 import type { Restaurant, Chef } from '@org/shared-types';
 import { RestaurantCard, DishCard } from '@org/ui-components';
@@ -29,19 +33,9 @@ export default async function HomePage() {
     <div>
       <Header />
       <main>
-        {/* Desktop hero — hidden on mobile via CSS */}
-        <section className="epicure-hero epicure-hero--desktop">
-          <h1 className="epicure-hero__title">{TEXT.home.heroTitleLine1}<br />{TEXT.home.heroTitleLine2}</h1>
-          <p className="epicure-hero__subtitle">{TEXT.home.heroSubtitle}</p>
-          <button className="epicure-hero__cta">{TEXT.home.heroCta}</button>
-        </section>
+        <Hero />
 
-        {/* Mobile hero — hidden on desktop via CSS */}
-        <section className="epicure-hero--mobile">
-          <MobileHero />
-        </section>
-
-        {/* Popular restaurants — mobile only */}
+        {/* Popular Restaurants — mobile carousel */}
         <MobileSection
           title={TEXT.home.popularTitle}
           linkLabel={TEXT.home.allRestaurantsLink}
@@ -52,7 +46,10 @@ export default async function HomePage() {
           ))}
         </MobileSection>
 
-        {/* Signature dishes — mobile only */}
+        {/* Popular Restaurants — desktop grid */}
+        <DesktopPopularRestaurants restaurants={popularRestaurants} />
+
+        {/* Signature Dishes — mobile carousel */}
         {signatureDishes.length > 0 && (
           <MobileSection
             title={TEXT.home.signatureDishTitle}
@@ -65,25 +62,27 @@ export default async function HomePage() {
           </MobileSection>
         )}
 
-        {/* Icons legend — mobile only */}
+        {/* Signature Dishes — desktop grid */}
+        <DesktopSignatureDishes dishes={signatureDishes} />
+
+        {/* Icons legend — shared, layout differs mobile vs desktop via CSS */}
         <div className="epicure-icons-legend">
           <h2 className="epicure-icons-legend__title">{TEXT.home.iconsTitle}</h2>
           <ul className="epicure-icons-legend__list">
             {TEXT.icons.map(icon => (
               <li key={icon.label} className="epicure-icons-legend__item">
-                { }
                 <img src={icon.src} alt="" aria-hidden="true" className="epicure-icons-legend__icon" />
                 <span className="epicure-icons-legend__label">{icon.label}</span>
               </li>
             ))}
           </ul>
         </div>
-        {/* Chef of the week — mobile only */}
+
+        {/* Chef of the Week — mobile */}
         {weeklyChef && (
           <section className="epicure-chef-week">
             <h2 className="epicure-chef-week__title">{TEXT.chefOfTheWeek.sectionTitle}</h2>
             <div className="epicure-chef-week__photo-wrap">
-              { }
               <img
                 src={strapiImageUrl(weeklyChef.image?.url)}
                 alt={weeklyChef.name}
@@ -94,7 +93,7 @@ export default async function HomePage() {
               </div>
             </div>
             <p className="epicure-chef-week__bio">{weeklyChef.bio ?? TEXT.chefOfTheWeek.bioPlaceholder}</p>
-            <p className="epicure-chef-week__restaurants-label">{weeklyChef.name.split(' ')[0].toUpperCase()}'S RESTAURANTS</p>
+            <p className="epicure-chef-week__restaurants-label">{weeklyChef.name.split(' ')[0].toUpperCase()}&apos;S RESTAURANTS</p>
             <div className="epicure-chef-week__cards-row">
               {chefRestaurants.map(restaurant => (
                 <RestaurantCard key={restaurant.id} restaurant={restaurant} />
@@ -106,23 +105,25 @@ export default async function HomePage() {
           </section>
         )}
 
-        {/* App download + about — mobile only */}
+        {/* Chef of the Week — desktop */}
+        {weeklyChef && <DesktopChefSection chef={weeklyChef} restaurants={chefRestaurants} />}
+
+        {/* About / App — mobile */}
         <div className="epicure-app-section">
           <div className="epicure-app-section__brand">
-            { }
             <img src="/icons/about-logo.svg" alt="Epicure" width={102} height={102} />
           </div>
           <a href="#" className="epicure-app-section__store-btn">
             <img src="/icons/google.svg" alt="" aria-hidden="true" width={19} height={25} />
-            <span>
-              <small>{TEXT.appSection.googlePlay.line1}</small>
+            <span className="epicure-app-section__store-text">
+              <small className="epicure-app-section__store-subtext">{TEXT.appSection.googlePlay.line1}</small>
               {TEXT.appSection.googlePlay.line2}
             </span>
           </a>
           <a href="#" className="epicure-app-section__store-btn">
             <img src="/icons/apple.svg" alt="" aria-hidden="true" width={23} height={30} />
-            <span>
-              <small>{TEXT.appSection.appStore.line1}</small>
+            <span className="epicure-app-section__store-text">
+              <small className="epicure-app-section__store-subtext">{TEXT.appSection.appStore.line1}</small>
               {TEXT.appSection.appStore.line2}
             </span>
           </a>
@@ -131,6 +132,9 @@ export default async function HomePage() {
             <p className="epicure-app-section__about-text">{TEXT.appSection.aboutText}</p>
           </div>
         </div>
+
+        {/* About — desktop */}
+        <DesktopAboutSection />
       </main>
       <Footer />
     </div>

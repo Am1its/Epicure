@@ -1,4 +1,5 @@
 @use '../setup/variables' as *;
+@use '../setup/mixins' as *;
 
 .epicure-dish-card {
   background: $white;
@@ -79,5 +80,45 @@
   &__price {
     font-size: 0.875rem;
     font-weight: 400;
+  }
+}
+
+@include for-normal-layout {
+  .epicure-dish-card {
+    display: flex;
+    flex-direction: column;
+
+    &__info {
+      flex: 1;
+    }
+
+    &__shekel-icon { display: none; }
+
+    &__price-row {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-top: auto;
+
+      &::before,
+      &::after {
+        content: '';
+        flex: 1;
+        height: 1px;
+        background: $black-primary;
+        opacity: 0.35;
+      }
+    }
+
+    &__price::before { content: '₪'; }
+
+    &__type-icon {
+      width: 20px;
+      height: 16px;
+      margin-top: auto;
+      margin-left: auto;
+      margin-right: auto;
+      margin-bottom: 0.5rem;
+    }
   }
 }
