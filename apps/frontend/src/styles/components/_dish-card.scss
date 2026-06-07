@@ -113,12 +113,28 @@
     &__price::before { content: '₪'; }
 
     &__type-icon {
-      width: 20px;
-      height: 16px;
+      width: 30px;
+      height: 24px;
       margin-top: auto;
       margin-left: auto;
       margin-right: auto;
       margin-bottom: 0.5rem;
+    }
+
+    &__name {
+      font-size: 2.5rem;
+      font-weight: 400;
+    }
+
+    &__description {
+      font-size: 1.5rem;
+      font-weight: 300;
+      opacity: 1;
+      -webkit-line-clamp: 4;
+    }
+
+    &__price {
+      font-size: 1.5rem;
     }
   }
 }

@@ -33,7 +33,7 @@ export default async function HomePage() {
     <div>
       <Header />
       <main>
-        <Hero />
+        <Hero restaurants={restaurants} chefs={chefs} />
 
         {/* Popular Restaurants — mobile carousel */}
         <MobileSection

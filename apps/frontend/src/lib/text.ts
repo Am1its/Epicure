@@ -28,6 +28,7 @@ export const TEXT = {
     dialogAriaLabel: 'Shopping cart',
     closeAriaLabel: 'Close cart',
     empty: 'YOUR BAG IS EMPTY',
+    orderHistory: 'ORDER HISTORY',
   },
   signIn: {
     dialogAriaLabel: 'Sign in',
@@ -52,6 +53,9 @@ export const TEXT = {
     heroCta: 'Explore Restaurants',
     mobileHeadline: 'Epicure works with the top chef restaurants in Tel Aviv',
     mobileSearchPlaceholder: 'Search for restaurant cuisine, chef',
+    searchClearAriaLabel: 'Clear search',
+    searchResultsRestaurants: 'Restaurants:',
+    searchResultsChefs: 'Chefs:',
     popularTitle: 'POPULAR RESTAURANT IN EPICURE:',
     signatureDishTitle: 'SIGNATURE DISH OF:',
     iconsTitle: 'THE MEANING OF OUR ICONS:',

@@ -32,7 +32,6 @@ export default function Header() {
 
           {/* Logo — centered on mobile, left on desktop */}
           <Link href="/" className="epicure-nav__logo" aria-label={TEXT.nav.logoAriaLabel}>
-            { }
             <img src="/icons/logo.svg" alt="" aria-hidden="true" width={34} height={34} className="epicure-nav__logo-icon" />
             <span>{TEXT.nav.brandName}</span>
           </Link>
@@ -43,18 +42,29 @@ export default function Header() {
             <li><Link href="/chefs">{TEXT.shared.chefs}</Link></li>
           </ul>
 
-          {/* Action icons — both mobile and desktop */}
+          {/* Action icons */}
           <div className="epicure-nav__actions">
+            {/* Desktop inline search — appears to the left of the search icon */}
+            {activePanel === 'search' && (
+              <div className="epicure-nav__search-inline">
+                <input
+                  type="text"
+                  placeholder={TEXT.searchOverlay.placeholder}
+                  className="epicure-nav__search-input"
+                  autoFocus
+                />
+              </div>
+            )}
+
+            {/* Search icon — always visible; toggles search box on desktop */}
             <button aria-label={TEXT.nav.searchAriaLabel} onClick={() => toggle('search')}>
-              { }
               <img src="/icons/search.svg" alt="" aria-hidden="true" width={22} height={22} />
             </button>
+
             <button aria-label={TEXT.nav.accountAriaLabel} onClick={() => toggle('signin')}>
-              { }
               <img src="/icons/user.svg" alt="" aria-hidden="true" width={22} height={22} />
             </button>
             <button aria-label={TEXT.nav.cartAriaLabel} onClick={() => toggle('cart')}>
-              { }
               <img src="/icons/cart.svg" alt="" aria-hidden="true" width={22} height={22} />
             </button>
           </div>

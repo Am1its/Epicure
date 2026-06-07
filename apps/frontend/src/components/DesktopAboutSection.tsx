@@ -25,7 +25,7 @@ export function DesktopAboutSection() {
           </div>
         </div>
         <div className="epicure-desktop-about__right">
-          <img src="/icons/about-logo.svg" alt="Epicure" width={160} height={160} />
+          <img src="/icons/about-logo.svg" alt="Epicure" width={102} height={102} />
         </div>
       </div>
     </section>
