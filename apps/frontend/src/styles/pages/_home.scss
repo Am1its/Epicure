@@ -294,36 +294,40 @@
     height: 500px;
 
     &__panel {
-      width: 480px;
-      height: auto;
+      width: 776px;
+      height: 221px;
+      background: rgba($white, 0.7);
       padding: 2.5rem 2rem;
       gap: 1.5rem;
     }
 
     &__headline {
+      width: 402px;
       font-size: 2rem;
       line-height: 1.35;
       letter-spacing: 0;
     }
 
-    &__search-wrap { width: 100%; }
+    &__search-wrap { width: 505px; }
 
     &__search {
       width: 100%;
-      height: auto;
-      padding: 0.625rem 1rem;
-      background: $white;
+      height: 48px;
+      gap: 1rem;
+      padding: 0 1rem;
+      background: transparent;
     }
 
     &__search-icon {
-      width: 18px;
-      height: 18px;
+      width: 32px;
+      height: 32px;
     }
 
     &__search-input {
-      font-size: 1rem;
+      height: 29px;
+      font-size: 1.5cqw;
 
-      &::placeholder { color: $gray-primary; opacity: 1; }
+      &::placeholder { color: $black-primary; opacity: 1; }
     }
   }
 
