@@ -1,12 +1,17 @@
 @use '../setup/variables' as *;
+@use '../setup/mixins' as *;
 
 .epicure-filter-row {
-  display: flex;
-  justify-content: center;
-  gap: 1rem;
-  padding: 1rem 2rem;
-  max-width: $max-width;
-  margin: 0 auto;
+  display: none;
+
+  @include for-normal-layout {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    padding: 1rem 2rem;
+    max-width: $max-width;
+    margin: 0 auto;
+  }
 }
 
 .epicure-filter-wrap { position: relative; }

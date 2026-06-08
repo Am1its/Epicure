@@ -1,4 +1,5 @@
 @use '../setup/variables' as *;
+@use '../setup/mixins' as *;
 
 .epicure-page-tabs-wrap {
   border-bottom: 1px solid rgba(0, 0, 0, 0.08);
@@ -7,11 +8,21 @@
 
 .epicure-page-tabs {
   display: flex;
-  justify-content: center;
-  gap: 2.5rem;
-  max-width: $max-width;
-  margin: 0 auto;
-  padding: 0 2rem;
+  justify-content: flex-start;
+  gap: 1.5rem;
+  padding: 0 1.25rem;
+  overflow-x: auto;
+  scrollbar-width: none;
+  &::-webkit-scrollbar { display: none; }
+
+  @include for-normal-layout {
+    justify-content: center;
+    gap: 2.5rem;
+    max-width: $max-width;
+    margin: 0 auto;
+    padding: 0 2rem;
+    overflow-x: unset;
+  }
 }
 
 .epicure-page-tab {
@@ -25,11 +36,18 @@
   cursor: pointer;
   transition: opacity 150ms;
   white-space: nowrap;
+  flex-shrink: 0;
 
   &:hover { opacity: 0.85; }
 
   &--active {
     opacity: 1;
     border-bottom-color: $gold-secondary;
+  }
+
+  &--map {
+    display: none;
+
+    @include for-normal-layout { display: block; }
   }
 }

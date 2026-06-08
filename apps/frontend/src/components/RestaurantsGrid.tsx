@@ -115,7 +115,7 @@ export function RestaurantsGrid({ restaurants }: RestaurantsGridProps) {
               key={tab.id}
               role="tab"
               aria-selected={activeTab === tab.id}
-              className={`epicure-page-tab${activeTab === tab.id ? ' epicure-page-tab--active' : ''}`}
+              className={`epicure-page-tab epicure-page-tab--${tab.id}${activeTab === tab.id ? ' epicure-page-tab--active' : ''}`}
               onClick={() => setActiveTab(tab.id)}
             >
               {tab.label}
