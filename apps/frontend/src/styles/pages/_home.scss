@@ -13,7 +13,7 @@
   &__panel {
     width: 335px;
     height: 144px;
-    background: rgba(255, 255, 255, 0.88);
+    background: $panel-overlay;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -147,7 +147,7 @@
     bottom: 0;
     left: 0;
     right: 0;
-    background: rgba($white, 0.88);
+    background: $panel-overlay;
     padding: 0.625rem 1rem;
     text-align: center;
   }
@@ -475,7 +475,7 @@
       bottom: 0;
       left: 0;
       right: 0;
-      background: rgba($white, 0.88);
+      background: $panel-overlay;
       padding: 0.75rem 1.25rem;
       text-align: center;
       font-size: 1.75rem;

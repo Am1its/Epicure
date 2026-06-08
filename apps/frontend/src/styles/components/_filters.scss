@@ -21,7 +21,7 @@
   align-items: center;
   gap: 0.375rem;
   padding: 0.5rem 1rem;
-  border: 1px solid rgba(0, 0, 0, 0.18);
+  border: 1px solid $border-interactive;
   border-radius: 4px;
   font-size: 0.875rem;
   color: $black-primary;
@@ -32,7 +32,7 @@
   &:hover { border-color: rgba(0, 0, 0, 0.35); }
 
   &--active {
-    border-color: rgba(0, 0, 0, 0.18);
+    border-color: $border-interactive;
     background: rgba(0, 0, 0, 0.06);
   }
 }
@@ -43,7 +43,7 @@
   left: 0;
   min-width: 220px;
   background: $white;
-  border: 1px solid rgba(0, 0, 0, 0.12);
+  border: 1px solid $shadow-subtle;
   border-radius: 4px;
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
   padding: 1rem;
@@ -93,7 +93,7 @@
   gap: 0.625rem;
 
   .rc-slider { flex: 1; }
-  .rc-slider-rail { background-color: rgba(0, 0, 0, 0.12); height: 3px; }
+  .rc-slider-rail { background-color: $shadow-subtle; height: 3px; }
 
   .rc-slider-track,
   .rc-slider-tracks { background-color: $cream-secondary; height: 3px; }
@@ -110,7 +110,7 @@
 
   .rc-slider-handle-dragging,
   .rc-slider-handle:active {
-    box-shadow: 0 0 0 4px rgba(0, 0, 0, 0.12) !important;
+    box-shadow: 0 0 0 4px $shadow-subtle !important;
     border: none !important;
   }
 }
