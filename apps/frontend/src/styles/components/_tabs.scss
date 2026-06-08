@@ -11,8 +11,7 @@
 
 .epicure-page-tabs {
   display: flex;
-  justify-content: flex-start;
-  gap: 1.5rem;
+  justify-content: space-between;
   padding: 0 1rem;
   overflow-x: auto;
   scrollbar-width: none;
@@ -30,7 +29,7 @@
 
 .epicure-page-tab {
   padding: 0.3125rem 0;
-  font-size: 0.9375rem;
+  font-size: 1.125rem;
   color: $black-primary;
   opacity: 0.55;
   border: none;
