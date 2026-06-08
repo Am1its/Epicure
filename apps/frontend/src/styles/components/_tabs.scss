@@ -5,7 +5,7 @@
   background: $white;
 
   @include for-normal-layout {
-    border-bottom: 1px solid $divider;
+    padding-top: 48px;
   }
 }
 
@@ -20,7 +20,7 @@
   @include for-normal-layout {
     justify-content: center;
     gap: 2.5rem;
-    max-width: $max-width;
+    max-width: 1112px;
     margin: 0 auto;
     padding: 0 2rem;
     overflow-x: unset;
@@ -46,6 +46,8 @@
     opacity: 1;
     font-weight: 500;
     border-bottom-color: $gold-secondary;
+
+    @include for-normal-layout { border-bottom-color: transparent; }
   }
 
   &--map {
@@ -53,4 +55,5 @@
 
     @include for-normal-layout { display: block; }
   }
+
 }
