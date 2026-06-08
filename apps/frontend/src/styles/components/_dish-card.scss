@@ -87,14 +87,54 @@
   .epicure-dish-card {
     display: flex;
     flex-direction: column;
+    height: 690px;
+
+    &__image-wrap {
+      flex-shrink: 0;
+      overflow: hidden;
+    }
+
+    &__image {
+      aspect-ratio: unset;
+      width: 100%;
+      height: 306px;
+    }
 
     &__info {
       flex: 1;
+      padding-left: 2.65rem;
+      padding-right: 2.65rem;
+      display: flex;
+      flex-direction: column;
     }
 
     &__shekel-icon { display: none; }
 
+    &__name {
+      order: 1;
+      font-size: 2.5rem;
+      font-weight: 400;
+      line-height: 1.2;
+      min-height: 6rem;
+    }
+
+    &__type-icon {
+      order: 2;
+      width: 40px;
+      height: 31px;
+      margin: 0.5rem auto;
+    }
+
+    &__description {
+      order: 3;
+      font-size: 1.5rem;
+      font-weight: 300;
+      opacity: 1;
+      -webkit-line-clamp: 4;
+    }
+
     &__price-row {
+      order: 4;
       display: flex;
       align-items: center;
       gap: 0.5rem;
@@ -112,13 +152,8 @@
 
     &__price::before { content: '₪'; }
 
-    &__type-icon {
-      width: 20px;
-      height: 16px;
-      margin-top: auto;
-      margin-left: auto;
-      margin-right: auto;
-      margin-bottom: 0.5rem;
+    &__price {
+      font-size: 1.5rem;
     }
   }
 }

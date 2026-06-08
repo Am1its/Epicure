@@ -1,0 +1,39 @@
+import { RestaurantCard } from '@org/ui-components';
+import type { Chef, Restaurant } from '@org/shared-types';
+import { strapiImageUrl } from '../lib/api';
+import { TEXT } from '../lib/text';
+
+interface Props {
+  chef: Chef;
+  restaurants: Restaurant[];
+}
+
+export function MobileChefSection({ chef, restaurants }: Props) {
+  return (
+    <section className="epicure-chef-week">
+      <h2 className="epicure-chef-week__title">{TEXT.chefOfTheWeek.sectionTitle}</h2>
+      <div className="epicure-chef-week__photo-wrap">
+        <img
+          src={strapiImageUrl(chef.image?.url)}
+          alt={chef.name}
+          className="epicure-chef-week__photo"
+        />
+        <div className="epicure-chef-week__name-bar">
+          <span className="epicure-chef-week__name">{chef.name}</span>
+        </div>
+      </div>
+      <p className="epicure-chef-week__bio">{chef.bio ?? TEXT.chefOfTheWeek.bioPlaceholder}</p>
+      <p className="epicure-chef-week__restaurants-label">
+        {chef.name.split(' ')[0].toUpperCase()}&apos;S RESTAURANTS
+      </p>
+      <div className="epicure-chef-week__cards-row">
+        {restaurants.map(restaurant => (
+          <RestaurantCard key={restaurant.id} restaurant={restaurant} />
+        ))}
+      </div>
+      <a href="/restaurants" className="epicure-chef-week__all-link">
+        {TEXT.chefOfTheWeek.allRestaurantsLink} <span aria-hidden="true">&raquo;&raquo;</span>
+      </a>
+    </section>
+  );
+}

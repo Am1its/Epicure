@@ -1,5 +1,6 @@
 @use '../setup/variables' as *;
 @use '../setup/placeholders' as *;
+@use '../setup/mixins' as *;
 
 .epicure-search-overlay__backdrop {
   position: fixed;
@@ -65,4 +66,10 @@
 
     &::placeholder { opacity: 0.45; }
   }
+}
+
+
+@include for-normal-layout {
+  .epicure-search-overlay,
+  .epicure-search-overlay__backdrop { display: none; }
 }

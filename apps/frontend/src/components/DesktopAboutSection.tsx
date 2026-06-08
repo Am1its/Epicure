@@ -7,6 +7,7 @@ export function DesktopAboutSection() {
         <div className="epicure-desktop-about__left">
           <h2 className="epicure-desktop-about__title">{TEXT.appSection.aboutTitle}</h2>
           <p className="epicure-desktop-about__text">{TEXT.appSection.aboutText}</p>
+          <p className="epicure-desktop-about__text">{TEXT.appSection.aboutText2}</p>
           <div className="epicure-desktop-about__store-btns">
             <a href="#" className="epicure-desktop-about__store-btn">
               <img src="/icons/apple.svg" alt="" aria-hidden="true" width={23} height={30} />
@@ -25,7 +26,7 @@ export function DesktopAboutSection() {
           </div>
         </div>
         <div className="epicure-desktop-about__right">
-          <img src="/icons/about-logo.svg" alt="Epicure" width={160} height={160} />
+          <img src="/icons/about-logo.svg" alt="Epicure" width={178} height={166} />
         </div>
       </div>
     </section>

@@ -1,5 +1,6 @@
 @use '../setup/variables' as *;
 @use '../setup/placeholders' as *;
+@use '../setup/mixins' as *;
 
 .epicure-signin-backdrop {
   position: fixed;
@@ -101,5 +102,20 @@
       color: $black-primary;
       text-decoration: underline;
     }
+  }
+}
+
+@include for-normal-layout {
+  .epicure-signin-backdrop {
+    background: rgba(0, 0, 0, 0.5);
+  }
+
+  .epicure-signin-modal {
+    top: 50%;
+    left: 50%;
+    right: auto;
+    transform: translate(-50%, -50%);
+    width: 500px;
+    padding: 2rem 2.5rem 2.5rem;
   }
 }

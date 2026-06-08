@@ -15,8 +15,11 @@ export function CartPanel({ onClose }: CartPanelProps) {
         aria-label={TEXT.cart.closeAriaLabel}
       />
       <div className="epicure-cart-panel" role="dialog" aria-label={TEXT.cart.dialogAriaLabel}>
-        <img src="/icons/cart.svg" alt="cart" width={48} height={48} className="epicure-cart-panel__icon" />
-        <p className="epicure-cart-panel__empty">{TEXT.cart.empty}</p>
+        <div className="epicure-cart-panel__body">
+          <img src="/icons/cart.svg" alt="cart" width={50} height={50} className="epicure-cart-panel__icon" />
+          <p className="epicure-cart-panel__empty">{TEXT.cart.empty}</p>
+        </div>
+        <button className="epicure-cart-panel__order-history">{TEXT.cart.orderHistory}</button>
       </div>
     </>
   );

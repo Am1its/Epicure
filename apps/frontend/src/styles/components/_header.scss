@@ -9,85 +9,130 @@
   z-index: 100;
 }
 
+// ─── Mobile base ──────────────────────────────────────────────────────────────
+
 .epicure-nav {
   @include flex-align(center, space-between);
   position: relative;
   padding: 0 1rem;
   height: $nav-height-mobile;
+}
 
-  &__hamburger {
-    @include flex-align(center, center);
-    padding: 0.25rem;
+.epicure-nav__hamburger {
+  @include flex-align(center, center);
+  padding: 0.25rem;
+  color: $black-primary;
+  opacity: 0.8;
+}
+
+.epicure-nav__logo {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  @include flex-align(center, center);
+  gap: 0.5rem;
+  text-decoration: none;
+  color: $black-primary;
+
+  span { display: none; }
+}
+
+.epicure-nav__logo-icon { display: block; }
+
+.epicure-nav__links {
+  display: none;
+
+  a {
+    font-size: 0.9375rem;
     color: $black-primary;
-    opacity: 0.8;
-  }
-
-  &__logo {
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
-    @include flex-align(center, center);
-    gap: 0.5rem;
+    opacity: 0.7;
+    transition: opacity 150ms;
     text-decoration: none;
+
+    &:hover { opacity: 1; }
+  }
+}
+
+.epicure-nav__actions {
+  @include flex-align(center, flex-end);
+  gap: 0.75rem;
+
+  button {
+    @include flex-align(center, center);
     color: $black-primary;
+    padding: 0.25rem;
+    opacity: 0.7;
+    transition: opacity 150ms;
 
-    span { display: none; }
+    &:hover { opacity: 1; }
   }
+}
 
-  &__logo-icon { display: block; }
+.epicure-nav__search-inline { display: none; }
 
-  &__links {
-    display: none;
+// ─── Desktop overrides (≥768px) ───────────────────────────────────────────────
 
-    a {
-      font-size: 0.9375rem;
-      color: $black-primary;
-      opacity: 0.7;
-      transition: opacity 150ms;
-      text-decoration: none;
-
-      &:hover { opacity: 1; }
-    }
-  }
-
-  &__actions {
-    @include flex-align(center, flex-end);
-    gap: 0.75rem;
-
-    button {
-      @include flex-align(center, center);
-      color: $black-primary;
-      padding: 0.25rem;
-      opacity: 0.7;
-      transition: opacity 150ms;
-
-      &:hover { opacity: 1; }
-    }
-  }
-
-  @include for-normal-layout {
+@include for-normal-layout {
+  .epicure-nav {
     max-width: $max-width;
     margin: 0 auto;
     padding: 0 2rem;
     height: $nav-height;
-
-    &__hamburger { display: none; }
-
-    &__logo {
-      position: static;
-      transform: none;
-      font-size: 1.1rem;
-      font-weight: 300;
-      letter-spacing: 0.15em;
-
-      span { display: inline; }
-    }
-
-    &__links {
-      display: flex;
-      gap: 2rem;
-    }
-
-    &__actions { gap: 1rem; }
+    justify-content: flex-start;
   }
+
+  .epicure-nav__hamburger { display: none; }
+
+  .epicure-nav__logo {
+    position: static;
+    transform: none;
+    font-size: 1.1rem;
+    font-weight: 300;
+    letter-spacing: 0.15em;
+
+    span { display: inline; }
+  }
+
+  .epicure-nav__links {
+    display: flex;
+    gap: 2rem;
+    margin-left: 2rem;
+  }
+
+  .epicure-nav__actions {
+    gap: 1rem;
+    margin-left: auto;
+  }
+
+  .epicure-nav__search-inline {
+    display: flex;
+    align-items: center;
+    width: 410px;
+    height: 41px;
+    border: 1px solid rgba(0, 0, 0, 0.25);
+    padding: 0 0.75rem;
+  }
+
+  .epicure-nav__search-input {
+    flex: 1;
+    border: none;
+    outline: none;
+    font-size: 0.9375rem;
+    font-weight: 300;
+    font-family: inherit;
+    color: $black-primary;
+    background: transparent;
+
+    &::placeholder { color: $gray-primary; opacity: 0.7; }
+  }
+
+  .epicure-nav__search-clear {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    padding: 0.25rem;
+    color: $black-primary;
+    filter: brightness(0);
+  }
+
 }

@@ -12,9 +12,13 @@ type ActivePanel = 'none' | 'drawer' | 'search' | 'cart' | 'signin';
 
 export default function Header() {
   const [activePanel, setActivePanel] = useState<ActivePanel>('none');
+  const [searchQuery, setSearchQuery] = useState('');
 
   function toggle(panel: Exclude<ActivePanel, 'none'>) {
-    setActivePanel(prev => (prev === panel ? 'none' : panel));
+    setActivePanel(prev => {
+      if (prev === panel) { setSearchQuery(''); return 'none'; }
+      return panel;
+    });
   }
 
   return (
@@ -32,7 +36,6 @@ export default function Header() {
 
           {/* Logo — centered on mobile, left on desktop */}
           <Link href="/" className="epicure-nav__logo" aria-label={TEXT.nav.logoAriaLabel}>
-            { }
             <img src="/icons/logo.svg" alt="" aria-hidden="true" width={34} height={34} className="epicure-nav__logo-icon" />
             <span>{TEXT.nav.brandName}</span>
           </Link>
@@ -43,18 +46,40 @@ export default function Header() {
             <li><Link href="/chefs">{TEXT.shared.chefs}</Link></li>
           </ul>
 
-          {/* Action icons — both mobile and desktop */}
+          {/* Action icons */}
           <div className="epicure-nav__actions">
+            {/* Desktop inline search — appears to the left of the search icon */}
+            {activePanel === 'search' && (
+              <div className="epicure-nav__search-inline">
+                <input
+                  type="text"
+                  placeholder={TEXT.searchOverlay.placeholder}
+                  className="epicure-nav__search-input"
+                  value={searchQuery}
+                  onChange={e => setSearchQuery(e.target.value)}
+                  autoFocus
+                />
+                {searchQuery && (
+                  <button
+                    className="epicure-nav__search-clear"
+                    onClick={() => setSearchQuery('')}
+                    aria-label={TEXT.home.searchClearAriaLabel}
+                  >
+                    <img src="/icons/x.svg" alt="" aria-hidden="true" width={12} height={12} />
+                  </button>
+                )}
+              </div>
+            )}
+
+            {/* Search icon — always visible; toggles search box on desktop */}
             <button aria-label={TEXT.nav.searchAriaLabel} onClick={() => toggle('search')}>
-              { }
               <img src="/icons/search.svg" alt="" aria-hidden="true" width={22} height={22} />
             </button>
+
             <button aria-label={TEXT.nav.accountAriaLabel} onClick={() => toggle('signin')}>
-              { }
               <img src="/icons/user.svg" alt="" aria-hidden="true" width={22} height={22} />
             </button>
             <button aria-label={TEXT.nav.cartAriaLabel} onClick={() => toggle('cart')}>
-              { }
               <img src="/icons/cart.svg" alt="" aria-hidden="true" width={22} height={22} />
             </button>
           </div>

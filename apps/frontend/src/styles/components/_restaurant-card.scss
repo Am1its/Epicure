@@ -1,4 +1,5 @@
 @use '../setup/variables' as *;
+@use '../setup/mixins' as *;
 
 .epicure-restaurant-card {
   display: block;
@@ -49,4 +50,47 @@
 
   &--filled { color: $gold-secondary; }
   &--empty  { color: $gold-secondary; opacity: 0.35; }
+}
+
+@include for-normal-layout {
+  .epicure-restaurant-card {
+    display: flex;
+    flex-direction: column;
+    height: 405px;
+
+    &__image {
+      flex-shrink: 0;
+      aspect-ratio: unset;
+      height: 236px;
+    }
+
+    &__info {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+    }
+
+    &__name {
+      font-size: 2.5rem;
+      font-weight: 400;
+      margin-bottom: 0.5rem;
+    }
+
+    &__chef {
+      font-size: 1.5rem;
+      font-weight: 300;
+      opacity: 1;
+      margin-bottom: 0.75rem;
+    }
+  }
+
+  .epicure-star-rating {
+    justify-content: center;
+    gap: 0.25rem;
+  }
+
+  .epicure-star { font-size: 2.5rem; }
 }
