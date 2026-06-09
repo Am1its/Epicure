@@ -36,3 +36,8 @@ export interface Restaurant {
   createdAt?: string;
   isPopular?: boolean;
 }
+
+export interface SearchResults {
+  restaurants: { id: number; name: string }[];
+  chefs: { id: number; name: string }[];
+}
