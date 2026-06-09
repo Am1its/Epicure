@@ -7,7 +7,7 @@ export class SearchService {
   constructor(private readonly strapiClient: StrapiClientService) {}
 
   async search(q: string): Promise<SearchResults> {
-    const query = q.trim();
+    const query = q.trim().slice(0, 100);
     if (!query) return { restaurants: [], chefs: [] };
 
     const [restaurants, chefs] = await Promise.all([
