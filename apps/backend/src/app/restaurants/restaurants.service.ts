@@ -21,13 +21,14 @@ export class RestaurantsService {
     return this.transform(item);
   }
 
-  private transform(item: StrapiRestaurant): Restaurant {
+  private transform(item: StrapiRestaurant, distance?: number): Restaurant {
     return {
       id: item.id,
       name: item.name,
       rating: item.rating,
       createdAt: item.createdAt,
       image: item.image,
+      distance,
       chef: item.chef
         ? { id: item.chef.id, name: item.chef.name, image: item.chef.image }
         : undefined,

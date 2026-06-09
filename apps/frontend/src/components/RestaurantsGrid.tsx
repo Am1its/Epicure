@@ -58,6 +58,7 @@ export function RestaurantsGrid({ restaurants }: RestaurantsGridProps) {
     () =>
       restaurants
         .filter(r => selectedRatings.size === 0 || selectedRatings.has(r.rating))
+        .filter(r => r.distance == null || r.distance <= distanceKm)
         .filter(r => {
           if (!priceRange) return true;
           const [lo, hi] = priceRange;
