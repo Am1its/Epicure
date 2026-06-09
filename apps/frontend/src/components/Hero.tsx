@@ -17,12 +17,13 @@ export function Hero() {
       setResults({ restaurants: [], chefs: [] });
       return;
     }
+    let cancelled = false;
     const timer = setTimeout(() => {
       fetchSearch(query.trim())
-        .then(data => setResults(data))
-        .catch(() => {/* keep previous results on error */});
+        .then(data => { if (!cancelled) setResults(data); })
+        .catch(() => { if (!cancelled) setResults({ restaurants: [], chefs: [] }); });
     }, 300);
-    return () => clearTimeout(timer);
+    return () => { cancelled = true; clearTimeout(timer); };
   }, [query]);
 
   const hasResults = results.restaurants.length > 0 || results.chefs.length > 0;
