@@ -13,10 +13,8 @@ export function Hero() {
   const searchRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    if (!query.trim()) {
-      setResults({ restaurants: [], chefs: [] });
-      return;
-    }
+    setResults({ restaurants: [], chefs: [] });
+    if (!query.trim()) return;
     let cancelled = false;
     const timer = setTimeout(() => {
       fetchSearch(query.trim())
