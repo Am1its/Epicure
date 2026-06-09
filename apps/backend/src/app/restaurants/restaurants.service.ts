@@ -17,6 +17,9 @@ export class RestaurantsService {
   }
 
   async findAllWithDistances(userLat: number, userLng: number): Promise<Restaurant[]> {
+    if (!isFinite(userLat) || !isFinite(userLng)) {
+      throw new Error('lat and lng must be finite numbers');
+    }
     const items = await this.strapiClient.get<StrapiRestaurant>(POPULATE_QUERY);
     return items.map(item => {
       const distance =

@@ -118,7 +118,20 @@ export function RestaurantsGrid() {
   ];
 
   if (locationLoading || fetchLoading) {
-    return <p className="epicure-restaurants-loading">Loading restaurants…</p>;
+    return (
+      <div className="epicure-restaurant-grid">
+        {Array.from({ length: 6 }).map((_, i) => (
+          <div key={i} className="epicure-restaurant-card-skeleton">
+            <div className="epicure-restaurant-card-skeleton__image" />
+            <div className="epicure-restaurant-card-skeleton__info">
+              <div className="epicure-restaurant-card-skeleton__line epicure-restaurant-card-skeleton__line--name" />
+              <div className="epicure-restaurant-card-skeleton__line epicure-restaurant-card-skeleton__line--chef" />
+              <div className="epicure-restaurant-card-skeleton__line epicure-restaurant-card-skeleton__line--stars" />
+            </div>
+          </div>
+        ))}
+      </div>
+    );
   }
 
   return (
