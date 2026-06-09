@@ -14,8 +14,8 @@ export function DistanceFilter({ value, onChange }: DistanceFilterProps) {
         <span className="epicure-filter-slider-edge">My location</span>
         <Slider
           min={0}
-          max={4}
-          step={0.5}
+          max={20}
+          step={1}
           value={value}
           onChange={(v) => onChange(v as number)}
         />

@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useMemo, type ReactNode } from 'react';
+import { useState, useEffect, useMemo, type ReactNode } from 'react';
 import type { Restaurant } from '@org/shared-types';
 import { RestaurantCard } from '@org/ui-components';
 import { Filter } from './Filter';
@@ -8,6 +8,8 @@ import { PriceFilter } from './PriceFilter';
 import { DistanceFilter } from './DistanceFilter';
 import { RatingFilter } from './RatingFilter';
 import { TEXT } from '../lib/text';
+import { fetchRestaurantsWithDistances } from '../lib/api';
+import { useUserLocation } from '../hooks/useUserLocation';
 
 type Tab = (typeof TEXT.restaurantsGrid.tabs)[number]['id'];
 
@@ -21,18 +23,26 @@ interface FilterConfig {
   content: ReactNode;
 }
 
-interface RestaurantsGridProps {
-  restaurants: Restaurant[];
-}
+export function RestaurantsGrid() {
+  const { coords, loading: locationLoading } = useUserLocation();
+  const [restaurants, setRestaurants] = useState<Restaurant[]>([]);
+  const [fetchLoading, setFetchLoading] = useState(true);
 
-export function RestaurantsGrid({ restaurants }: RestaurantsGridProps) {
   const [activeTab, setActiveTab] = useState<Tab>('all');
   const [selectedRatings, setSelectedRatings] = useState<Set<number>>(new Set());
   const [priceRange, setPriceRange] = useState<[number, number] | null>(null);
-  const [distanceKm, setDistanceKm] = useState<number>(4);
+  const [distanceKm, setDistanceKm] = useState<number>(20);
   const [ratingOpen, setRatingOpen] = useState(false);
   const [priceOpen, setPriceOpen] = useState(false);
   const [distanceOpen, setDistanceOpen] = useState(false);
+
+  useEffect(() => {
+    if (!coords) return;
+    fetchRestaurantsWithDistances(coords.lat, coords.lng)
+      .then(setRestaurants)
+      .catch(() => setRestaurants([]))
+      .finally(() => setFetchLoading(false));
+  }, [coords]);
 
   const globalPrices = useMemo(() => {
     const all = restaurants.flatMap(r =>
@@ -75,7 +85,7 @@ export function RestaurantsGrid({ restaurants }: RestaurantsGridProps) {
           }
           return 0;
         }),
-    [restaurants, selectedRatings, priceRange, globalPrices, activeTab],
+    [restaurants, selectedRatings, priceRange, globalPrices, activeTab, distanceKm],
   );
 
   const filterConfigs: FilterConfig[] = [
@@ -106,6 +116,10 @@ export function RestaurantsGrid({ restaurants }: RestaurantsGridProps) {
       content: <RatingFilter selectedRatings={selectedRatings} onToggle={toggleRating} />,
     },
   ];
+
+  if (locationLoading || fetchLoading) {
+    return <p className="epicure-restaurants-loading">Loading restaurants…</p>;
+  }
 
   return (
     <>
