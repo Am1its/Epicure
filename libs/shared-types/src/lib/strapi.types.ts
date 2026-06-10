@@ -36,4 +36,7 @@ export interface Restaurant {
   createdAt?: string;
   isPopular?: boolean;
   distance?: number;
+  latitude?: number;
+  longitude?: number;
+  openingHours?: string;
 }

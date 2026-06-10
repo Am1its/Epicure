@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect, useMemo, type ReactNode } from 'react';
+import dynamic from 'next/dynamic';
 import type { Restaurant } from '@org/shared-types';
 import { RestaurantCard } from '@org/ui-components';
 import { Filter } from './Filter';
@@ -10,6 +11,9 @@ import { RatingFilter } from './RatingFilter';
 import { TEXT } from '../lib/text';
 import { fetchRestaurantsWithDistances } from '../lib/api';
 import { useUserLocation } from '../hooks/useUserLocation';
+import { isOpenNow } from '../lib/openingHours';
+
+const MapView = dynamic(() => import('./MapView').then(m => m.MapView), { ssr: false });
 
 type Tab = (typeof TEXT.restaurantsGrid.tabs)[number]['id'];
 
@@ -67,6 +71,7 @@ export function RestaurantsGrid() {
   const filtered = useMemo(
     () =>
       restaurants
+        .filter(r => activeTab !== 'open' || isOpenNow(r.openingHours))
         .filter(r => selectedRatings.size === 0 || selectedRatings.has(r.rating))
         .filter(r => r.distance == null || r.distance <= distanceKm)
         .filter(r => {
@@ -159,7 +164,7 @@ export function RestaurantsGrid() {
       </div>
 
       {activeTab === 'map' ? (
-        <div className="epicure-map-placeholder">{TEXT.restaurantsGrid.mapPlaceholder}</div>
+        <MapView restaurants={filtered} />
       ) : (
         <div className="epicure-restaurant-grid">
           {filtered.map(restaurant => (

@@ -44,7 +44,20 @@ export default function Header() {
 
           {/* Desktop nav links — hidden on mobile */}
           <ul className="epicure-nav__links">
-            <li><Link href="/restaurants" className={pathname.startsWith('/restaurants') ? 'epicure-nav__link--active' : ''}>{TEXT.shared.restaurants}</Link></li>
+            <li>
+              <Link
+                href="/restaurants"
+                className={pathname.startsWith('/restaurants') ? 'epicure-nav__link--active' : ''}
+                onClick={(e) => {
+                  if (pathname.startsWith('/restaurants')) {
+                    e.preventDefault();
+                    window.location.href = '/restaurants';
+                  }
+                }}
+              >
+                {TEXT.shared.restaurants}
+              </Link>
+            </li>
             <li><Link href="/chefs" className={pathname.startsWith('/chefs') ? 'epicure-nav__link--active' : ''}>{TEXT.shared.chefs}</Link></li>
           </ul>
 
