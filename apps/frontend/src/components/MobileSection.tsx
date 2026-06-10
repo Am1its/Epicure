@@ -15,7 +15,8 @@ export function MobileSection({ title, linkLabel, linkHref, children }: MobileSe
       <div className="epicure-mobile-section__row">{children}</div>
       {linkLabel && linkHref && (
         <Link href={linkHref} className="epicure-mobile-section__link">
-          {linkLabel} <span aria-hidden="true">&raquo;&raquo;</span>
+          {linkLabel}
+          <img src="/icons/Arrow.svg" alt="" aria-hidden="true" width={24} height={24} />
         </Link>
       )}
     </section>
