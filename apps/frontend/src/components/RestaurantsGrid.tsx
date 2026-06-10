@@ -96,7 +96,7 @@ export function RestaurantsGrid() {
       onToggle: () => { setPriceOpen(o => !o); setDistanceOpen(false); setRatingOpen(false); },
       onClose: () => setPriceOpen(false),
       dropdownClassName: 'epicure-filter-dropdown--slider',
-      content: <PriceFilter globalPrices={globalPrices} value={sliderValue} onChange={setPriceRange} />,
+      content: <PriceFilter globalPrices={globalPrices} value={sliderValue} onChange={setPriceRange} onClear={() => setPriceRange(null)} />,
     },
     {
       id: 'distance',
@@ -105,7 +105,7 @@ export function RestaurantsGrid() {
       onToggle: () => { setDistanceOpen(o => !o); setPriceOpen(false); setRatingOpen(false); },
       onClose: () => setDistanceOpen(false),
       dropdownClassName: 'epicure-filter-dropdown--slider',
-      content: <DistanceFilter value={distanceKm} onChange={setDistanceKm} />,
+      content: <DistanceFilter value={distanceKm} onChange={setDistanceKm} onClear={() => setDistanceKm(20)} />,
     },
     {
       id: 'rating',
@@ -113,7 +113,7 @@ export function RestaurantsGrid() {
       isOpen: ratingOpen,
       onToggle: () => { setRatingOpen(o => !o); setPriceOpen(false); setDistanceOpen(false); },
       onClose: () => setRatingOpen(false),
-      content: <RatingFilter selectedRatings={selectedRatings} onToggle={toggleRating} />,
+      content: <RatingFilter selectedRatings={selectedRatings} onToggle={toggleRating} onClear={() => setSelectedRatings(new Set())} />,
     },
   ];
 
