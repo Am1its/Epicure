@@ -9,7 +9,7 @@ import { PriceFilter } from './PriceFilter';
 import { DistanceFilter } from './DistanceFilter';
 import { RatingFilter } from './RatingFilter';
 import { TEXT } from '../lib/text';
-import { fetchRestaurantsWithDistances } from '../lib/api';
+import { fetchRestaurantsWithDistances, strapiImageUrl } from '../lib/api';
 import { useUserLocation } from '../hooks/useUserLocation';
 import { isOpenNow } from '../lib/openingHours';
 
@@ -168,7 +168,7 @@ export function RestaurantsGrid() {
       ) : (
         <div className="epicure-restaurant-grid">
           {filtered.map(restaurant => (
-            <RestaurantCard key={restaurant.id} restaurant={restaurant} />
+            <RestaurantCard key={restaurant.id} restaurant={restaurant} imageUrl={strapiImageUrl(restaurant.image?.url)} />
           ))}
         </div>
       )}

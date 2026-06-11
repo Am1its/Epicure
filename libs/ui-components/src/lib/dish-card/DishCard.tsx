@@ -1,13 +1,5 @@
 import type { Dish } from '@org/shared-types';
 
-const STRAPI_URL = process.env['NEXT_PUBLIC_STRAPI_URL'] ?? 'http://localhost:1337';
-
-function imageUrl(url?: string): string {
-  if (!url) return '/icons/logo.svg';
-  if (url.startsWith('http')) return url;
-  return `${STRAPI_URL}${url}`;
-}
-
 const TYPE_ICONS: Record<string, string> = {
   Spicy: '/icons/spicy.svg',
   Vegan: '/icons/vegan.svg',
@@ -16,14 +8,15 @@ const TYPE_ICONS: Record<string, string> = {
 
 interface DishCardProps {
   dish: Dish;
+  imageUrl?: string;
 }
 
-export function DishCard({ dish }: DishCardProps) {
+export function DishCard({ dish, imageUrl }: DishCardProps) {
   return (
     <div className="epicure-dish-card">
       <div className="epicure-dish-card__image-wrap">
         <img
-          src={imageUrl(dish.image?.url)}
+          src={imageUrl ?? '/icons/logo.svg'}
           alt={dish.name}
           className="epicure-dish-card__image"
         />

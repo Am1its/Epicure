@@ -26,7 +26,7 @@ export function DesktopChefSection({ chef, restaurants }: Props) {
       <p className="epicure-desktop-chef__label">{chef.name.split(' ')[0] || chef.name}&apos;s Restaurants</p>
       <div className="epicure-desktop-chef__cards">
         {restaurants.map(restaurant => (
-          <RestaurantCard key={restaurant.id} restaurant={restaurant} />
+          <RestaurantCard key={restaurant.id} restaurant={restaurant} imageUrl={strapiImageUrl(restaurant.image?.url)} />
         ))}
       </div>
     </section>

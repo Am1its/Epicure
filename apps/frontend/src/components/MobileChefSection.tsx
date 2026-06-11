@@ -28,7 +28,7 @@ export function MobileChefSection({ chef, restaurants }: Props) {
       </p>
       <div className="epicure-chef-week__cards-row">
         {restaurants.map(restaurant => (
-          <RestaurantCard key={restaurant.id} restaurant={restaurant} />
+          <RestaurantCard key={restaurant.id} restaurant={restaurant} imageUrl={strapiImageUrl(restaurant.image?.url)} />
         ))}
       </div>
       <a href="/restaurants" className="epicure-chef-week__all-link">
