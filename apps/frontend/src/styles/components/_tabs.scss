@@ -1,22 +1,35 @@
 @use '../setup/variables' as *;
+@use '../setup/mixins' as *;
 
 .epicure-page-tabs-wrap {
-  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
   background: $white;
+
+  @include for-normal-layout {
+    border-bottom: 1px solid $divider;
+  }
 }
 
 .epicure-page-tabs {
   display: flex;
-  justify-content: center;
-  gap: 2.5rem;
-  max-width: $max-width;
-  margin: 0 auto;
-  padding: 0 2rem;
+  justify-content: space-between;
+  padding: 0 1rem;
+  overflow-x: auto;
+  scrollbar-width: none;
+  &::-webkit-scrollbar { display: none; }
+
+  @include for-normal-layout {
+    justify-content: center;
+    gap: 2.5rem;
+    max-width: $max-width;
+    margin: 0 auto;
+    padding: 0 2rem;
+    overflow-x: unset;
+  }
 }
 
 .epicure-page-tab {
-  padding: 1rem 0;
-  font-size: 0.9375rem;
+  padding: 0.3125rem 0;
+  font-size: 1.125rem;
   color: $black-primary;
   opacity: 0.55;
   border: none;
@@ -25,11 +38,19 @@
   cursor: pointer;
   transition: opacity 150ms;
   white-space: nowrap;
+  flex-shrink: 0;
 
   &:hover { opacity: 0.85; }
 
   &--active {
     opacity: 1;
+    font-weight: 500;
     border-bottom-color: $gold-secondary;
+  }
+
+  &--map {
+    display: none;
+
+    @include for-normal-layout { display: block; }
   }
 }

@@ -3,10 +3,13 @@
 
 .epicure-header {
   background: $white;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
   position: sticky;
   top: 0;
   z-index: 100;
+
+  @include for-normal-layout {
+    border-bottom: 1px solid $divider;
+  }
 }
 
 // ─── Mobile base ──────────────────────────────────────────────────────────────

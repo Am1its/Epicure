@@ -23,7 +23,7 @@
   align-items: center;
   justify-content: space-between;
   padding: 2.5rem 1rem 2rem;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+  border-bottom: 1px solid $divider;
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
 
   &__body {
@@ -63,7 +63,7 @@
     width: 500px;
     height: 585px;
     border-bottom: none;
-    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.12);
+    box-shadow: 0 4px 24px $shadow-subtle;
   }
 
   .epicure-cart-panel__order-history {
