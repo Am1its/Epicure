@@ -140,6 +140,7 @@
     height: 282px;
     object-fit: cover;
     display: block;
+    filter: grayscale(100%);
   }
 
   &__name-bar {
@@ -475,6 +476,7 @@
       height: 372px;
       object-fit: cover;
       display: block;
+      filter: grayscale(100%);
     }
 
     &__name-bar {
