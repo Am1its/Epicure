@@ -6,6 +6,7 @@ export interface StrapiChef {
   image?: StrapiImage;
   bio?: string;
   chefOfTheWeek?: boolean;
+  chefOfTheWeekOrder?: number;
 }
 
 export interface StrapiDish {

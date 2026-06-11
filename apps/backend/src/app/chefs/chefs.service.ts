@@ -8,7 +8,7 @@ export class ChefsService {
   constructor(private readonly strapiClient: StrapiClientService) {}
 
   async findAll(): Promise<Chef[]> {
-    const items = await this.strapiClient.get<StrapiChef>('/api/chefs?populate=*');
+    const items = await this.strapiClient.get<StrapiChef>('/api/chefs?populate=*&sort=chefOfTheWeekOrder:asc');
     return items.map(item => this.transform(item));
   }
 
@@ -26,6 +26,7 @@ export class ChefsService {
       image: item.image,
       bio: item.bio,
       chefOfTheWeek: item.chefOfTheWeek,
+      chefOfTheWeekOrder: item.chefOfTheWeekOrder,
     };
   }
 }
