@@ -22,7 +22,7 @@ export function Filter({ label, isOpen, onToggle, onClose, dropdownClassName, ch
         className={`epicure-filter-btn${isOpen ? ' epicure-filter-btn--active' : ''}`}
         onClick={onToggle}
       >
-        {label} ∨
+        {label} <span className="epicure-filter-chevron" />
       </button>
       {isOpen && (
         <div className={`epicure-filter-dropdown${dropdownClassName ? ` ${dropdownClassName}` : ''}`}>

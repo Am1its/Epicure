@@ -7,11 +7,25 @@
   @include for-normal-layout {
     display: flex;
     justify-content: center;
-    gap: 1rem;
-    padding: 1rem 2rem;
-    max-width: $max-width;
-    margin: 0 auto;
+    align-items: center;
+    gap: 3rem;
+    width: 100%;
+    height: 60px;
+    background: $bg-light;
+    margin-top: 40px;
   }
+}
+
+.epicure-filter-chevron {
+  display: inline-block;
+  width: 7px;
+  height: 7px;
+  border-right: 1.5px solid $black-primary;
+  border-bottom: 1.5px solid $black-primary;
+  transform: rotate(45deg);
+  margin-left: 4px;
+  vertical-align: middle;
+  margin-top: -3px;
 }
 
 .epicure-filter-wrap { position: relative; }
@@ -20,20 +34,19 @@
   display: inline-flex;
   align-items: center;
   gap: 0.375rem;
-  padding: 0.5rem 1rem;
-  border: 1px solid $border-interactive;
-  border-radius: 4px;
-  font-size: 0.875rem;
+  padding: 0.25rem 0;
+  border: none;
+  background: none;
+  font-size: 1.125rem;
   color: $black-primary;
-  background: $white;
   cursor: pointer;
-  transition: border-color 150ms;
 
-  &:hover { border-color: rgba(0, 0, 0, 0.35); }
+  &:hover { opacity: 0.7; }
 
   &--active {
-    border-color: $border-interactive;
-    background: rgba(0, 0, 0, 0.06);
+    background: rgba(208, 207, 207, 1);
+    border-radius: 4px;
+    padding: 0.25rem 0.5rem;
   }
 }
 
@@ -113,6 +126,33 @@
     box-shadow: 0 0 0 4px $shadow-subtle !important;
     border: none !important;
   }
+
+  &--dirty .rc-slider-handle {
+    background-color: rgba(222, 146, 0, 1);
+  }
+
+  &--dirty-left .rc-slider-handle-1 {
+    background-color: rgba(222, 146, 0, 1);
+  }
+
+  &--dirty-right .rc-slider-handle-2 {
+    background-color: rgba(222, 146, 0, 1);
+  }
+}
+
+.epicure-filter-clear-btn {
+  display: block;
+  margin: 0.875rem auto 0;
+  padding: 0.3rem 1.5rem;
+  background: $white;
+  border: 1px solid $black-primary;
+  font-size: 0.8125rem;
+  font-family: inherit;
+  font-weight: 300;
+  cursor: pointer;
+  letter-spacing: 0.04em;
+
+  &:hover { background: $bg-light; }
 }
 
 .epicure-filter-slider-edge {
