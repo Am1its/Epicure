@@ -7,7 +7,7 @@ export default function ChefsPage() {
   return (
     <div>
       <Header />
-      <main>
+      <main className="epicure-chefs-main">
         <h1 className="epicure-chefs-page-title">{TEXT.shared.chefs}</h1>
         <ChefsGrid />
       </main>
