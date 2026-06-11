@@ -47,6 +47,9 @@
     },
     "longitude": {
       "type": "decimal"
+    },
+    "openingHours": {
+      "type": "string"
     }
   }
 }

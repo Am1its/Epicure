@@ -32,5 +32,6 @@ export interface StrapiRestaurant {
   isPopular?: boolean;
   latitude?: number;
   longitude?: number;
+  openingHours?: string;
   [key: string]: unknown;
 }
