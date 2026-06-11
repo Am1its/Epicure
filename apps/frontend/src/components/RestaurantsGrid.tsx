@@ -44,7 +44,7 @@ export function RestaurantsGrid() {
     if (!coords) return;
     fetchRestaurantsWithDistances(coords.lat, coords.lng)
       .then(setRestaurants)
-      .catch(() => setRestaurants([]))
+      .catch((err) => { console.error('Failed to fetch restaurants:', err); setRestaurants([]); })
       .finally(() => setFetchLoading(false));
   }, [coords]);
 

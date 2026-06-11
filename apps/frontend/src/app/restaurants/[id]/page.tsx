@@ -15,7 +15,8 @@ export default async function RestaurantDetailPage({
   let restaurant: Restaurant | null = null;
   try {
     restaurant = await fetchApi<Restaurant>(`/api/restaurants/${id}`);
-  } catch {
+  } catch (err) {
+    console.error('Failed to fetch restaurant:', err);
     restaurant = null;
   }
 
