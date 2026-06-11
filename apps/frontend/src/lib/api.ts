@@ -14,6 +14,9 @@ export async function fetchSearch(q: string): Promise<SearchResults> {
     cache: 'no-store',
   });
   if (!res.ok) throw new Error(`API error ${res.status}: /api/search`);
+  return res.json();
+}
+
 export async function fetchRestaurantsWithDistances(lat: number, lng: number): Promise<Restaurant[]> {
   const res = await fetch(`${BACKEND_URL}/api/restaurants/distances`, {
     method: 'POST',
