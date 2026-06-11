@@ -39,6 +39,59 @@
   }
 }
 
+@keyframes epicure-skeleton-pulse {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.5; }
+}
+
+.epicure-restaurant-card-skeleton {
+  background: $white;
+  border-radius: 4px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  animation: epicure-skeleton-pulse 1.5s ease-in-out infinite;
+
+  &__image {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    background: $border-light;
+  }
+
+  &__info {
+    background: $cream-secondary;
+    padding: 1rem 1.25rem 1.25rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  &__line {
+    border-radius: 4px;
+    background: rgba(0, 0, 0, 0.08);
+
+    &--name  { width: 60%; height: 1.375rem; }
+    &--chef  { width: 40%; height: 1rem; }
+    &--stars { width: 30%; height: 1rem; }
+  }
+
+  @include for-normal-layout {
+    &__image { aspect-ratio: unset; height: 235px; }
+
+    &__info {
+      height: 169px;
+      align-items: center;
+      justify-content: center;
+      padding: 0 1rem;
+    }
+
+    &__line {
+      &--name  { width: 70%; height: 2.5rem; }
+      &--chef  { width: 50%; height: 1.5rem; }
+      &--stars { width: 40%; height: 2.5rem; }
+    }
+  }
+}
+
 .epicure-map-placeholder {
   display: flex;
   align-items: center;

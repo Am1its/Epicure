@@ -30,5 +30,7 @@ export interface StrapiRestaurant {
   chef?: StrapiChef;
   dishes?: StrapiDish[];
   isPopular?: boolean;
+  latitude?: number;
+  longitude?: number;
   [key: string]: unknown;
 }

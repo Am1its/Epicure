@@ -4,23 +4,29 @@ import 'rc-slider/assets/index.css';
 interface DistanceFilterProps {
   value: number;
   onChange: (km: number) => void;
+  onClear: () => void;
 }
 
-export function DistanceFilter({ value, onChange }: DistanceFilterProps) {
+export function DistanceFilter({ value, onChange, onClear }: DistanceFilterProps) {
+  const isDirty = value !== 20;
+
   return (
     <>
       <p className="epicure-filter-dropdown__title">Distance</p>
-      <div className="epicure-filter-slider-wrap">
+      <div className={`epicure-filter-slider-wrap${isDirty ? ' epicure-filter-slider-wrap--dirty' : ''}`}>
         <span className="epicure-filter-slider-edge">My location</span>
         <Slider
           min={0}
-          max={4}
-          step={0.5}
+          max={20}
+          step={1}
           value={value}
           onChange={(v) => onChange(v as number)}
         />
         <span className="epicure-filter-slider-edge">{value}km</span>
       </div>
+      {isDirty && (
+        <button className="epicure-filter-clear-btn" onClick={onClear}>CLEAR</button>
+      )}
     </>
   );
 }
