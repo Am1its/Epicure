@@ -106,6 +106,7 @@ export const TEXT = {
     tabs: [
       { id: 'all', label: 'All' },
       { id: 'new', label: 'New' },
+      { id: 'most-viewed', label: 'Most Viewed' },
     ],
   },
 } as const;

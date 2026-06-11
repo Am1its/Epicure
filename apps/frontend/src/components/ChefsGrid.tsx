@@ -22,6 +22,8 @@ export function ChefsGrid() {
 
   const filtered = useMemo(() => {
     if (activeTab === 'new') return [...chefs].sort((a, b) => b.id - a.id);
+    if (activeTab === 'most-viewed')
+      return chefs.filter(c => c.chefOfTheWeek);
     return chefs;
   }, [chefs, activeTab]);
 
