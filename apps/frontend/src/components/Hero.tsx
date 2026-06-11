@@ -1,28 +1,30 @@
 'use client';
 
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import Link from 'next/link';
 import { TEXT } from '../lib/text';
 import { useClickOutside } from '../hooks/useClickOutside';
-import type { Restaurant, Chef } from '@org/shared-types';
+import type { SearchResults } from '@org/shared-types';
+import { fetchSearch } from '../lib/api';
 
-interface HeroProps {
-  restaurants: Restaurant[];
-  chefs: Chef[];
-}
-
-export function Hero({ restaurants, chefs }: HeroProps) {
+export function Hero() {
   const [query, setQuery] = useState('');
+  const [results, setResults] = useState<SearchResults>({ restaurants: [], chefs: [] });
   const searchRef = useRef<HTMLDivElement>(null);
 
-  const q = query.toLowerCase();
-  const matchedRestaurants = query
-    ? restaurants.filter(r => r.name.toLowerCase().includes(q)).slice(0, 5)
-    : [];
-  const matchedChefs = query
-    ? chefs.filter(c => c.name.toLowerCase().includes(q)).slice(0, 3)
-    : [];
-  const hasResults = matchedRestaurants.length > 0 || matchedChefs.length > 0;
+  useEffect(() => {
+    setResults({ restaurants: [], chefs: [] });
+    if (!query.trim()) return;
+    let cancelled = false;
+    const timer = setTimeout(() => {
+      fetchSearch(query.trim())
+        .then(data => { if (!cancelled) setResults(data); })
+        .catch(() => { if (!cancelled) setResults({ restaurants: [], chefs: [] }); });
+    }, 300);
+    return () => { cancelled = true; clearTimeout(timer); };
+  }, [query]);
+
+  const hasResults = results.restaurants.length > 0 || results.chefs.length > 0;
 
   useClickOutside(searchRef, () => setQuery(''), query.length > 0);
 
@@ -54,20 +56,20 @@ export function Hero({ restaurants, chefs }: HeroProps) {
 
           {query && hasResults && (
             <div className="epicure-hero__results">
-              {matchedRestaurants.length > 0 && (
+              {results.restaurants.length > 0 && (
                 <div className="epicure-hero__results-group">
                   <span className="epicure-hero__results-label">{TEXT.home.searchResultsRestaurants}</span>
-                  {matchedRestaurants.map(r => (
+                  {results.restaurants.map(r => (
                     <Link key={r.id} href={`/restaurants/${r.id}`} className="epicure-hero__results-item">
                       {r.name}
                     </Link>
                   ))}
                 </div>
               )}
-              {matchedChefs.length > 0 && (
+              {results.chefs.length > 0 && (
                 <div className="epicure-hero__results-group">
                   <span className="epicure-hero__results-label">{TEXT.home.searchResultsChefs}</span>
-                  {matchedChefs.map(c => (
+                  {results.chefs.map(c => (
                     <span key={c.id} className="epicure-hero__results-item">{c.name}</span>
                   ))}
                 </div>

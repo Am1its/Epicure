@@ -16,7 +16,8 @@ export function DesktopPopularRestaurants({ restaurants }: Props) {
         ))}
       </div>
       <a href="/restaurants" className="epicure-desktop-popular__link">
-        {TEXT.home.allRestaurantsLink} &raquo;&raquo;
+        {TEXT.home.allRestaurantsLink}
+        <img src="/icons/Arrow.svg" alt="" aria-hidden="true" width={24} height={24} />
       </a>
     </section>
   );

@@ -56,21 +56,22 @@
   .epicure-restaurant-card {
     display: flex;
     flex-direction: column;
-    height: 405px;
 
     &__image {
       flex-shrink: 0;
       aspect-ratio: unset;
-      height: 236px;
+      height: 235px;
     }
 
     &__info {
-      flex: 1;
+      height: 169px;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
       text-align: center;
+      padding: 0 1rem;
+      overflow: hidden;
     }
 
     &__name {

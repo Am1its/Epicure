@@ -27,15 +27,110 @@
   .epicure-star-rating { display: none; }
 
   @include for-normal-layout {
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(3, 379px);
     gap: 1.5rem;
+    justify-content: center;
     max-width: $max-width;
     margin: 0 auto;
-    padding: 2rem;
+    padding: 2rem 2rem 3rem;
 
-    .epicure-restaurant-card__image { aspect-ratio: unset; }
+    .epicure-restaurant-card__image { aspect-ratio: unset; height: 235px; }
     .epicure-star-rating { display: flex; }
   }
+}
+
+@keyframes epicure-skeleton-pulse {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.5; }
+}
+
+.epicure-restaurant-card-skeleton {
+  background: $white;
+  border-radius: 4px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  animation: epicure-skeleton-pulse 1.5s ease-in-out infinite;
+
+  &__image {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    background: $border-light;
+  }
+
+  &__info {
+    background: $cream-secondary;
+    padding: 1rem 1.25rem 1.25rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  &__line {
+    border-radius: 4px;
+    background: rgba(0, 0, 0, 0.08);
+
+    &--name  { width: 60%; height: 1.375rem; }
+    &--chef  { width: 40%; height: 1rem; }
+    &--stars { width: 30%; height: 1rem; }
+  }
+
+  @include for-normal-layout {
+    &__image { aspect-ratio: unset; height: 235px; }
+
+    &__info {
+      height: 169px;
+      align-items: center;
+      justify-content: center;
+      padding: 0 1rem;
+    }
+
+    &__line {
+      &--name  { width: 70%; height: 2.5rem; }
+      &--chef  { width: 50%; height: 1.5rem; }
+      &--stars { width: 40%; height: 2.5rem; }
+    }
+  }
+}
+
+.epicure-map-container {
+  width: 100%;
+  padding: 0 128px;
+  box-sizing: border-box;
+
+  .epicure-map {
+    width: 100%;
+    height: 500px;
+  }
+}
+
+.epicure-map-label {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  transform: translate(-50%, -100%);
+  cursor: pointer;
+
+  &__text {
+    background: rgba(222, 146, 0, 1);
+    color: #000;
+    font-size: 1.125rem;
+    font-weight: 700;
+    padding: 0.5rem 1.1rem;
+    border-radius: 8px;
+    white-space: nowrap;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
+  }
+
+  &__tail {
+    width: 0;
+    height: 0;
+    border-left: 10px solid transparent;
+    border-right: 10px solid transparent;
+    border-top: 10px solid rgba(222, 146, 0, 1);
+  }
+
+  &:hover &__text { background: rgba(190, 120, 0, 1); }
+  &:hover &__tail { border-top-color: rgba(190, 120, 0, 1); }
 }
 
 .epicure-map-placeholder {

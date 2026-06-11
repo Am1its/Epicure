@@ -100,6 +100,12 @@
     display: flex;
     gap: 2rem;
     margin-left: 2rem;
+
+    .epicure-nav__link--active {
+      opacity: 1;
+      border-bottom: 2px solid $gold-secondary;
+      padding-bottom: 2px;
+    }
   }
 
   .epicure-nav__actions {
