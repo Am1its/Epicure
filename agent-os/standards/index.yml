@@ -1,0 +1,29 @@
+# Agent OS Standards Index
+
+backend:
+  nestjs-pattern:
+    description: NestJS module structure (controller/service/module), transform pattern, how to add a new resource
+  strapi-populate:
+    description: Strapi 5 populate syntax rules — correct nested populate, never use populate[mediaField]=*, StrapiClientService usage
+
+css:
+  bem-naming:
+    description: BEM class naming with epicure- prefix — block/element structure and active state rules
+  design-tokens:
+    description: SCSS variables (colors, breakpoints, layout) and shared placeholders (%btn-primary etc.)
+  mobile-first-responsive:
+    description: Mobile-first pattern — base styles for mobile, desktop overrides inside for-normal-layout mixin
+  smacss-structure:
+    description: SCSS folder structure — single main.scss entry point, components never import SCSS directly
+
+frontend:
+  api-layer:
+    description: fetchApi + strapiImageUrl usage — all calls go through lib/api.ts, never call Strapi directly from frontend
+  icon-pattern:
+    description: All icons are <img> tags with aria-hidden and explicit dimensions — no inline SVGs, fallback is logo.svg
+  link-and-layout-pattern:
+    description: Always use Link from next/link for internal nav; dual mobile/desktop component pattern with CSS-driven visibility
+  server-client-split:
+    description: Pages are async server components, 'use client' only when hooks/events needed, Next.js 16 params are a Promise
+  text-centralization:
+    description: All UI strings in lib/text.ts as TEXT — never hardcode visible strings in JSX
