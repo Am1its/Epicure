@@ -24,11 +24,11 @@ export function MobileChefSection({ chef, restaurants }: Props) {
       </div>
       <p className="epicure-chef-week__bio">{chef.bio ?? TEXT.chefOfTheWeek.bioPlaceholder}</p>
       <p className="epicure-chef-week__restaurants-label">
-        {chef.name.split(' ')[0].toUpperCase()}&apos;S RESTAURANTS
+        {(chef.name.split(' ')[0] || chef.name).toUpperCase()}&apos;S RESTAURANTS
       </p>
       <div className="epicure-chef-week__cards-row">
         {restaurants.map(restaurant => (
-          <RestaurantCard key={restaurant.id} restaurant={restaurant} />
+          <RestaurantCard key={restaurant.id} restaurant={restaurant} imageUrl={strapiImageUrl(restaurant.image?.url)} />
         ))}
       </div>
       <a href="/restaurants" className="epicure-chef-week__all-link">

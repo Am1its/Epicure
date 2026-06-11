@@ -6,7 +6,7 @@
 
   @include for-normal-layout {
     position: relative;
-    z-index: 1000;
+    z-index: $z-filter-dropdown;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -62,7 +62,7 @@
   border-radius: 4px;
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
   padding: 1rem;
-  z-index: 20;
+  z-index: $z-filter-overlay;
 
   &--slider {
     min-width: 280px;

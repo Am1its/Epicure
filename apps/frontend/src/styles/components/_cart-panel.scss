@@ -5,7 +5,7 @@
   position: fixed;
   inset: 0;
   background: transparent;
-  z-index: 149;
+  z-index: $z-panel-backdrop;
   cursor: default;
   width: 100%;
   height: 100%;
@@ -17,7 +17,7 @@
   left: 0;
   right: 0;
   background: $white;
-  z-index: 150;
+  z-index: $z-panel;
   display: flex;
   flex-direction: column;
   align-items: center;

@@ -5,7 +5,7 @@
   background: $white;
   position: sticky;
   top: 0;
-  z-index: 100;
+  z-index: $z-header;
 
   @include for-normal-layout {
     border-bottom: 1px solid $divider;
@@ -118,7 +118,7 @@
     align-items: center;
     width: 410px;
     height: 41px;
-    border: 1px solid rgba(0, 0, 0, 0.25);
+    border: 1px solid $border-search;
     padding: 0 0.75rem;
   }
 

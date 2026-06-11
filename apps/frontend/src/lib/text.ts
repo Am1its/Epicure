@@ -96,6 +96,7 @@ export const TEXT = {
     mapPlaceholder: 'Map view coming soon',
     priceFilter: 'Price Range',
     distanceFilter: 'Distance',
+    distanceMyLocation: 'My location',
     ratingFilter: 'Rating',
   },
   dishGrid: {

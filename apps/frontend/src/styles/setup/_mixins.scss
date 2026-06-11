@@ -8,9 +8,9 @@
   @media (min-width: $break-wide) { @content; }
 }
 
-@mixin flex-align($main, $cross, $dir: row) {
+@mixin flex-align($align, $justify, $dir: row) {
   display: flex;
-  align-items: $main;
-  justify-content: $cross;
+  align-items: $align;
+  justify-content: $justify;
   flex-direction: $dir;
 }

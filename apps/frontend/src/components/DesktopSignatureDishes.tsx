@@ -1,5 +1,6 @@
 import { DishCard } from '@org/ui-components';
 import type { Dish } from '@org/shared-types';
+import { strapiImageUrl } from '../lib/api';
 import { TEXT } from '../lib/text';
 
 interface Props {
@@ -14,7 +15,7 @@ export function DesktopSignatureDishes({ dishes }: Props) {
       <h2 className="epicure-desktop-signature__title">{TEXT.home.signatureDishTitle}</h2>
       <div className="epicure-desktop-signature__grid">
         {dishes.map(dish => (
-          <DishCard key={dish.id} dish={dish} />
+          <DishCard key={dish.id} dish={dish} imageUrl={strapiImageUrl(dish.image?.url)} />
         ))}
       </div>
     </section>

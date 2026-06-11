@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import type { Dish } from '@org/shared-types';
 import { DishCard } from '@org/ui-components';
+import { strapiImageUrl } from '../lib/api';
 import { TEXT } from '../lib/text';
 
 type MealTime = (typeof TEXT.dishGrid.tabs)[number];
@@ -12,7 +13,7 @@ interface DishGridProps {
 }
 
 export function DishGrid({ dishes }: DishGridProps) {
-  const [activeTab, setActiveTab] = useState<MealTime>('Breakfast');
+  const [activeTab, setActiveTab] = useState<MealTime>(TEXT.dishGrid.tabs[0]);
 
   const filtered = dishes.filter(
     d => d.mealTime?.trim() === activeTab
@@ -39,7 +40,7 @@ export function DishGrid({ dishes }: DishGridProps) {
       </div>
       <div className="epicure-dish-grid">
         {filtered.map(dish => (
-          <DishCard key={dish.id} dish={dish} />
+          <DishCard key={dish.id} dish={dish} imageUrl={strapiImageUrl(dish.image?.url)} />
         ))}
       </div>
     </>

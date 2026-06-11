@@ -6,7 +6,6 @@ export interface StrapiChef {
   image?: StrapiImage;
   bio?: string;
   chefOfTheWeek?: boolean;
-  [key: string]: unknown;
 }
 
 export interface StrapiDish {
@@ -18,7 +17,6 @@ export interface StrapiDish {
   image?: StrapiImage;
   mealTime?: 'Breakfast' | 'Lunch' | 'Dinner';
   isSignatureDish?: boolean;
-  [key: string]: unknown;
 }
 
 export interface StrapiRestaurant {
@@ -33,5 +31,4 @@ export interface StrapiRestaurant {
   latitude?: number;
   longitude?: number;
   openingHours?: string;
-  [key: string]: unknown;
 }

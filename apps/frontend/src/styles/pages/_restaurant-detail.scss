@@ -32,6 +32,11 @@
   color: $gold-secondary;
 }
 
+.epicure-detail-error {
+  padding: 4rem 2rem;
+  text-align: center;
+}
+
 .epicure-dish-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);

@@ -23,10 +23,10 @@ export function DesktopChefSection({ chef, restaurants }: Props) {
         </div>
         <p className="epicure-desktop-chef__bio">{chef.bio ?? TEXT.chefOfTheWeek.bioPlaceholder}</p>
       </div>
-      <p className="epicure-desktop-chef__label">{chef.name.split(' ')[0]}&apos;s Restaurants</p>
+      <p className="epicure-desktop-chef__label">{chef.name.split(' ')[0] || chef.name}&apos;s Restaurants</p>
       <div className="epicure-desktop-chef__cards">
         {restaurants.map(restaurant => (
-          <RestaurantCard key={restaurant.id} restaurant={restaurant} />
+          <RestaurantCard key={restaurant.id} restaurant={restaurant} imageUrl={strapiImageUrl(restaurant.image?.url)} />
         ))}
       </div>
     </section>

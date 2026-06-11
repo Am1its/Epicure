@@ -1,4 +1,5 @@
 import { StarRating } from '@org/ui-components';
+import { TEXT } from '../lib/text';
 
 interface RatingFilterProps {
   selectedRatings: Set<number>;
@@ -9,10 +10,11 @@ interface RatingFilterProps {
 export function RatingFilter({ selectedRatings, onToggle, onClear }: RatingFilterProps) {
   return (
     <>
-      <p className="epicure-filter-dropdown__title">Rating</p>
+      <p className="epicure-filter-dropdown__title">{TEXT.restaurantsGrid.ratingFilter}</p>
       {[1, 2, 3, 4, 5].map(r => (
-        <label key={r}>
+        <label key={r} htmlFor={`rating-${r}`}>
           <input
+            id={`rating-${r}`}
             type="checkbox"
             checked={selectedRatings.has(r)}
             onChange={() => onToggle(r)}

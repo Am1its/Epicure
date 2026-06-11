@@ -9,7 +9,7 @@ import { DesktopPopularRestaurants } from '../components/DesktopPopularRestauran
 import { DesktopSignatureDishes } from '../components/DesktopSignatureDishes';
 import { DesktopChefSection } from '../components/DesktopChefSection';
 import { DesktopAboutSection } from '../components/DesktopAboutSection';
-import { fetchApi } from '../lib/api';
+import { fetchApi, strapiImageUrl } from '../lib/api';
 import type { Restaurant, Chef } from '@org/shared-types';
 import { RestaurantCard, DishCard } from '@org/ui-components';
 import { TEXT } from '../lib/text';
@@ -44,7 +44,7 @@ export default async function HomePage() {
           linkHref="/restaurants"
         >
           {popularRestaurants.map(restaurant => (
-            <RestaurantCard key={restaurant.id} restaurant={restaurant} />
+            <RestaurantCard key={restaurant.id} restaurant={restaurant} imageUrl={strapiImageUrl(restaurant.image?.url)} />
           ))}
         </MobileSection>
 
@@ -57,7 +57,7 @@ export default async function HomePage() {
             linkHref="/restaurants"
           >
             {signatureDishes.map(dish => (
-              <DishCard key={dish.id} dish={dish} />
+              <DishCard key={dish.id} dish={dish} imageUrl={strapiImageUrl(dish.image?.url)} />
             ))}
           </MobileSection>
         )}
