@@ -5,7 +5,7 @@
   background: $white;
   position: sticky;
   top: 0;
-  z-index: 100;
+  z-index: $z-header;
 
   @include for-normal-layout {
     border-bottom: 1px solid $divider;

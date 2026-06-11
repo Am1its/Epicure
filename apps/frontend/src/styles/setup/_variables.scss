@@ -19,3 +19,10 @@ $max-width:          1440px;
 // Breakpoints
 $break-normal: 768px;
 $break-wide:   1200px;
+
+// z-index stack
+$z-header:          100;
+$z-filter-overlay:   20;
+$z-filter-dropdown: 1000;
+$z-panel-backdrop:  149;
+$z-panel:           150;
