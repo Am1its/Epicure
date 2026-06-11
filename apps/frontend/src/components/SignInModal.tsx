@@ -43,7 +43,7 @@ export function SignInModal({ onClose }: SignInModalProps) {
           />
         </div>
         <button className="epicure-signin-modal__submit">{TEXT.signIn.loginBtn}</button>
-        <a href="#" className="epicure-signin-modal__forgot">{TEXT.signIn.forgotPassword}</a>
+        <a href="#" aria-disabled="true" onClick={e => e.preventDefault()} className="epicure-signin-modal__forgot">{TEXT.signIn.forgotPassword}</a>
         <div className="epicure-signin-modal__divider"><span>{TEXT.signIn.divider}</span></div>
         <button className="epicure-signin-modal__signup">{TEXT.signIn.signUpBtn}</button>
       </div>

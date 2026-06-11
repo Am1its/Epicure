@@ -9,14 +9,14 @@ export function DesktopAboutSection() {
           <p className="epicure-desktop-about__text">{TEXT.appSection.aboutText}</p>
           <p className="epicure-desktop-about__text">{TEXT.appSection.aboutText2}</p>
           <div className="epicure-desktop-about__store-btns">
-            <a href="#" className="epicure-desktop-about__store-btn">
+            <a href="#" aria-disabled="true" onClick={e => e.preventDefault()} className="epicure-desktop-about__store-btn">
               <img src="/icons/apple.svg" alt="" aria-hidden="true" width={23} height={30} />
               <span className="epicure-desktop-about__store-text">
                 <small className="epicure-desktop-about__store-subtext">{TEXT.appSection.appStore.line1}</small>
                 {TEXT.appSection.appStore.line2}
               </span>
             </a>
-            <a href="#" className="epicure-desktop-about__store-btn">
+            <a href="#" aria-disabled="true" onClick={e => e.preventDefault()} className="epicure-desktop-about__store-btn">
               <img src="/icons/google.svg" alt="" aria-hidden="true" width={19} height={25} />
               <span className="epicure-desktop-about__store-text">
                 <small className="epicure-desktop-about__store-subtext">{TEXT.appSection.googlePlay.line1}</small>
