@@ -13,7 +13,7 @@ interface DishGridProps {
 }
 
 export function DishGrid({ dishes }: DishGridProps) {
-  const [activeTab, setActiveTab] = useState<MealTime>('Breakfast');
+  const [activeTab, setActiveTab] = useState<MealTime>(TEXT.dishGrid.tabs[0]);
 
   const filtered = dishes.filter(
     d => d.mealTime?.trim() === activeTab

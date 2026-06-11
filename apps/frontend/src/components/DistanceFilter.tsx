@@ -1,5 +1,6 @@
 import Slider from 'rc-slider';
 import 'rc-slider/assets/index.css';
+import { TEXT } from '../lib/text';
 
 interface DistanceFilterProps {
   value: number;
@@ -12,9 +13,9 @@ export function DistanceFilter({ value, onChange, onClear }: DistanceFilterProps
 
   return (
     <>
-      <p className="epicure-filter-dropdown__title">Distance</p>
+      <p className="epicure-filter-dropdown__title">{TEXT.restaurantsGrid.distanceFilter}</p>
       <div className={`epicure-filter-slider-wrap${isDirty ? ' epicure-filter-slider-wrap--dirty' : ''}`}>
-        <span className="epicure-filter-slider-edge">My location</span>
+        <span className="epicure-filter-slider-edge">{TEXT.restaurantsGrid.distanceMyLocation}</span>
         <Slider
           min={0}
           max={20}
