@@ -8,6 +8,7 @@ $bg-light:        #FAFAFA;
 $border-light:       #F2F2F2;
 $divider:            rgba(0, 0, 0, 0.08);
 $border-interactive: rgba(0, 0, 0, 0.18);
+$border-search:      rgba(0, 0, 0, 0.25);
 $shadow-subtle:      rgba(0, 0, 0, 0.12);
 $panel-overlay:      rgba(255, 255, 255, 0.88);
 
@@ -19,6 +20,10 @@ $max-width:          1440px;
 // Breakpoints
 $break-normal: 768px;
 $break-wide:   1200px;
+
+// Layout grid gutters
+$layout-gutter-mobile:  20px;
+$layout-gutter-desktop: 128px;
 
 // z-index stack
 $z-header:          100;
