@@ -36,7 +36,7 @@ export default async function HomePage() {
     <div>
       <Header />
       <main>
-        <Hero restaurants={restaurants} chefs={chefs} />
+        <Hero />
 
         <MobileSection
           title={TEXT.home.popularTitle}
