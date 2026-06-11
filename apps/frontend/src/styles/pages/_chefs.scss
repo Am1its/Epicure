@@ -13,6 +13,11 @@
   @include for-normal-layout { display: none; }
 }
 
+.epicure-chefs-page-title ~ .epicure-page-tabs-wrap .epicure-page-tabs {
+  justify-content: flex-start;
+  gap: 1.5rem;
+}
+
 .epicure-chef-grid {
   display: grid;
   grid-template-columns: 1fr;
