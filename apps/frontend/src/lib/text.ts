@@ -102,4 +102,10 @@ export const TEXT = {
   dishGrid: {
     tabs: ['Breakfast', 'Lunch', 'Dinner'] as const,
   },
+  chefsGrid: {
+    tabs: [
+      { id: 'all', label: 'All' },
+      { id: 'new', label: 'New' },
+    ],
+  },
 } as const;
