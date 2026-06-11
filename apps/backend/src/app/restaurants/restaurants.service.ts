@@ -2,16 +2,32 @@ import { Injectable } from '@nestjs/common';
 import type { Restaurant, Dish } from '@org/shared-types';
 import { StrapiClientService } from '../strapi-client/strapi-client.service';
 import type { StrapiRestaurant } from '../strapi-client/strapi-types';
+import { haversineKm } from './haversine';
+
+const POPULATE_QUERY =
+  '/api/restaurants?populate[image][fields][0]=url&populate[image][fields][1]=alternativeText&populate[chef][fields][0]=name&populate[chef][fields][1]=id&populate[dishes][populate]=*';
 
 @Injectable()
 export class RestaurantsService {
   constructor(private readonly strapiClient: StrapiClientService) {}
 
   async findAll(): Promise<Restaurant[]> {
-    const items = await this.strapiClient.get<StrapiRestaurant>(
-      '/api/restaurants?populate[image][fields][0]=url&populate[image][fields][1]=alternativeText&populate[chef][fields][0]=name&populate[chef][fields][1]=id&populate[dishes][populate]=*',
-    );
+    const items = await this.strapiClient.get<StrapiRestaurant>(POPULATE_QUERY);
     return items.map(item => this.transform(item));
+  }
+
+  async findAllWithDistances(userLat: number, userLng: number): Promise<Restaurant[]> {
+    if (!isFinite(userLat) || !isFinite(userLng)) {
+      throw new Error('lat and lng must be finite numbers');
+    }
+    const items = await this.strapiClient.get<StrapiRestaurant>(POPULATE_QUERY);
+    return items.map(item => {
+      const distance =
+        item.latitude != null && item.longitude != null
+          ? haversineKm(userLat, userLng, item.latitude, item.longitude)
+          : undefined;
+      return this.transform(item, distance);
+    });
   }
 
   async findOne(id: number): Promise<Restaurant> {
@@ -21,13 +37,14 @@ export class RestaurantsService {
     return this.transform(item);
   }
 
-  private transform(item: StrapiRestaurant): Restaurant {
+  private transform(item: StrapiRestaurant, distance?: number): Restaurant {
     return {
       id: item.id,
       name: item.name,
       rating: item.rating,
       createdAt: item.createdAt,
       image: item.image,
+      distance,
       chef: item.chef
         ? { id: item.chef.id, name: item.chef.name, image: item.chef.image }
         : undefined,

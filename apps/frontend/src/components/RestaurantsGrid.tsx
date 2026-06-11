@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useMemo, type ReactNode } from 'react';
+import { useState, useEffect, useMemo, type ReactNode } from 'react';
 import type { Restaurant } from '@org/shared-types';
 import { RestaurantCard } from '@org/ui-components';
 import { Filter } from './Filter';
@@ -8,6 +8,8 @@ import { PriceFilter } from './PriceFilter';
 import { DistanceFilter } from './DistanceFilter';
 import { RatingFilter } from './RatingFilter';
 import { TEXT } from '../lib/text';
+import { fetchRestaurantsWithDistances } from '../lib/api';
+import { useUserLocation } from '../hooks/useUserLocation';
 
 type Tab = (typeof TEXT.restaurantsGrid.tabs)[number]['id'];
 
@@ -21,18 +23,26 @@ interface FilterConfig {
   content: ReactNode;
 }
 
-interface RestaurantsGridProps {
-  restaurants: Restaurant[];
-}
+export function RestaurantsGrid() {
+  const { coords, loading: locationLoading } = useUserLocation();
+  const [restaurants, setRestaurants] = useState<Restaurant[]>([]);
+  const [fetchLoading, setFetchLoading] = useState(true);
 
-export function RestaurantsGrid({ restaurants }: RestaurantsGridProps) {
   const [activeTab, setActiveTab] = useState<Tab>('all');
   const [selectedRatings, setSelectedRatings] = useState<Set<number>>(new Set());
   const [priceRange, setPriceRange] = useState<[number, number] | null>(null);
-  const [distanceKm, setDistanceKm] = useState<number>(4);
+  const [distanceKm, setDistanceKm] = useState<number>(20);
   const [ratingOpen, setRatingOpen] = useState(false);
   const [priceOpen, setPriceOpen] = useState(false);
   const [distanceOpen, setDistanceOpen] = useState(false);
+
+  useEffect(() => {
+    if (!coords) return;
+    fetchRestaurantsWithDistances(coords.lat, coords.lng)
+      .then(setRestaurants)
+      .catch(() => setRestaurants([]))
+      .finally(() => setFetchLoading(false));
+  }, [coords]);
 
   const globalPrices = useMemo(() => {
     const all = restaurants.flatMap(r =>
@@ -58,6 +68,7 @@ export function RestaurantsGrid({ restaurants }: RestaurantsGridProps) {
     () =>
       restaurants
         .filter(r => selectedRatings.size === 0 || selectedRatings.has(r.rating))
+        .filter(r => r.distance == null || r.distance <= distanceKm)
         .filter(r => {
           if (!priceRange) return true;
           const [lo, hi] = priceRange;
@@ -74,7 +85,7 @@ export function RestaurantsGrid({ restaurants }: RestaurantsGridProps) {
           }
           return 0;
         }),
-    [restaurants, selectedRatings, priceRange, globalPrices, activeTab],
+    [restaurants, selectedRatings, priceRange, globalPrices, activeTab, distanceKm],
   );
 
   const filterConfigs: FilterConfig[] = [
@@ -85,7 +96,7 @@ export function RestaurantsGrid({ restaurants }: RestaurantsGridProps) {
       onToggle: () => { setPriceOpen(o => !o); setDistanceOpen(false); setRatingOpen(false); },
       onClose: () => setPriceOpen(false),
       dropdownClassName: 'epicure-filter-dropdown--slider',
-      content: <PriceFilter globalPrices={globalPrices} value={sliderValue} onChange={setPriceRange} />,
+      content: <PriceFilter globalPrices={globalPrices} value={sliderValue} onChange={setPriceRange} onClear={() => setPriceRange(null)} />,
     },
     {
       id: 'distance',
@@ -94,7 +105,7 @@ export function RestaurantsGrid({ restaurants }: RestaurantsGridProps) {
       onToggle: () => { setDistanceOpen(o => !o); setPriceOpen(false); setRatingOpen(false); },
       onClose: () => setDistanceOpen(false),
       dropdownClassName: 'epicure-filter-dropdown--slider',
-      content: <DistanceFilter value={distanceKm} onChange={setDistanceKm} />,
+      content: <DistanceFilter value={distanceKm} onChange={setDistanceKm} onClear={() => setDistanceKm(20)} />,
     },
     {
       id: 'rating',
@@ -102,9 +113,26 @@ export function RestaurantsGrid({ restaurants }: RestaurantsGridProps) {
       isOpen: ratingOpen,
       onToggle: () => { setRatingOpen(o => !o); setPriceOpen(false); setDistanceOpen(false); },
       onClose: () => setRatingOpen(false),
-      content: <RatingFilter selectedRatings={selectedRatings} onToggle={toggleRating} />,
+      content: <RatingFilter selectedRatings={selectedRatings} onToggle={toggleRating} onClear={() => setSelectedRatings(new Set())} />,
     },
   ];
+
+  if (locationLoading || fetchLoading) {
+    return (
+      <div className="epicure-restaurant-grid">
+        {Array.from({ length: 6 }).map((_, i) => (
+          <div key={i} className="epicure-restaurant-card-skeleton">
+            <div className="epicure-restaurant-card-skeleton__image" />
+            <div className="epicure-restaurant-card-skeleton__info">
+              <div className="epicure-restaurant-card-skeleton__line epicure-restaurant-card-skeleton__line--name" />
+              <div className="epicure-restaurant-card-skeleton__line epicure-restaurant-card-skeleton__line--chef" />
+              <div className="epicure-restaurant-card-skeleton__line epicure-restaurant-card-skeleton__line--stars" />
+            </div>
+          </div>
+        ))}
+      </div>
+    );
+  }
 
   return (
     <>

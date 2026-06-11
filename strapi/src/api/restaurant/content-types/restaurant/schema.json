@@ -41,6 +41,12 @@
     },
     "isPopular": {
       "type": "boolean"
+    },
+    "latitude": {
+      "type": "decimal"
+    },
+    "longitude": {
+      "type": "decimal"
     }
   }
 }

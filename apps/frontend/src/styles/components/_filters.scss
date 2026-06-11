@@ -42,7 +42,12 @@
   cursor: pointer;
 
   &:hover { opacity: 0.7; }
-  &--active { opacity: 0.7; }
+
+  &--active {
+    background: rgba(208, 207, 207, 1);
+    border-radius: 4px;
+    padding: 0.25rem 0.5rem;
+  }
 }
 
 .epicure-filter-dropdown {
@@ -121,6 +126,33 @@
     box-shadow: 0 0 0 4px $shadow-subtle !important;
     border: none !important;
   }
+
+  &--dirty .rc-slider-handle {
+    background-color: rgba(222, 146, 0, 1);
+  }
+
+  &--dirty-left .rc-slider-handle-1 {
+    background-color: rgba(222, 146, 0, 1);
+  }
+
+  &--dirty-right .rc-slider-handle-2 {
+    background-color: rgba(222, 146, 0, 1);
+  }
+}
+
+.epicure-filter-clear-btn {
+  display: block;
+  margin: 0.875rem auto 0;
+  padding: 0.3rem 1.5rem;
+  background: $white;
+  border: 1px solid $black-primary;
+  font-size: 0.8125rem;
+  font-family: inherit;
+  font-weight: 300;
+  cursor: pointer;
+  letter-spacing: 0.04em;
+
+  &:hover { background: $bg-light; }
 }
 
 .epicure-filter-slider-edge {

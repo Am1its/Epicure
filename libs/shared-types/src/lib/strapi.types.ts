@@ -35,4 +35,5 @@ export interface Restaurant {
   dishes?: Dish[];
   createdAt?: string;
   isPopular?: boolean;
+  distance?: number;
 }

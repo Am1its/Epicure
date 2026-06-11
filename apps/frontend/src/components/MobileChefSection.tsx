@@ -32,7 +32,8 @@ export function MobileChefSection({ chef, restaurants }: Props) {
         ))}
       </div>
       <a href="/restaurants" className="epicure-chef-week__all-link">
-        {TEXT.chefOfTheWeek.allRestaurantsLink} <span aria-hidden="true">&raquo;&raquo;</span>
+        {TEXT.chefOfTheWeek.allRestaurantsLink}
+        <img src="/icons/Arrow.svg" alt="" aria-hidden="true" width={24} height={24} />
       </a>
     </section>
   );
