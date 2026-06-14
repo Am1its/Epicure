@@ -28,6 +28,11 @@ export const TEXT = {
     dialogAriaLabel: 'Shopping cart',
     closeAriaLabel: 'Close cart',
     empty: 'YOUR BAG IS EMPTY',
+    yourOrder: 'YOUR ORDER',
+    total: 'TOTAL',
+    checkout: 'CHECKOUT',
+    addComment: 'Add A Comment',
+    commentPlaceholder: 'Special requests, allergies, dietary restrictions, etc',
     orderHistory: 'ORDER HISTORY',
   },
   signIn: {
@@ -85,6 +90,26 @@ export const TEXT = {
     notFound: 'Restaurant not found.',
     openNow: 'Open now',
     opensAt: (time: string) => `Opens at ${time}`,
+  },
+  dishModal: {
+    dialogAriaLabel: 'Dish details',
+    closeAriaLabel: 'Close dish details',
+    chooseSide: 'Choose a side',
+    changes: 'Changes',
+    quantity: 'Quantity',
+    addToBag: 'ADD TO BAG',
+    decreaseAriaLabel: 'Decrease quantity',
+    increaseAriaLabel: 'Increase quantity',
+  },
+  deleteOrder: {
+    dialogAriaLabel: 'Delete order confirmation',
+    icon: '?',
+    title: 'DELETE ORDER?',
+    message: 'You can order from only one restaurant per order. Going out to another restaurant will erase all the items you put in the cart',
+    confirm: 'DELETE',
+    confirmAriaLabel: 'Delete current order',
+    cancel: 'BACK TO ORDER',
+    cancelAriaLabel: 'Go back to order',
   },
   restaurantsGrid: {
     tabs: [
