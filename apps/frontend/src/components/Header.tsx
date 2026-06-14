@@ -8,6 +8,7 @@ import { SearchOverlay } from './SearchOverlay';
 import { CartPanel } from './CartPanel';
 import { SignInModal } from './SignInModal';
 import { TEXT } from '../lib/text';
+import { useCart } from '../context/CartContext';
 
 type ActivePanel = 'none' | 'drawer' | 'search' | 'cart' | 'signin';
 
@@ -15,6 +16,7 @@ export default function Header() {
   const [activePanel, setActivePanel] = useState<ActivePanel>('none');
   const pathname = usePathname();
   const [searchQuery, setSearchQuery] = useState('');
+  const { totalItems } = useCart();
 
   function toggle(panel: Exclude<ActivePanel, 'none'>) {
     setActivePanel(prev => {
@@ -108,7 +110,14 @@ export default function Header() {
               <img src="/icons/user.svg" alt="" aria-hidden="true" width={22} height={22} />
             </button>
             <button aria-label={TEXT.nav.cartAriaLabel} onClick={() => toggle('cart')}>
-              <img src="/icons/cart.svg" alt="" aria-hidden="true" width={22} height={22} />
+              <span className="epicure-nav__cart-wrap">
+                <img src="/icons/cart.svg" alt="" aria-hidden="true" width={22} height={22} />
+                {totalItems > 0 && (
+                  <span className="epicure-nav__cart-badge" aria-label={`${totalItems} items in cart`}>
+                    {totalItems}
+                  </span>
+                )}
+              </span>
             </button>
           </div>
         </nav>
