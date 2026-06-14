@@ -54,6 +54,12 @@
     "isSignatureDish": {
       "type": "boolean",
       "required": true
+    },
+    "sides": {
+      "type": "json"
+    },
+    "changes": {
+      "type": "json"
     }
   }
 }
