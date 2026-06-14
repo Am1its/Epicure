@@ -63,6 +63,8 @@ export class RestaurantsService {
           image: d.image,
           mealTime: d.mealTime,
           isSignatureDish: d.isSignatureDish,
+          sides: d.sides,
+          changes: d.changes,
         }),
       ),
     };
