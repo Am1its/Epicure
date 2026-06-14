@@ -1,6 +1,7 @@
 import Header from '../../../components/Header';
 import Footer from '../../../components/Footer';
 import { DishGrid } from '../../../components/DishGrid';
+import { OpenNowBadge } from '../../../components/OpenNowBadge';
 import { fetchApi, strapiImageUrl } from '../../../lib/api';
 import type { Restaurant } from '@org/shared-types';
 import { TEXT } from '../../../lib/text';
@@ -36,7 +37,6 @@ export default async function RestaurantDetailPage({
     <div>
       <Header />
       <main>
-        { }
         <img
           src={strapiImageUrl(restaurant.image?.url)}
           alt={restaurant.name}
@@ -47,10 +47,7 @@ export default async function RestaurantDetailPage({
           {restaurant.chef && (
             <p className="epicure-detail-chef">{restaurant.chef.name}</p>
           )}
-          <span className="epicure-detail-open">
-            <img src="/icons/Clock.svg" alt="" aria-hidden="true" width={16} height={16} />
-            {TEXT.restaurantDetail.openNow}
-          </span>
+          <OpenNowBadge openingHours={restaurant.openingHours} />
         </div>
         <DishGrid dishes={restaurant.dishes ?? []} />
       </main>

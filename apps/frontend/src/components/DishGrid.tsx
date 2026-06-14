@@ -31,6 +31,7 @@ export function DishGrid({ dishes }: DishGridProps) {
               type="button"
               role="tab"
               aria-selected={activeTab === tab}
+              aria-controls="dish-grid-panel"
               className={`epicure-page-tab${activeTab === tab ? ' epicure-page-tab--active' : ''}`}
               onClick={() => setActiveTab(tab)}
             >
@@ -39,7 +40,7 @@ export function DishGrid({ dishes }: DishGridProps) {
           ))}
         </div>
       </div>
-      <div className="epicure-dish-grid">
+      <div id="dish-grid-panel" role="tabpanel" className="epicure-dish-grid">
         {filtered.map(dish => (
           <DishCard key={dish.id} dish={dish} imageUrl={strapiImageUrl(dish.image?.url)} />
         ))}

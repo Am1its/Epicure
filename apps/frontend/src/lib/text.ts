@@ -84,6 +84,7 @@ export const TEXT = {
   restaurantDetail: {
     notFound: 'Restaurant not found.',
     openNow: 'Open now',
+    opensAt: (time: string) => `Opens at ${time}`,
   },
   restaurantsGrid: {
     tabs: [
