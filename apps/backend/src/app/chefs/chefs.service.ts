@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import type { Chef } from '@org/shared-types';
 import { StrapiClientService } from '../strapi-client/strapi-client.service';
 import type { StrapiChef } from '../strapi-client/strapi-types';
@@ -13,10 +13,11 @@ export class ChefsService {
   }
 
   async findOne(id: number): Promise<Chef> {
-    const item = await this.strapiClient.getById<StrapiChef>(
-      `/api/chefs/${id}?populate=*`,
+    const items = await this.strapiClient.get<StrapiChef>(
+      `/api/chefs?filters[id][$eq]=${id}&populate=*`,
     );
-    return this.transform(item);
+    if (!items.length) throw new NotFoundException('Chef not found');
+    return this.transform(items[0]);
   }
 
   private transform(item: StrapiChef): Chef {

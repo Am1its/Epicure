@@ -47,6 +47,7 @@ export function ChefsGrid() {
           {TEXT.chefsGrid.tabs.map(tab => (
             <button
               key={tab.id}
+              type="button"
               role="tab"
               aria-selected={activeTab === tab.id}
               className={`epicure-page-tab epicure-page-tab--${tab.id}${activeTab === tab.id ? ' epicure-page-tab--active' : ''}`}

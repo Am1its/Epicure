@@ -1,27 +1,53 @@
 @use '../setup/variables' as *;
+@use '../setup/mixins' as *;
 
+// ── Hero ──────────────────────────────────────────────────────────
 .epicure-detail-hero {
   width: 100%;
-  height: 45vh;
+  height: 272px;
   object-fit: cover;
   display: block;
+
+  @include for-normal-layout {
+    width: 1186px;
+    height: 425px;
+    margin: 0 auto;
+    display: block;
+  }
 }
 
+// ── Info block ────────────────────────────────────────────────────
 .epicure-detail-info {
-  text-align: center;
-  padding: 2rem 2rem 1rem;
+  text-align: left;
+  padding: 1rem 1.25rem;
+
+  @include for-normal-layout {
+    text-align: center;
+    padding: 2rem 2rem 1rem;
+  }
 }
 
 .epicure-detail-name {
-  font-size: clamp(1.75rem, 4vw, 2.5rem);
-  font-weight: 300;
-  margin-bottom: 0.375rem;
+  font-size: 1.75rem;
+  font-weight: 400;
+  margin-bottom: 0.25rem;
+
+  @include for-normal-layout {
+    font-size: clamp(2rem, 4vw, 3rem);
+    font-weight: 300;
+    margin-bottom: 0.375rem;
+  }
 }
 
 .epicure-detail-chef {
-  font-size: 1rem;
-  opacity: 0.55;
-  margin-bottom: 0.75rem;
+  font-size: 1.125rem;
+  opacity: 0.75;
+  margin-bottom: 0.5rem;
+
+  @include for-normal-layout {
+    font-size: 1.25rem;
+    margin-bottom: 0.75rem;
+  }
 }
 
 .epicure-detail-open {
@@ -29,19 +55,201 @@
   align-items: center;
   gap: 0.375rem;
   font-size: 0.875rem;
-  color: $gold-secondary;
+  color: $black-primary;
 }
 
+// ── Tabs: left-aligned on mobile, gold underline + no bold in detail context ──
+.epicure-detail-tabs .epicure-page-tabs {
+  justify-content: flex-start;
+  gap: 1.5rem;
+  padding: 0 1.25rem;
+
+  @include for-normal-layout {
+    justify-content: center;
+    gap: 2.5rem;
+    padding: 0 2rem;
+  }
+}
+
+.epicure-detail-tabs .epicure-page-tab--active {
+  font-weight: 200;
+
+  @include for-normal-layout {
+    border-bottom-color: $gold-secondary;
+  }
+}
+
+// ── Dish grid ─────────────────────────────────────────────────────
+.epicure-dish-grid {
+  display: grid;
+  grid-template-columns: 335px;
+  justify-content: center;
+  gap: 22px;
+  padding-top: 24px;
+  padding-bottom: 56px;
+  background: $bg-light;
+
+  @include for-normal-layout {
+    grid-template-columns: repeat(4, 272px);
+    grid-auto-rows: 413px;
+    justify-content: center;
+    gap: 2rem;
+    width: 1184px;
+    margin: 0 auto;
+    padding: 2rem 0;
+    background: transparent;
+  }
+}
+
+// ── Dish card overrides (restaurant detail context only) ──────────
+// Scoped under .epicure-dish-grid so homepage DishCard is unaffected.
+// Resets desktop _dish-card.scss overrides (690px height, large text,
+// element reordering) and applies compact detail-page sizing.
+.epicure-dish-grid .epicure-dish-card {
+  border-radius: 0;
+
+  &__image {
+    aspect-ratio: unset;
+    height: 208px;
+  }
+
+  &__info {
+    background: $cream-secondary;
+    text-align: left;
+    padding: 0.75rem 1rem 1rem;
+    display: flex;
+    flex-direction: column;
+    min-height: 179px;
+  }
+
+  &__signature { display: none; }
+
+  &__name {
+    font-size: 1.5rem;
+    font-weight: 500;
+    margin-bottom: 0.25rem;
+  }
+
+  &__description {
+    font-size: 1rem;
+    opacity: 0.55;
+    margin-bottom: 0;
+    -webkit-line-clamp: 3;
+  }
+
+  &__type-icon { display: none; }
+
+  &__price-row {
+    display: flex;
+    align-items: center;
+    gap: 0.125rem;
+    border-top: none;
+    padding-top: 0;
+    margin-top: auto;
+
+    &::before { display: none; }
+
+    &::after {
+      display: block;
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: $black-primary;
+      opacity: 0.35;
+      margin-left: 0.5rem;
+    }
+  }
+
+  &__shekel-icon {
+    display: block;
+    width: 8px;
+    height: 19px;
+    opacity: 1;
+    align-self: flex-end;
+    filter: brightness(0);
+  }
+
+  &__price {
+    font-size: 1.5rem;
+    line-height: 1;
+
+    &::before { content: ''; }
+  }
+
+  // ── Desktop overrides ────────────────────────────────────────────
+  @include for-normal-layout {
+    height: auto;
+    border-radius: 4px;
+
+    &__image {
+      aspect-ratio: unset;
+      height: 173px;
+    }
+
+    &__info {
+      background: $cream-secondary;
+      text-align: center;
+      padding: 0.875rem 1rem 1rem;
+      display: flex;
+      flex-direction: column;
+    }
+
+    &__name {
+      font-size: 2rem;
+      font-weight: 400;
+      min-height: auto;
+      order: unset;
+    }
+
+    &__description {
+      font-size: 1.15rem;
+      order: unset;
+    }
+
+    &__type-icon {
+      display: none;
+      order: unset;
+    }
+
+    &__price-row {
+      border-top: none;
+      padding-top: 0;
+      margin-top: auto;
+      order: unset;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.125rem;
+
+      &::before,
+      &::after {
+        display: block;
+        content: '';
+        width: 82.5px;
+        flex: none;
+        height: 1px;
+        background: $black-primary;
+        opacity: 0.35;
+      }
+    }
+
+    &__shekel-icon {
+      display: block;
+      width: 8px;
+      height: 19px;
+      align-self: flex-end;
+    }
+
+    &__price {
+      font-size: 1rem;
+
+      &::before { content: ''; }
+    }
+  }
+}
+
+// ── Error state ───────────────────────────────────────────────────
 .epicure-detail-error {
   padding: 4rem 2rem;
   text-align: center;
-}
-
-.epicure-dish-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 1.25rem;
-  max-width: $max-width;
-  margin: 0 auto;
-  padding: 2rem;
 }
