@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import type { Dish } from '@org/shared-types';
 import { StrapiClientService } from '../strapi-client/strapi-client.service';
 import type { StrapiDish } from '../strapi-client/strapi-types';
@@ -13,10 +13,11 @@ export class DishesService {
   }
 
   async findOne(id: number): Promise<Dish> {
-    const item = await this.strapiClient.getById<StrapiDish>(
-      `/api/dishes/${id}?populate=*`,
+    const items = await this.strapiClient.get<StrapiDish>(
+      `/api/dishes?filters[id][$eq]=${id}&populate=*`,
     );
-    return this.transform(item);
+    if (!items.length) throw new NotFoundException('Dish not found');
+    return this.transform(items[0]);
   }
 
   private transform(item: StrapiDish): Dish {
