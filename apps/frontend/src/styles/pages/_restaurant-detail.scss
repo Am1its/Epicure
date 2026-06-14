@@ -1,27 +1,50 @@
 @use '../setup/variables' as *;
+@use '../setup/mixins' as *;
 
+// ── Hero ──────────────────────────────────────────────────────────
 .epicure-detail-hero {
   width: 100%;
   height: 45vh;
   object-fit: cover;
   display: block;
+
+  @include for-normal-layout {
+    height: 55vh;
+  }
 }
 
+// ── Info block ────────────────────────────────────────────────────
 .epicure-detail-info {
-  text-align: center;
-  padding: 2rem 2rem 1rem;
+  text-align: left;
+  padding: 1rem 1.25rem;
+
+  @include for-normal-layout {
+    text-align: center;
+    padding: 2rem 2rem 1rem;
+  }
 }
 
 .epicure-detail-name {
-  font-size: clamp(1.75rem, 4vw, 2.5rem);
-  font-weight: 300;
-  margin-bottom: 0.375rem;
+  font-size: 1.25rem;
+  font-weight: 400;
+  margin-bottom: 0.25rem;
+
+  @include for-normal-layout {
+    font-size: clamp(1.75rem, 4vw, 2.5rem);
+    font-weight: 300;
+    margin-bottom: 0.375rem;
+  }
 }
 
 .epicure-detail-chef {
-  font-size: 1rem;
+  font-size: 0.875rem;
   opacity: 0.55;
-  margin-bottom: 0.75rem;
+  margin-bottom: 0.5rem;
+
+  @include for-normal-layout {
+    font-size: 1rem;
+    margin-bottom: 0.75rem;
+  }
 }
 
 .epicure-detail-open {
@@ -32,16 +55,160 @@
   color: $gold-secondary;
 }
 
+// ── Tabs: left-aligned on mobile in detail context ────────────────
+.epicure-detail-tabs .epicure-page-tabs {
+  justify-content: flex-start;
+  gap: 1.5rem;
+  padding: 0 1.25rem;
+
+  @include for-normal-layout {
+    justify-content: center;
+    gap: 2.5rem;
+    padding: 0 2rem;
+  }
+}
+
+// ── Dish grid ─────────────────────────────────────────────────────
+.epicure-dish-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0;
+  background: $bg-light;
+
+  @include for-normal-layout {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.25rem;
+    max-width: $max-width;
+    margin: 0 auto;
+    padding: 2rem;
+    background: transparent;
+  }
+}
+
+// ── Dish card overrides (restaurant detail context only) ──────────
+// Scoped under .epicure-dish-grid so homepage DishCard is unaffected.
+// Resets desktop _dish-card.scss overrides (690px height, large text,
+// element reordering) and applies compact detail-page sizing.
+.epicure-dish-grid .epicure-dish-card {
+  border-radius: 0;
+
+  &__image {
+    aspect-ratio: 16 / 9;
+    height: auto;
+  }
+
+  &__info {
+    background: $white;
+    text-align: left;
+    padding: 0.75rem 1rem 1rem;
+    display: flex;
+    flex-direction: column;
+  }
+
+  &__signature { display: none; }
+
+  &__name {
+    font-size: 1rem;
+    font-weight: 500;
+    margin-bottom: 0.25rem;
+  }
+
+  &__description {
+    font-size: 0.875rem;
+    opacity: 0.55;
+    margin-bottom: 0;
+    -webkit-line-clamp: 3;
+  }
+
+  &__type-icon { display: none; }
+
+  &__price-row {
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+    padding-top: 0.5rem;
+    margin-top: 0.5rem;
+
+    &::before,
+    &::after { display: none; }
+  }
+
+  &__shekel-icon {
+    display: inline;
+    width: 7.5px;
+    height: 7.5px;
+  }
+
+  &__price {
+    font-size: 0.875rem;
+
+    &::before { content: ''; }
+  }
+
+  // ── Desktop overrides ────────────────────────────────────────────
+  @include for-normal-layout {
+    height: auto;
+    border-radius: 4px;
+
+    &__image {
+      aspect-ratio: unset;
+      height: 200px;
+    }
+
+    &__info {
+      background: $cream-secondary;
+      text-align: center;
+      padding: 0.875rem 1rem 1rem;
+      align-items: center;
+    }
+
+    &__name {
+      font-size: 1.125rem;
+      font-weight: 400;
+      min-height: auto;
+      order: unset;
+    }
+
+    &__description {
+      font-size: 0.875rem;
+      order: unset;
+    }
+
+    &__type-icon {
+      display: none;
+      order: unset;
+    }
+
+    &__price-row {
+      border-top: none;
+      padding-top: 0;
+      margin-top: 0.625rem;
+      order: unset;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+
+      &::before,
+      &::after {
+        display: block;
+        content: '';
+        flex: 1;
+        height: 1px;
+        background: $black-primary;
+        opacity: 0.35;
+      }
+    }
+
+    &__shekel-icon { display: none; }
+
+    &__price {
+      font-size: 1rem;
+
+      &::before { content: '₪'; }
+    }
+  }
+}
+
+// ── Error state ───────────────────────────────────────────────────
 .epicure-detail-error {
   padding: 4rem 2rem;
   text-align: center;
-}
-
-.epicure-dish-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 1.25rem;
-  max-width: $max-width;
-  margin: 0 auto;
-  padding: 2rem;
 }
