@@ -24,6 +24,8 @@ export interface Dish {
   mealTime?: 'Breakfast' | 'Lunch' | 'Dinner';
   isSignatureDish?: boolean;
   restaurantName?: string;
+  sides?: string[];
+  changes?: string[];
 }
 
 export interface Restaurant {
@@ -40,6 +42,16 @@ export interface Restaurant {
   latitude?: number;
   longitude?: number;
   openingHours?: string;
+}
+
+export interface CartItem {
+  dish: Dish;
+  imageUrl: string;
+  quantity: number;
+  selectedSide?: string;
+  selectedChanges: string[];
+  restaurantId: number;
+  restaurantName: string;
 }
 
 export interface SearchResults {
