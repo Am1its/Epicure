@@ -54,9 +54,9 @@ export function DishGrid({ dishes, restaurantId, restaurantName }: DishGridProps
             className="epicure-dish-grid-item"
             role="button"
             tabIndex={0}
-            aria-label={`View ${dish.name} details`}
+            aria-label={TEXT.dishGrid.openAriaLabel(dish.name)}
             onClick={() => handleDishClick(dish)}
-            onKeyDown={e => e.key === 'Enter' && handleDishClick(dish)}
+            onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleDishClick(dish); } }}
           >
             <DishCard dish={dish} imageUrl={strapiImageUrl(dish.image?.url)} />
           </div>

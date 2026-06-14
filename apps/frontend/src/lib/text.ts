@@ -127,6 +127,7 @@ export const TEXT = {
   },
   dishGrid: {
     tabs: ['Breakfast', 'Lunch', 'Dinner'] as const,
+    openAriaLabel: (dishName: string) => `View ${dishName} details`,
   },
   chefsGrid: {
     tabs: [
