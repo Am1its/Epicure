@@ -23,7 +23,7 @@ export function DishGrid({ dishes }: DishGridProps) {
 
   return (
     <>
-      <div className="epicure-page-tabs-wrap">
+      <div className="epicure-detail-tabs epicure-page-tabs-wrap">
         <div className="epicure-page-tabs" role="tablist">
           {tabs.map(tab => (
             <button
