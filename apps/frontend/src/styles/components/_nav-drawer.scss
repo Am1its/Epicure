@@ -11,7 +11,7 @@
 
 .epicure-nav-drawer {
   @extend %overlay-panel;
-  width: 377px;
+  width: 100vw;
   height: 367px;
   display: flex;
   flex-direction: column;
