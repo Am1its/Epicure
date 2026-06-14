@@ -28,6 +28,7 @@ export function DishGrid({ dishes }: DishGridProps) {
           {tabs.map(tab => (
             <button
               key={tab}
+              type="button"
               role="tab"
               aria-selected={activeTab === tab}
               className={`epicure-page-tab${activeTab === tab ? ' epicure-page-tab--active' : ''}`}
