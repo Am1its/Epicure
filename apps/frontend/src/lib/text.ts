@@ -83,7 +83,7 @@ export const TEXT = {
   },
   restaurantDetail: {
     notFound: 'Restaurant not found.',
-    openNow: '🕐 Open now',
+    openNow: 'Open now',
   },
   restaurantsGrid: {
     tabs: [

@@ -48,6 +48,7 @@ export default async function RestaurantDetailPage({
             <p className="epicure-detail-chef">{restaurant.chef.name}</p>
           )}
           <span className="epicure-detail-open">
+            <img src="/icons/Clock.svg" alt="" aria-hidden="true" width={16} height={16} />
             {TEXT.restaurantDetail.openNow}
           </span>
         </div>
