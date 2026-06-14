@@ -5,21 +5,28 @@ import type { Dish } from '@org/shared-types';
 import { DishCard } from '@org/ui-components';
 import { strapiImageUrl } from '../lib/api';
 import { TEXT } from '../lib/text';
+import { DishModal } from './DishModal';
 
 type MealTime = (typeof TEXT.dishGrid.tabs)[number];
 
 interface DishGridProps {
   dishes: Dish[];
+  restaurantId: number;
+  restaurantName: string;
 }
 
-export function DishGrid({ dishes }: DishGridProps) {
+export function DishGrid({ dishes, restaurantId, restaurantName }: DishGridProps) {
   const [activeTab, setActiveTab] = useState<MealTime>(TEXT.dishGrid.tabs[0]);
+  const [selectedDish, setSelectedDish] = useState<Dish | null>(null);
+  const [selectedImageUrl, setSelectedImageUrl] = useState<string>('');
 
-  const filtered = dishes.filter(
-    d => d.mealTime?.trim() === activeTab
-  );
-
+  const filtered = dishes.filter(d => d.mealTime?.trim() === activeTab);
   const tabs = [...TEXT.dishGrid.tabs] as MealTime[];
+
+  function handleDishClick(dish: Dish) {
+    setSelectedDish(dish);
+    setSelectedImageUrl(strapiImageUrl(dish.image?.url));
+  }
 
   return (
     <>
@@ -42,9 +49,29 @@ export function DishGrid({ dishes }: DishGridProps) {
       </div>
       <div id="dish-grid-panel" role="tabpanel" className="epicure-dish-grid">
         {filtered.map(dish => (
-          <DishCard key={dish.id} dish={dish} imageUrl={strapiImageUrl(dish.image?.url)} />
+          <div
+            key={dish.id}
+            className="epicure-dish-grid-item"
+            role="button"
+            tabIndex={0}
+            aria-label={`View ${dish.name} details`}
+            onClick={() => handleDishClick(dish)}
+            onKeyDown={e => e.key === 'Enter' && handleDishClick(dish)}
+          >
+            <DishCard dish={dish} imageUrl={strapiImageUrl(dish.image?.url)} />
+          </div>
         ))}
       </div>
+
+      {selectedDish && (
+        <DishModal
+          dish={selectedDish}
+          imageUrl={selectedImageUrl}
+          restaurantId={restaurantId}
+          restaurantName={restaurantName}
+          onClose={() => setSelectedDish(null)}
+        />
+      )}
     </>
   );
 }

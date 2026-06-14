@@ -49,7 +49,11 @@ export default async function RestaurantDetailPage({
           )}
           <OpenNowBadge openingHours={restaurant.openingHours} />
         </div>
-        <DishGrid dishes={restaurant.dishes ?? []} />
+        <DishGrid
+          dishes={restaurant.dishes ?? []}
+          restaurantId={restaurant.id}
+          restaurantName={restaurant.name}
+        />
       </main>
       <Footer />
     </div>
