@@ -11,6 +11,7 @@ export interface Chef {
   image?: StrapiImage;
   bio?: string;
   chefOfTheWeek?: boolean;
+  chefOfTheWeekOrder?: number;
 }
 
 export interface Dish {

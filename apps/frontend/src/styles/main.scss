@@ -15,6 +15,7 @@
 @use 'components/sign-in-modal';
 @use 'components/restaurant-card';
 @use 'components/dish-card';
+@use 'components/chef-card';
 @use 'components/tabs';
 @use 'components/filters';
 @use 'components/mobile-section';
@@ -22,4 +23,5 @@
 // Pages
 @use 'pages/home';
 @use 'pages/restaurants';
+@use 'pages/chefs';
 @use 'pages/restaurant-detail';

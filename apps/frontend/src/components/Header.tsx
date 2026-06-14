@@ -58,7 +58,20 @@ export default function Header() {
                 {TEXT.shared.restaurants}
               </Link>
             </li>
-            <li><Link href="/chefs" className={pathname.startsWith('/chefs') ? 'epicure-nav__link--active' : ''}>{TEXT.shared.chefs}</Link></li>
+            <li>
+              <Link
+                href="/chefs"
+                className={pathname.startsWith('/chefs') ? 'epicure-nav__link--active' : ''}
+                onClick={(e) => {
+                  if (pathname.startsWith('/chefs')) {
+                    e.preventDefault();
+                    window.location.href = '/chefs';
+                  }
+                }}
+              >
+                {TEXT.shared.chefs}
+              </Link>
+            </li>
           </ul>
 
           {/* Action icons */}

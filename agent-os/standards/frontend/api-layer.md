@@ -13,6 +13,19 @@ const restaurant  = await fetchApi<Restaurant>(`/api/restaurants/${id}`);
 <img src={strapiImageUrl(item.image?.url)} />
 ```
 
+## ui-components imageUrl convention
+
+`RestaurantCard`, `DishCard`, and `ChefCard` accept an `imageUrl?: string` prop — they never call `strapiImageUrl` themselves. The caller (page or container component) builds the URL and passes it in:
+
+```tsx
+import { strapiImageUrl } from '../lib/api';
+<RestaurantCard restaurant={r} imageUrl={strapiImageUrl(r.image?.url)} />
+<DishCard dish={d} imageUrl={strapiImageUrl(d.image?.url)} />
+<ChefCard chef={c} imageUrl={strapiImageUrl(c.image?.url)} />
+```
+
+Never put `STRAPI_URL` or `strapiImageUrl` inside a ui-component — they live in `libs/ui-components` which has no access to frontend env vars.
+
 ## Rules
 - `fetchApi` uses `cache: 'no-store'` — always fresh data
 - `strapiImageUrl` falls back to `/icons/logo.svg` when url is undefined

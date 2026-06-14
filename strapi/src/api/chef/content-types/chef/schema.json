@@ -27,6 +27,9 @@
     },
     "bio": {
       "type": "text"
+    },
+    "chefOfTheWeekOrder": {
+      "type": "integer"
     }
   }
 }

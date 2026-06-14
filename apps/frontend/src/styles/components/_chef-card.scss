@@ -1,0 +1,78 @@
+@use '../setup/variables' as *;
+@use '../setup/mixins' as *;
+
+.epicure-chef-card {
+  position: relative;
+  overflow: hidden;
+
+  &__image {
+    width: 100%;
+    aspect-ratio: 335 / 337;
+    object-fit: cover;
+    display: block;
+    filter: grayscale(100%);
+  }
+
+  &__info {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 78px;
+    background: $card-name-overlay;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  &__name {
+    font-size: 1.375rem;
+    font-weight: 400;
+    color: $black-primary;
+    margin: 0;
+  }
+
+  @include for-normal-layout {
+    height: 338px;
+
+    &__image {
+      width: 100%;
+      height: 100%;
+      aspect-ratio: unset;
+    }
+
+    &__name { font-size: 2rem; }
+  }
+}
+
+@keyframes epicure-chef-skeleton-pulse {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.5; }
+}
+
+.epicure-chef-card-skeleton {
+  position: relative;
+  overflow: hidden;
+
+  &__image {
+    width: 100%;
+    aspect-ratio: 335 / 337;
+    background: $border-light;
+    animation: epicure-chef-skeleton-pulse 1.5s ease-in-out infinite;
+  }
+
+  &__info {
+    height: 78px;
+    background: rgba(0, 0, 0, 0.05);
+    animation: epicure-chef-skeleton-pulse 1.5s ease-in-out infinite;
+  }
+
+  @include for-normal-layout {
+    height: 338px;
+
+    &__image {
+      height: 100%;
+      aspect-ratio: unset;
+    }
+  }
+}
