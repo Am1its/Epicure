@@ -1,4 +1,5 @@
 @use '../setup/variables' as *;
+@use '../setup/mixins' as *;
 @use '../setup/placeholders' as *;
 
 .epicure-delete-modal__backdrop {
