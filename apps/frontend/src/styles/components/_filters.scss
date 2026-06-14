@@ -46,7 +46,7 @@
   &:hover { opacity: 0.7; }
 
   &--active {
-    background: rgba(208, 207, 207, 1);
+    background: $filter-active-bg;
     border-radius: 4px;
   }
 }
