@@ -5,7 +5,7 @@
 .epicure-dish-modal__backdrop {
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.5);
+  background: $modal-overlay;
   z-index: $z-panel-backdrop;
   cursor: default;
   width: 100%;
@@ -39,7 +39,7 @@
     position: fixed;
     top: 45px;
     left: calc(50% - 288px - 3px);
-    z-index: $z-panel + 1;
+    z-index: $z-panel-top;
     background: none;
     border: none;
     cursor: pointer;

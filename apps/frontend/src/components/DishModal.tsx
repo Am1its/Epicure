@@ -84,6 +84,7 @@ export function DishModal({ dish, imageUrl, restaurantId, restaurantName, onClos
 
         <div className="epicure-dish-modal__body">
           <div className="epicure-dish-modal__name-row">
+            {/* mobile: icon sits beside name in the name row */}
             {dish.type && TYPE_ICONS[dish.type] && (
               <img
                 src={TYPE_ICONS[dish.type]}
@@ -96,6 +97,7 @@ export function DishModal({ dish, imageUrl, restaurantId, restaurantName, onClos
           {dish.description && (
             <p className="epicure-dish-modal__description">{dish.description}</p>
           )}
+          {/* desktop: icon sits below description — different structural position requires two DOM nodes */}
           {dish.type && TYPE_ICONS[dish.type] && (
             <img
               src={TYPE_ICONS[dish.type]}

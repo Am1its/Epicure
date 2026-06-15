@@ -24,7 +24,7 @@
   flex-direction: column;
   padding: 2.5rem 1rem 2rem;
   border-bottom: 1px solid $divider;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 4px 16px $shadow-panel;
   max-height: calc(100vh - #{$nav-height-mobile});
   overflow: hidden;
 
@@ -174,100 +174,6 @@
   }
 }
 
-// ─── Cart item row (image left, info right) ───────────────────────────────────
-
-.epicure-cart-item {
-  direction: ltr;
-  display: flex;
-  flex-direction: row;
-  flex-shrink: 0;
-  background: $cream-secondary;
-  height: auto;
-  min-height: 96px;
-
-  &__image {
-    width: 96px;
-    min-height: 96px;
-    height: 100%;
-    object-fit: cover;
-    flex-shrink: 0;
-    align-self: stretch;
-  }
-
-  &__body {
-    flex: 1;
-    min-width: 0;
-    height: auto;
-    min-height: 96px;
-    padding: 0.625rem 0.75rem;
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
-  }
-
-  &__top {
-    display: flex;
-    align-items: flex-start;
-    gap: 0.375rem;
-    margin-bottom: 0.125rem;
-  }
-
-  // mobile: hidden in favour of __qty-inline
-  &__qty { display: none; }
-
-  // mobile: "1x" prefix inside name
-  &__qty-inline {
-    font-weight: 400;
-    color: $black-primary;
-  }
-
-  &__details {
-    flex: 1;
-    min-width: 0;
-  }
-
-  &__name {
-    font-size: 1rem;
-    font-weight: 500;
-    margin-bottom: 0.125rem;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-
-  // mobile: hidden
-  &__gold-price { display: none; }
-
-  &__meta {
-    font-size: 0.8125rem;
-    color: $gray-primary;
-    white-space: normal;
-    margin-bottom: 0.125rem;
-  }
-
-  &__price-row {
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
-    margin-top: auto;
-  }
-
-  &__price-val {
-    display: flex;
-    align-items: center;
-    gap: 0.125rem;
-    font-size: 0.9375rem;
-    font-weight: 600;
-    white-space: nowrap;
-    flex-shrink: 0;
-  }
-
-  &__shekel {
-    width: 7px;
-    height: 10px;
-  }
-}
-
 // ─── Desktop ──────────────────────────────────────────────────────────────────
 
 @include for-normal-layout {
@@ -365,7 +271,7 @@
     font-family: inherit;
     flex-shrink: 0;
 
-    &:hover { background: rgba(0, 0, 0, 0.04); }
+    &:hover { background: $hover-overlay; }
   }
 
   // title + restaurant bigger on desktop
@@ -374,46 +280,4 @@
   .epicure-cart-panel__title--mobile  { display: none; }
   .epicure-cart-panel__restaurant    { font-size: 1rem; }
 
-  // bigger text in dish cards — card grows to fit
-  .epicure-cart-item {
-    height: auto;
-    min-height: 96px;
-  }
-
-  .epicure-cart-item__image {
-    height: 100%;
-    min-height: 96px;
-    align-self: stretch;
-  }
-
-  .epicure-cart-item__body {
-    height: auto;
-    min-height: 96px;
-    padding: 15px 0.5rem 0.5rem 24px;
-  }
-
-  .epicure-cart-item__qty {
-    display: flex;
-    color: $gold-secondary;
-    font-weight: 400;
-    border: 1px solid $gold-secondary;
-    width: 31px;
-    height: 31px;
-    align-items: center;
-    justify-content: center;
-    font-size: 0.875rem;
-    flex-shrink: 0;
-  }
-
-  .epicure-cart-item__qty-inline  { display: none; }
-
-  .epicure-cart-item__gold-price {
-    display: block;
-    font-size: 0.875rem;
-    color: $gold-secondary;
-  }
-
-  .epicure-cart-item__name       { font-size: 1rem; }
-  .epicure-cart-item__meta       { font-size: 0.8125rem; white-space: normal; }
-  .epicure-cart-item__price-val  { font-size: 0.9375rem; }
 }

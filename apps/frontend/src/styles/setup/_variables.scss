@@ -33,3 +33,10 @@ $z-filter-overlay:   20;
 $z-filter-dropdown: 1000;
 $z-panel-backdrop:  149;
 $z-panel:           150;
+$z-panel-top:       151;
+
+// Overlays, shadows, borders
+$modal-overlay:  rgba(0, 0, 0, 0.5);
+$shadow-panel:   rgba(0, 0, 0, 0.08);
+$border-subtle:  rgba(0, 0, 0, 0.1);
+$hover-overlay:  rgba(0, 0, 0, 0.04);
