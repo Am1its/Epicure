@@ -5,6 +5,7 @@ import type { Dish } from '@org/shared-types';
 import { useCart } from '../context/CartContext';
 import { DeleteOrderModal } from './DeleteOrderModal';
 import { TEXT } from '../lib/text';
+import Footer from './Footer';
 
 const TYPE_ICONS: Record<string, string> = {
   Spicy: '/icons/spicy.svg',
@@ -59,20 +60,39 @@ export function DishModal({ dish, imageUrl, restaurantId, restaurantName, onClos
         onClick={onClose}
         aria-label={TEXT.dishModal.closeAriaLabel}
       />
+      {/* desktop: floats in backdrop above modal */}
       <button
         type="button"
-        className="epicure-dish-modal__close"
+        className="epicure-dish-modal__close-desktop"
         onClick={onClose}
         aria-label={TEXT.dishModal.closeAriaLabel}
       >
-        <img src="/icons/x.svg" alt="" aria-hidden="true" width={16} height={16} />
+        <img src="/icons/x.svg" alt="" aria-hidden="true" width={20} height={20} />
       </button>
 
       <div className="epicure-dish-modal" role="dialog" aria-modal="true" aria-label={TEXT.dishModal.dialogAriaLabel}>
+        {/* mobile: in-flow above image */}
+        <button
+          type="button"
+          className="epicure-dish-modal__close-mobile"
+          onClick={onClose}
+          aria-label={TEXT.dishModal.closeAriaLabel}
+        >
+          <img src="/icons/x.svg" alt="" aria-hidden="true" width={18} height={18} />
+        </button>
         <img src={imageUrl} alt={dish.name} className="epicure-dish-modal__image" />
 
         <div className="epicure-dish-modal__body">
-          <h2 className="epicure-dish-modal__name">{dish.name}</h2>
+          <div className="epicure-dish-modal__name-row">
+            {dish.type && TYPE_ICONS[dish.type] && (
+              <img
+                src={TYPE_ICONS[dish.type]}
+                alt={dish.type}
+                className="epicure-dish-modal__type-icon epicure-dish-modal__type-icon--mobile"
+              />
+            )}
+            <h2 className="epicure-dish-modal__name">{dish.name}</h2>
+          </div>
           {dish.description && (
             <p className="epicure-dish-modal__description">{dish.description}</p>
           )}
@@ -80,7 +100,7 @@ export function DishModal({ dish, imageUrl, restaurantId, restaurantName, onClos
             <img
               src={TYPE_ICONS[dish.type]}
               alt={dish.type}
-              className="epicure-dish-modal__type-icon"
+              className="epicure-dish-modal__type-icon epicure-dish-modal__type-icon--desktop"
             />
           )}
           <div className="epicure-dish-modal__price-row">
@@ -155,6 +175,7 @@ export function DishModal({ dish, imageUrl, restaurantId, restaurantName, onClos
             {TEXT.dishModal.addToBag}
           </button>
         </div>
+        <Footer />
       </div>
 
       {showDeleteConfirm && (
