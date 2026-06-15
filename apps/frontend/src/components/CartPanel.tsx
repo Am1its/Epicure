@@ -33,22 +33,27 @@ export function CartPanel({ onClose }: CartPanelProps) {
         ) : (
           <div className="epicure-cart-panel__filled">
             <div className="epicure-cart-panel__header">
-              <h2 className="epicure-cart-panel__title">{TEXT.cart.yourOrder}</h2>
+              <h2 className="epicure-cart-panel__title epicure-cart-panel__title--desktop">{TEXT.cart.yourOrder}</h2>
+              <h2 className="epicure-cart-panel__title epicure-cart-panel__title--mobile">{TEXT.cart.myOrder}</h2>
               <p className="epicure-cart-panel__restaurant">{restaurantName}</p>
             </div>
             <div className="epicure-cart-panel__items">
               {cartItems.map(item => (
-                <div key={`${item.dish.id}-${item.selectedSide ?? ''}-${item.selectedChanges.join(',')}`} className="epicure-cart-item">
-                  <img
-                    src={item.imageUrl}
-                    alt={item.dish.name}
-                    className="epicure-cart-item__image"
-                  />
+                <div
+                  key={`${item.dish.id}-${item.selectedSide ?? ''}-${item.selectedChanges.join(',')}`}
+                  className="epicure-cart-item"
+                >
+                  <img src={item.imageUrl} alt={item.dish.name} className="epicure-cart-item__image" />
                   <div className="epicure-cart-item__body">
                     <div className="epicure-cart-item__top">
+                      {/* desktop: qty box */}
                       <span className="epicure-cart-item__qty">{item.quantity}</span>
                       <div className="epicure-cart-item__details">
-                        <p className="epicure-cart-item__name">{item.dish.name}</p>
+                        <p className="epicure-cart-item__name">
+                          {/* mobile: qty inline prefix */}
+                          <span className="epicure-cart-item__qty-inline">{item.quantity}x </span>
+                          {item.dish.name}
+                        </p>
                         <p className="epicure-cart-item__gold-price">&#8362;{item.dish.price.toFixed(2)}</p>
                       </div>
                     </div>
@@ -67,6 +72,7 @@ export function CartPanel({ onClose }: CartPanelProps) {
                 </div>
               ))}
             </div>
+            {/* desktop only */}
             <hr className="epicure-cart-panel__divider" />
             <div className="epicure-cart-panel__comment-wrap">
               <p className="epicure-cart-panel__comment-label">{TEXT.cart.addComment}</p>
@@ -81,11 +87,22 @@ export function CartPanel({ onClose }: CartPanelProps) {
         )}
 
         {cartItems.length > 0 && (
-          <button type="button" className="epicure-cart-panel__checkout">
-            {TEXT.cart.checkout}&nbsp;
-            <img src="/icons/Shekel.svg" alt="₪" aria-hidden="true" className="epicure-cart-panel__checkout-shekel" />
-            {totalPrice}
-          </button>
+          <>
+            {/* mobile only */}
+            <div className="epicure-cart-panel__total">
+              {TEXT.cart.total} -&nbsp;
+              <img src="/icons/Shekel.svg" alt="₪" aria-hidden="true" className="epicure-cart-panel__total-shekel" />
+              {totalPrice}
+            </div>
+            <button type="button" className="epicure-cart-panel__checkout">
+              {TEXT.cart.checkout}
+              {/* desktop only: price inside button */}
+              <span className="epicure-cart-panel__checkout-price">
+                &nbsp;<img src="/icons/Shekel.svg" alt="₪" aria-hidden="true" className="epicure-cart-panel__checkout-shekel" />
+                {totalPrice}
+              </span>
+            </button>
+          </>
         )}
         <button type="button" className="epicure-cart-panel__order-history">
           {TEXT.cart.orderHistory}

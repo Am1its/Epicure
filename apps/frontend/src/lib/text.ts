@@ -29,6 +29,7 @@ export const TEXT = {
     closeAriaLabel: 'Close cart',
     empty: 'YOUR BAG IS EMPTY',
     yourOrder: 'YOUR ORDER',
+    myOrder: 'MY ORDER',
     total: 'TOTAL',
     checkout: 'CHECKOUT',
     addComment: 'Add A Comment',
