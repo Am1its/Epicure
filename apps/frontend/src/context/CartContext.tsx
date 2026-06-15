@@ -31,6 +31,15 @@ const EMPTY_STATE: CartState = {
   comment: '',
 };
 
+function itemsMatch(a: CartItem, b: CartItem): boolean {
+  return (
+    a.dish.id === b.dish.id &&
+    a.selectedSide === b.selectedSide &&
+    a.selectedChanges.length === b.selectedChanges.length &&
+    a.selectedChanges.every((c, i) => c === b.selectedChanges[i])
+  );
+}
+
 export function CartProvider({ children }: { children: ReactNode }) {
   const [state, setState] = useState<CartState>(EMPTY_STATE);
 
@@ -47,14 +56,12 @@ export function CartProvider({ children }: { children: ReactNode }) {
 
   function addToCart(item: CartItem) {
     setState(prev => {
-      const existing = prev.cartItems.find(c => c.dish.id === item.dish.id);
+      const existing = prev.cartItems.find(c => itemsMatch(c, item));
       if (existing) {
         return {
           ...prev,
           cartItems: prev.cartItems.map(c =>
-            c.dish.id === item.dish.id
-              ? { ...c, quantity: c.quantity + item.quantity }
-              : c
+            itemsMatch(c, item) ? { ...c, quantity: c.quantity + item.quantity } : c
           ),
         };
       }

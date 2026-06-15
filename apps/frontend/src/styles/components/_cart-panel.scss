@@ -26,7 +26,7 @@
   border-bottom: 1px solid $divider;
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
   max-height: calc(100vh - #{$nav-height-mobile});
-  overflow-y: auto;
+  overflow: hidden;
 
   &__body {
     display: flex;
@@ -56,11 +56,14 @@
     display: flex;
     flex-direction: column;
     flex: 1;
+    min-height: 0;
+    overflow: hidden;
   }
 
   &__header {
     text-align: center;
     margin-bottom: 1.25rem;
+    flex-shrink: 0;
   }
 
   &__title {
@@ -75,30 +78,36 @@
     color: $gray-primary;
   }
 
+  // vertical carousel — scrollbar flipped to left side
   &__items {
     display: flex;
     flex-direction: column;
-    gap: 0.75rem;
+    gap: 12px;
+    max-height: 220px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    flex-shrink: 0;
     margin-bottom: 1.25rem;
+    direction: rtl;
+
+    scrollbar-width: thin;
+    scrollbar-color: $gray-primary transparent;
+
+    &::-webkit-scrollbar       { width: 8px; }
+    &::-webkit-scrollbar-track { background: transparent; }
+    &::-webkit-scrollbar-thumb { background: $gray-primary; border-radius: 2px; }
   }
 
-  &__total {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0.25rem;
-    font-size: 1.125rem;
-    font-weight: 400;
-    margin-bottom: 1.25rem;
-  }
-
-  &__total-shekel {
-    width: 10px;
-    height: 14px;
+  &__divider {
+    border: none;
+    border-top: 1px solid $divider;
+    margin: 0 0 1.25rem;
+    flex-shrink: 0;
   }
 
   &__comment-wrap {
     margin-bottom: 1.25rem;
+    flex-shrink: 0;
   }
 
   &__comment-label {
@@ -117,6 +126,7 @@
     color: $gray-primary;
     resize: none;
     outline: none;
+    display: block;
 
     &::placeholder { color: $gray-primary; opacity: 0.7; }
     &:focus { border-color: $black-primary; }
@@ -132,6 +142,7 @@
     cursor: pointer;
     border: none;
     margin-bottom: 0.75rem;
+    flex-shrink: 0;
   }
 
   &__checkout-shekel {
@@ -145,31 +156,43 @@
   }
 }
 
+// ─── Cart item row (image left, info right) ───────────────────────────────────
+
 .epicure-cart-item {
+  direction: ltr;
   display: flex;
-  gap: 0.75rem;
-  align-items: flex-start;
+  flex-direction: row;
+  flex-shrink: 0;
   background: $cream-secondary;
-  padding: 0.625rem;
+  height: 96px;
 
   &__image {
-    width: 56px;
-    height: 56px;
+    width: 96px;
+    height: 96px;
     object-fit: cover;
     flex-shrink: 0;
   }
 
-  &__info {
+  &__body {
+    flex: 1;
+    min-width: 0;
+    height: 96px;
+    padding: 0.5rem 0.625rem;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  &__top {
     display: flex;
     align-items: flex-start;
-    gap: 0.5rem;
-    flex: 1;
+    gap: 0.375rem;
+    margin-bottom: 0.125rem;
   }
 
   &__qty {
     color: $gold-secondary;
     font-weight: 400;
-    flex-shrink: 0;
     border: 1px solid $gold-secondary;
     width: 22px;
     height: 22px;
@@ -177,28 +200,51 @@
     align-items: center;
     justify-content: center;
     font-size: 0.75rem;
+    flex-shrink: 0;
   }
 
   &__details {
     flex: 1;
+    min-width: 0;
   }
 
   &__name {
-    font-size: 0.875rem;
+    font-size: 0.8125rem;
     font-weight: 500;
-    margin-bottom: 0.125rem;
+    margin-bottom: 0.0625rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  &__gold-price {
+    font-size: 0.75rem;
+    color: $gold-secondary;
   }
 
   &__meta {
-    font-size: 0.75rem;
+    font-size: 0.6875rem;
     color: $gray-primary;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin-bottom: 0.125rem;
   }
 
-  &__price {
+  &__price-row {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    margin-top: auto;
+  }
+
+  &__price-val {
     display: flex;
     align-items: center;
     gap: 0.125rem;
-    font-size: 0.875rem;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    white-space: nowrap;
     flex-shrink: 0;
   }
 
@@ -208,18 +254,48 @@
   }
 }
 
+// ─── Desktop ──────────────────────────────────────────────────────────────────
+
 @include for-normal-layout {
   .epicure-cart-panel {
     top: $nav-height;
     left: auto;
     right: 0;
-    width: 500px;
-    height: 585px;
+    width: 497px;
+    height: 778px;
+    max-height: calc(100vh - #{$nav-height});
     border-bottom: none;
     box-shadow: 0 4px 24px $shadow-subtle;
-    max-height: none;
+    padding: 2rem 78px;
     overflow-y: auto;
-    padding: 2rem 1.5rem;
+  }
+
+  .epicure-cart-panel__filled {
+    overflow: visible;
+  }
+
+  .epicure-cart-panel__items {
+    width: 100%;
+    height: 262px;
+    max-height: 262px;
+    flex: none;
+  }
+
+  .epicure-cart-panel__comment-label {
+    text-align: center;
+  }
+
+  .epicure-cart-panel__comment-input {
+    width: 100%;
+    height: 122px;
+    margin: 0 auto;
+  }
+
+  .epicure-cart-panel__checkout {
+    width: 206px;
+    height: 48px;
+    margin: auto auto 9px;
+    padding: 0;
   }
 
   .epicure-cart-panel__order-history {
@@ -227,12 +303,13 @@
     align-items: center;
     justify-content: center;
     width: 206px;
-    margin: 0.75rem auto 0;
+    height: 48px;
+    margin: 0 auto;
     cursor: pointer;
     border: 1px solid $black-primary;
     background: transparent;
     color: $black-primary;
-    padding: 0.875rem;
+    padding: 0;
     border-radius: 2px;
     font-size: 0.9375rem;
     font-weight: 400;
@@ -241,7 +318,41 @@
     text-transform: uppercase;
     transition: background-color 200ms;
     font-family: inherit;
+    flex-shrink: 0;
 
     &:hover { background: rgba(0, 0, 0, 0.04); }
   }
+
+  // title + restaurant bigger on desktop
+  .epicure-cart-panel__title      { font-size: 1.375rem; letter-spacing: 0.12em; }
+  .epicure-cart-panel__restaurant { font-size: 1rem; }
+
+  // bigger text in dish cards — card grows to fit
+  .epicure-cart-item {
+    height: auto;
+    min-height: 96px;
+  }
+
+  .epicure-cart-item__image {
+    height: 100%;
+    min-height: 96px;
+    align-self: stretch;
+  }
+
+  .epicure-cart-item__body {
+    height: auto;
+    min-height: 96px;
+    padding: 15px 0.5rem 0.5rem 24px;
+  }
+
+  .epicure-cart-item__qty {
+    width: 31px;
+    height: 31px;
+    font-size: 0.875rem;
+  }
+
+  .epicure-cart-item__name       { font-size: 1rem; }
+  .epicure-cart-item__gold-price { font-size: 0.875rem; }
+  .epicure-cart-item__meta       { font-size: 0.8125rem; white-space: normal; }
+  .epicure-cart-item__price-val  { font-size: 0.9375rem; }
 }

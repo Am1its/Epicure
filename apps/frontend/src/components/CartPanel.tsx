@@ -1,5 +1,6 @@
 'use client';
 
+import { useEffect } from 'react';
 import { useCart } from '../context/CartContext';
 import { TEXT } from '../lib/text';
 
@@ -9,6 +10,11 @@ interface CartPanelProps {
 
 export function CartPanel({ onClose }: CartPanelProps) {
   const { cartItems, restaurantName, totalPrice, comment, setComment } = useCart();
+
+  useEffect(() => {
+    document.body.style.overflow = 'hidden';
+    return () => { document.body.style.overflow = ''; };
+  }, []);
 
   return (
     <>
@@ -32,34 +38,36 @@ export function CartPanel({ onClose }: CartPanelProps) {
             </div>
             <div className="epicure-cart-panel__items">
               {cartItems.map(item => (
-                <div key={item.dish.id} className="epicure-cart-item">
+                <div key={`${item.dish.id}-${item.selectedSide ?? ''}-${item.selectedChanges.join(',')}`} className="epicure-cart-item">
                   <img
                     src={item.imageUrl}
                     alt={item.dish.name}
                     className="epicure-cart-item__image"
                   />
-                  <div className="epicure-cart-item__info">
-                    <span className="epicure-cart-item__qty">{item.quantity}</span>
-                    <div className="epicure-cart-item__details">
-                      <p className="epicure-cart-item__name">{item.dish.name}</p>
-                      {(item.selectedSide || item.selectedChanges.length > 0) && (
-                        <p className="epicure-cart-item__meta">
-                          {[item.selectedSide, ...item.selectedChanges].filter(Boolean).join(' | ')}
-                        </p>
-                      )}
+                  <div className="epicure-cart-item__body">
+                    <div className="epicure-cart-item__top">
+                      <span className="epicure-cart-item__qty">{item.quantity}</span>
+                      <div className="epicure-cart-item__details">
+                        <p className="epicure-cart-item__name">{item.dish.name}</p>
+                        <p className="epicure-cart-item__gold-price">&#8362;{item.dish.price.toFixed(2)}</p>
+                      </div>
                     </div>
-                    <p className="epicure-cart-item__price">
-                      <img src="/icons/Shekel.svg" alt="₪" aria-hidden="true" className="epicure-cart-item__shekel" />
-                      {item.dish.price * item.quantity}
-                    </p>
+                    {(item.selectedSide || item.selectedChanges.length > 0) && (
+                      <p className="epicure-cart-item__meta">
+                        {[item.selectedSide, ...item.selectedChanges].filter(Boolean).join(' | ')}
+                      </p>
+                    )}
+                    <div className="epicure-cart-item__price-row">
+                      <span className="epicure-cart-item__price-val">
+                        <img src="/icons/Shekel.svg" alt="₪" aria-hidden="true" className="epicure-cart-item__shekel" />
+                        {item.dish.price * item.quantity}
+                      </span>
+                    </div>
                   </div>
                 </div>
               ))}
             </div>
-            <p className="epicure-cart-panel__total">
-              <img src="/icons/Shekel.svg" alt="₪" aria-hidden="true" className="epicure-cart-panel__total-shekel" />
-              {totalPrice}
-            </p>
+            <hr className="epicure-cart-panel__divider" />
             <div className="epicure-cart-panel__comment-wrap">
               <p className="epicure-cart-panel__comment-label">{TEXT.cart.addComment}</p>
               <textarea
@@ -69,12 +77,15 @@ export function CartPanel({ onClose }: CartPanelProps) {
                 onChange={e => setComment(e.target.value)}
               />
             </div>
-            <button type="button" className="epicure-cart-panel__checkout">
-              {TEXT.cart.checkout}&nbsp;
-              <img src="/icons/Shekel.svg" alt="₪" aria-hidden="true" className="epicure-cart-panel__checkout-shekel" />
-              {totalPrice}
-            </button>
           </div>
+        )}
+
+        {cartItems.length > 0 && (
+          <button type="button" className="epicure-cart-panel__checkout">
+            {TEXT.cart.checkout}&nbsp;
+            <img src="/icons/Shekel.svg" alt="₪" aria-hidden="true" className="epicure-cart-panel__checkout-shekel" />
+            {totalPrice}
+          </button>
         )}
         <button type="button" className="epicure-cart-panel__order-history">
           {TEXT.cart.orderHistory}

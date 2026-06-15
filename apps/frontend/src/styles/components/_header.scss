@@ -3,8 +3,10 @@
 
 .epicure-header {
   background: $white;
-  position: sticky;
+  position: fixed;
   top: 0;
+  left: 0;
+  right: 0;
   z-index: $z-header;
 
   @include for-normal-layout {
