@@ -59,16 +59,16 @@ export function DishModal({ dish, imageUrl, restaurantId, restaurantName, onClos
         onClick={onClose}
         aria-label={TEXT.dishModal.closeAriaLabel}
       />
-      <div className="epicure-dish-modal" role="dialog" aria-modal="true" aria-label={TEXT.dishModal.dialogAriaLabel}>
-        <button
-          type="button"
-          className="epicure-dish-modal__close"
-          onClick={onClose}
-          aria-label={TEXT.dishModal.closeAriaLabel}
-        >
-          <img src="/icons/x.svg" alt="" aria-hidden="true" width={16} height={16} />
-        </button>
+      <button
+        type="button"
+        className="epicure-dish-modal__close"
+        onClick={onClose}
+        aria-label={TEXT.dishModal.closeAriaLabel}
+      >
+        <img src="/icons/x.svg" alt="" aria-hidden="true" width={16} height={16} />
+      </button>
 
+      <div className="epicure-dish-modal" role="dialog" aria-modal="true" aria-label={TEXT.dishModal.dialogAriaLabel}>
         <img src={imageUrl} alt={dish.name} className="epicure-dish-modal__image" />
 
         <div className="epicure-dish-modal__body">
