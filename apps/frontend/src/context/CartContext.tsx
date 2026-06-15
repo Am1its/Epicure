@@ -47,7 +47,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
     try {
       const saved = localStorage.getItem(STORAGE_KEY);
       if (saved) setState(JSON.parse(saved));
-    } catch {}
+    } catch { /* ignore corrupted localStorage */ }
   }, []);
 
   useEffect(() => {
