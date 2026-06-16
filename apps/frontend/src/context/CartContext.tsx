@@ -2,6 +2,7 @@
 
 import { createContext, useContext, useState, useEffect, type ReactNode } from 'react';
 import type { CartItem } from '@org/shared-types';
+import { loadCart, saveCart } from '../lib/cartStorage';
 
 interface CartState {
   cartItems: CartItem[];
@@ -21,8 +22,6 @@ interface CartContextValue extends CartState {
 }
 
 const CartContext = createContext<CartContextValue | null>(null);
-
-const STORAGE_KEY = 'epicure-cart';
 
 const EMPTY_STATE: CartState = {
   cartItems: [],
@@ -44,14 +43,12 @@ export function CartProvider({ children }: { children: ReactNode }) {
   const [state, setState] = useState<CartState>(EMPTY_STATE);
 
   useEffect(() => {
-    try {
-      const saved = localStorage.getItem(STORAGE_KEY);
-      if (saved) setState(JSON.parse(saved));
-    } catch { /* ignore corrupted localStorage */ }
+    const saved = loadCart<CartState>();
+    if (saved) setState(saved);
   }, []);
 
   useEffect(() => {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+    saveCart(state);
   }, [state]);
 
   function addToCart(item: CartItem) {
