@@ -8,6 +8,14 @@
   @media (min-width: $break-wide) { @content; }
 }
 
+@mixin horizontal-scroll {
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  &::-webkit-scrollbar { display: none; }
+}
+
 @mixin flex-align($align, $justify, $dir: row) {
   display: flex;
   align-items: $align;

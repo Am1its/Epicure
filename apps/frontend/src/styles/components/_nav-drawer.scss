@@ -2,11 +2,9 @@
 @use '../setup/placeholders' as *;
 
 .epicure-nav-drawer__backdrop {
-  position: fixed;
-  inset: 0;
+  @extend %backdrop;
   background: transparent;
-  z-index: 149;
-  cursor: default;
+  z-index: $z-panel-backdrop;
 }
 
 .epicure-nav-drawer {

@@ -3,11 +3,9 @@
 @use '../setup/mixins' as *;
 
 .epicure-search-overlay__backdrop {
-  position: fixed;
-  inset: 0;
+  @extend %backdrop;
   background: transparent;
-  z-index: 149;
-  cursor: default;
+  z-index: $z-panel-backdrop;
 }
 
 .epicure-search-overlay {
