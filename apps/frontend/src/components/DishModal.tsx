@@ -5,6 +5,9 @@ import type { Dish } from '@org/shared-types';
 import { useCart } from '../context/CartContext';
 import { DeleteOrderModal } from './DeleteOrderModal';
 import { Modal } from './Modal';
+import { ChooseSide } from './dish-modal/ChooseSide';
+import { Changes } from './dish-modal/Changes';
+import { QuantityStepper } from './dish-modal/QuantityStepper';
 import { TEXT } from '../lib/text';
 import Footer from './Footer';
 
@@ -111,62 +114,20 @@ export function DishModal({ dish, imageUrl, restaurantId, restaurantName, onClos
             <span className="epicure-dish-modal__line" />
           </div>
 
-          {dish.sides && dish.sides.length > 0 && (
-            <div className="epicure-dish-modal__section">
-              <h3 className="epicure-dish-modal__section-title">{TEXT.dishModal.chooseSide}</h3>
-              {dish.sides.map(side => (
-                <label key={side} className="epicure-dish-modal__option">
-                  <input
-                    type="radio"
-                    name={`side-${dish.id}`}
-                    value={side}
-                    checked={selectedSide === side}
-                    onChange={() => setSelectedSide(side)}
-                  />
-                  {side}
-                </label>
-              ))}
-            </div>
-          )}
+          <ChooseSide
+            sides={dish.sides ?? []}
+            dishId={dish.id}
+            selectedSide={selectedSide}
+            onChange={setSelectedSide}
+          />
 
-          {dish.changes && dish.changes.length > 0 && (
-            <div className="epicure-dish-modal__section">
-              <h3 className="epicure-dish-modal__section-title">{TEXT.dishModal.changes}</h3>
-              {dish.changes.map(change => (
-                <label key={change} className="epicure-dish-modal__option">
-                  <input
-                    type="checkbox"
-                    checked={selectedChanges.includes(change)}
-                    onChange={() => toggleChange(change)}
-                  />
-                  {change}
-                </label>
-              ))}
-            </div>
-          )}
+          <Changes
+            changes={dish.changes ?? []}
+            selectedChanges={selectedChanges}
+            onToggle={toggleChange}
+          />
 
-          <div className="epicure-dish-modal__section">
-            <h3 className="epicure-dish-modal__section-title">{TEXT.dishModal.quantity}</h3>
-            <div className="epicure-dish-modal__quantity">
-              <button
-                type="button"
-                className="epicure-dish-modal__qty-btn"
-                aria-label={TEXT.dishModal.decreaseAriaLabel}
-                onClick={() => setQuantity(q => Math.max(1, q - 1))}
-              >
-                —
-              </button>
-              <span className="epicure-dish-modal__qty-value">{quantity}</span>
-              <button
-                type="button"
-                className="epicure-dish-modal__qty-btn"
-                aria-label={TEXT.dishModal.increaseAriaLabel}
-                onClick={() => setQuantity(q => q + 1)}
-              >
-                +
-              </button>
-            </div>
-          </div>
+          <QuantityStepper quantity={quantity} onChange={setQuantity} />
 
           <button
             type="button"
