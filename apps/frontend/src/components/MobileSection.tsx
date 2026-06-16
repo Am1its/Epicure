@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { type ReactNode } from 'react';
+import { Carousel } from './Carousel';
 
 interface MobileSectionProps {
   title: string;
@@ -12,7 +13,7 @@ export function MobileSection({ title, linkLabel, linkHref, children }: MobileSe
   return (
     <section className="epicure-mobile-section">
       <h2 className="epicure-mobile-section__title">{title}</h2>
-      <div className="epicure-mobile-section__row">{children}</div>
+      <Carousel className="epicure-mobile-section__row">{children}</Carousel>
       {linkLabel && linkHref && (
         <Link href={linkHref} className="epicure-mobile-section__link">
           {linkLabel}
