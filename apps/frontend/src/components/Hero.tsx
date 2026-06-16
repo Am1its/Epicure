@@ -1,28 +1,15 @@
 'use client';
 
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef } from 'react';
 import Link from 'next/link';
 import { TEXT } from '../lib/text';
 import { useClickOutside } from '../hooks/useClickOutside';
-import type { SearchResults } from '@org/shared-types';
-import { fetchSearch } from '../lib/api';
+import { useSearch } from '../hooks/useSearch';
 
 export function Hero() {
   const [query, setQuery] = useState('');
-  const [results, setResults] = useState<SearchResults>({ restaurants: [], chefs: [] });
+  const results = useSearch(query);
   const searchRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    setResults({ restaurants: [], chefs: [] });
-    if (!query.trim()) return;
-    let cancelled = false;
-    const timer = setTimeout(() => {
-      fetchSearch(query.trim())
-        .then(data => { if (!cancelled) setResults(data); })
-        .catch(() => { if (!cancelled) setResults({ restaurants: [], chefs: [] }); });
-    }, 300);
-    return () => { cancelled = true; clearTimeout(timer); };
-  }, [query]);
 
   const hasResults = results.restaurants.length > 0 || results.chefs.length > 0;
 
