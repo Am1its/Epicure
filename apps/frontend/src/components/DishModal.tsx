@@ -4,6 +4,7 @@ import { useState } from 'react';
 import type { Dish } from '@org/shared-types';
 import { useCart } from '../context/CartContext';
 import { DeleteOrderModal } from './DeleteOrderModal';
+import { Modal } from './Modal';
 import { TEXT } from '../lib/text';
 import Footer from './Footer';
 
@@ -53,14 +54,14 @@ export function DishModal({ dish, imageUrl, restaurantId, restaurantName, onClos
   }
 
   return (
-    <>
-      <button
-        type="button"
-        className="epicure-dish-modal__backdrop"
-        onClick={onClose}
-        aria-label={TEXT.dishModal.closeAriaLabel}
-      />
-      {/* desktop: floats in backdrop above modal */}
+    <Modal
+      onClose={onClose}
+      ariaLabel={TEXT.dishModal.dialogAriaLabel}
+      closeAriaLabel={TEXT.dishModal.closeAriaLabel}
+      backdropClassName="epicure-dish-modal__backdrop"
+      className="epicure-dish-modal"
+    >
+      {/* desktop: position:fixed so DOM position doesn't affect visual placement */}
       <button
         type="button"
         className="epicure-dish-modal__close-desktop"
@@ -69,8 +70,6 @@ export function DishModal({ dish, imageUrl, restaurantId, restaurantName, onClos
       >
         <img src="/icons/x.svg" alt="" aria-hidden="true" width={20} height={20} />
       </button>
-
-      <div className="epicure-dish-modal" role="dialog" aria-modal="true" aria-label={TEXT.dishModal.dialogAriaLabel}>
         {/* mobile: in-flow above image */}
         <button
           type="button"
@@ -178,7 +177,6 @@ export function DishModal({ dish, imageUrl, restaurantId, restaurantName, onClos
           </button>
         </div>
         <Footer />
-      </div>
 
       {showDeleteConfirm && (
         <DeleteOrderModal
@@ -186,6 +184,6 @@ export function DishModal({ dish, imageUrl, restaurantId, restaurantName, onClos
           onCancel={() => setShowDeleteConfirm(false)}
         />
       )}
-    </>
+    </Modal>
   );
 }

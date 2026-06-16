@@ -1,6 +1,7 @@
 'use client';
 
 import { TEXT } from '../lib/text';
+import { Modal } from './Modal';
 
 interface SignInModalProps {
   onClose: () => void;
@@ -8,13 +9,13 @@ interface SignInModalProps {
 
 export function SignInModal({ onClose }: SignInModalProps) {
   return (
-    <>
-      <button
-        className="epicure-signin-backdrop"
-        onClick={onClose}
-        aria-label={TEXT.signIn.closeAriaLabel}
-      />
-      <div className="epicure-signin-modal" role="dialog" aria-label={TEXT.signIn.dialogAriaLabel}>
+    <Modal
+      onClose={onClose}
+      ariaLabel={TEXT.signIn.dialogAriaLabel}
+      closeAriaLabel={TEXT.signIn.closeAriaLabel}
+      backdropClassName="epicure-signin-backdrop"
+      className="epicure-signin-modal"
+    >
         <button
           className="epicure-signin-modal__close"
           onClick={onClose}
@@ -46,7 +47,6 @@ export function SignInModal({ onClose }: SignInModalProps) {
         <a href="#" aria-disabled="true" onClick={e => e.preventDefault()} className="epicure-signin-modal__forgot">{TEXT.signIn.forgotPassword}</a>
         <div className="epicure-signin-modal__divider"><span>{TEXT.signIn.divider}</span></div>
         <button className="epicure-signin-modal__signup">{TEXT.signIn.signUpBtn}</button>
-      </div>
-    </>
+    </Modal>
   );
 }
