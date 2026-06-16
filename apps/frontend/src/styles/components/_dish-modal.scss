@@ -24,7 +24,8 @@
   @include for-normal-layout { display: none; }
 }
 
-// ─── Desktop close: fixed above modal in backdrop, white icon ─────────────────
+// ─── Desktop close: rendered outside the modal div in JSX so it is
+//     viewport-relative (not clipped by the modal's transform + overflow).
 
 .epicure-dish-modal__close-desktop {
   display: none;
@@ -32,13 +33,13 @@
   @include for-normal-layout {
     display: block;
     position: fixed;
-    top: 45px;
-    left: calc(50% - 288px - 3px);
+    top: 70px;                        // modal top (100px) minus 32px gap
+    left: calc(50% - 288px - 12px);   // modal left edge minus 16px gap
     z-index: $z-panel-top;
     background: none;
     border: none;
     cursor: pointer;
-    padding: 0;
+    padding: 8px;
     line-height: 0;
 
     img { width: 20px; height: 20px; filter: brightness(0) invert(1); opacity: 1; }
@@ -197,22 +198,22 @@
   // ─── Desktop overrides ───────────────────────────────────────────────────
 
   @include for-normal-layout {
-    top: 70px;
+    top: 100px;
     left: 50%;
     right: auto;
     bottom: auto;
     transform: translateX(-50%);
     width: 576px;
-    max-height: calc(100vh - 160px);
+    max-height: calc(100vh - 120px);
     overflow-y: auto;
 
     &__image {
       width: 576px;
-      height: 180px;
+      height: 150px;
     }
 
     &__body {
-      padding: 1rem 83.5px 1rem;
+      padding: 1rem 83.5px 0.5rem;
       align-items: center;
       text-align: center;
     }
@@ -225,10 +226,11 @@
     &__name-row         { justify-content: center; }
     &__type-icon--mobile  { display: none; }
     &__type-icon--desktop { display: block; margin-bottom: 0.375rem; }
-    &__line        { display: block; }
-    &__price-row   { width: 100%; margin-bottom: 0.625rem; }
+    // decorative lines flanking the price
+    &__line        { display: block; flex: 1; height: 1px; background: $black-primary; opacity: 0.15; }
+    &__price-row   { width: 100%; margin-bottom: 0.625rem; justify-content: center; }
     &__section     { margin-bottom: 0.5rem; }
     &__quantity    { justify-content: center; }
-    &__add-btn     { margin-top: 0.75rem; width: 206px; height: 48px; padding: 0; }
+    &__add-btn     { margin: 0.5rem auto 1rem; width: 206px; height: 48px; padding: 0; }
   }
 }

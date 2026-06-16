@@ -57,14 +57,9 @@ export function DishModal({ dish, imageUrl, restaurantId, restaurantName, onClos
   }
 
   return (
-    <Modal
-      onClose={onClose}
-      ariaLabel={TEXT.dishModal.dialogAriaLabel}
-      closeAriaLabel={TEXT.dishModal.closeAriaLabel}
-      backdropClassName="epicure-dish-modal__backdrop"
-      className="epicure-dish-modal"
-    >
-      {/* desktop: position:fixed so DOM position doesn't affect visual placement */}
+    <>
+      {/* Desktop X is outside the modal div — position:fixed on a transformed ancestor
+          clips children outside its bounds, so we render the X as a viewport sibling */}
       <button
         type="button"
         className="epicure-dish-modal__close-desktop"
@@ -73,6 +68,14 @@ export function DishModal({ dish, imageUrl, restaurantId, restaurantName, onClos
       >
         <img src="/icons/x.svg" alt="" aria-hidden="true" width={20} height={20} />
       </button>
+
+      <Modal
+        onClose={onClose}
+        ariaLabel={TEXT.dishModal.dialogAriaLabel}
+        closeAriaLabel={TEXT.dishModal.closeAriaLabel}
+        backdropClassName="epicure-dish-modal__backdrop"
+        className="epicure-dish-modal"
+      >
         {/* mobile: in-flow above image */}
         <button
           type="button"
@@ -128,23 +131,27 @@ export function DishModal({ dish, imageUrl, restaurantId, restaurantName, onClos
           />
 
           <QuantityStepper quantity={quantity} onChange={setQuantity} />
-
-          <button
-            type="button"
-            className="epicure-dish-modal__add-btn"
-            onClick={handleAddToBag}
-          >
-            {TEXT.dishModal.addToBag}
-          </button>
         </div>
-        <Footer />
 
+        {/* add-btn outside __body so it stays visible when body scrolls on desktop */}
+        <button
+          type="button"
+          className="epicure-dish-modal__add-btn"
+          onClick={handleAddToBag}
+        >
+          {TEXT.dishModal.addToBag}
+        </button>
+        <Footer />
+      </Modal>
+
+      {/* rendered outside Modal so its position:fixed backdrop is viewport-relative,
+          not clipped by the dish modal's transform */}
       {showDeleteConfirm && (
         <DeleteOrderModal
           onConfirmDelete={handleConfirmDelete}
           onCancel={() => setShowDeleteConfirm(false)}
         />
       )}
-    </Modal>
+    </>
   );
 }
