@@ -22,6 +22,10 @@
 @use 'components/tabs';
 @use 'components/filters';
 @use 'components/mobile-section';
+@use 'components/dish-grid';
+@use 'components/hero';
+@use 'components/chef-week';
+@use 'components/app-section';
 
 // Pages
 @use 'pages/home';

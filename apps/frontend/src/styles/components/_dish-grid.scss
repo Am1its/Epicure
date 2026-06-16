@@ -1,0 +1,176 @@
+@use '../setup/variables' as *;
+@use '../setup/mixins' as *;
+
+// ── Dish grid ─────────────────────────────────────────────────────
+.epicure-dish-grid {
+  display: grid;
+  grid-template-columns: 335px;
+  justify-content: center;
+  gap: 22px;
+  padding-top: 24px;
+  padding-bottom: 56px;
+  background: $bg-light;
+
+  @include for-normal-layout {
+    grid-template-columns: repeat(4, 272px);
+    grid-auto-rows: 413px;
+    justify-content: center;
+    gap: 2rem;
+    width: 1184px;
+    margin: 0 auto;
+    padding: 2rem 0;
+    background: transparent;
+  }
+}
+
+// ── Dish card overrides (restaurant detail context only) ──────────
+// Scoped under .epicure-dish-grid so homepage DishCard is unaffected.
+// Resets desktop _dish-card.scss overrides (690px height, large text,
+// element reordering) and applies compact detail-page sizing.
+.epicure-dish-grid .epicure-dish-card {
+  border-radius: 0;
+
+  &__image {
+    aspect-ratio: unset;
+    height: 208px;
+  }
+
+  &__info {
+    background: $cream-secondary;
+    text-align: left;
+    padding: 0.75rem 1rem 1rem;
+    display: flex;
+    flex-direction: column;
+    min-height: 179px;
+  }
+
+  &__signature { display: none; }
+
+  &__name {
+    font-size: 1.5rem;
+    font-weight: 500;
+    margin-bottom: 0.25rem;
+  }
+
+  &__description {
+    font-size: 1rem;
+    opacity: 0.55;
+    margin-bottom: 0;
+    -webkit-line-clamp: 3;
+  }
+
+  &__type-icon { display: none; }
+
+  &__price-row {
+    display: flex;
+    align-items: center;
+    gap: 0.125rem;
+    border-top: none;
+    padding-top: 0;
+    margin-top: auto;
+
+    &::before { display: none; }
+
+    &::after {
+      display: block;
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: $black-primary;
+      opacity: 0.35;
+      margin-left: 0.5rem;
+    }
+  }
+
+  &__shekel-icon {
+    display: block;
+    width: 8px;
+    height: 19px;
+    opacity: 1;
+    align-self: flex-end;
+    filter: brightness(0);
+  }
+
+  &__price {
+    font-size: 1.5rem;
+    line-height: 1;
+
+    &::before { content: ''; }
+  }
+
+  // ── Desktop overrides ────────────────────────────────────────────
+  @include for-normal-layout {
+    height: auto;
+    border-radius: 4px;
+
+    &__image {
+      aspect-ratio: unset;
+      height: 173px;
+    }
+
+    &__info {
+      background: $cream-secondary;
+      text-align: center;
+      padding: 0.875rem 1rem 1rem;
+      display: flex;
+      flex-direction: column;
+    }
+
+    &__name {
+      font-size: 2rem;
+      font-weight: 400;
+      min-height: auto;
+      order: unset;
+    }
+
+    &__description {
+      font-size: 1.15rem;
+      order: unset;
+    }
+
+    &__type-icon {
+      display: none;
+      order: unset;
+    }
+
+    &__price-row {
+      border-top: none;
+      padding-top: 0;
+      margin-top: auto;
+      order: unset;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.125rem;
+
+      &::before,
+      &::after {
+        display: block;
+        content: '';
+        width: 82.5px;
+        flex: none;
+        height: 1px;
+        background: $black-primary;
+        opacity: 0.35;
+      }
+    }
+
+    &__shekel-icon {
+      display: block;
+      width: 8px;
+      height: 19px;
+      align-self: flex-end;
+    }
+
+    &__price {
+      font-size: 1rem;
+
+      &::before { content: ''; }
+    }
+  }
+}
+
+.epicure-dish-grid-item {
+  cursor: pointer;
+  display: contents;
+}
