@@ -57,6 +57,12 @@
 
   &__input { @extend %input-underline; }
 
+  &__error {
+    color: #c0392b;
+    font-size: 0.75rem;
+    margin: 0.25rem 0 0.5rem;
+  }
+
   &__submit { @extend %btn-primary; }
 
   &__signup { @extend %btn-secondary; }
