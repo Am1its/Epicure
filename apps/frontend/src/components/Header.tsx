@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { NavDrawer } from './NavDrawer';
@@ -20,6 +20,7 @@ export default function Header() {
   const [searchQuery, setSearchQuery] = useState('');
   const { totalItems } = useCart();
   const { user } = useAuth();
+  const userButtonRef = useRef<HTMLButtonElement>(null);
 
   function toggle(panel: Exclude<ActivePanel, 'none'>) {
     setActivePanel(prev => {
@@ -112,8 +113,11 @@ export default function Header() {
               <img src="/icons/search.svg" alt="" aria-hidden="true" width={22} height={22} />
             </button>
 
-            <button aria-label={TEXT.nav.accountAriaLabel} onClick={handleUserIconClick}>
-              <img src="/icons/user.svg" alt="" aria-hidden="true" width={22} height={22} />
+            <button ref={userButtonRef} aria-label={TEXT.nav.accountAriaLabel} onClick={handleUserIconClick}>
+              <span className="epicure-nav__user-wrap">
+                <img src="/icons/user.svg" alt="" aria-hidden="true" width={22} height={22} />
+                {user && <span className="epicure-nav__user-dot" aria-hidden="true" />}
+              </span>
             </button>
 
             <button aria-label={TEXT.nav.cartAriaLabel} onClick={() => toggle('cart')}>
@@ -134,7 +138,7 @@ export default function Header() {
       {activePanel === 'search' && <SearchOverlay onClose={() => setActivePanel('none')} />}
       {activePanel === 'cart' && <CartPanel onClose={() => setActivePanel('none')} />}
       {activePanel === 'signin' && <SignInModal onClose={() => setActivePanel('none')} />}
-      {activePanel === 'userdropdown' && <UserDropdown onClose={() => setActivePanel('none')} />}
+      {activePanel === 'userdropdown' && <UserDropdown onClose={() => setActivePanel('none')} triggerRef={userButtonRef} />}
     </>
   );
 }

@@ -1,33 +1,77 @@
 @use '../setup/variables' as *;
+@use '../setup/mixins' as *;
 
 .epicure-user-dropdown {
   position: absolute;
-  top: 60px;
-  right: 1rem;
+  top: $nav-height-mobile;
+  right: 0;
+  left: 0;
+  min-width: unset;
   background: $white;
-  padding: 1.25rem;
+  padding: 1.25rem 1.5rem 1rem;
   z-index: $z-dropdown;
-  min-width: 160px;
+  min-width: 200px;
   box-shadow: 0 4px 16px $shadow-subtle;
+  border: 1px solid $border-subtle;
+  text-align: center;
+
+  &__avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: $black-primary;
+    color: $white;
+    font-size: 1rem;
+    font-weight: 400;
+    letter-spacing: 0.05em;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 0.75rem;
+  }
 
   &__name {
     font-size: 0.875rem;
-    text-align: center;
-    margin-bottom: 0.75rem;
-    letter-spacing: 0.03em;
+    font-weight: 400;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: $black-primary;
+    margin-bottom: 0.25rem;
+  }
+
+  &__email {
+    font-size: 0.75rem;
+    color: $gray-primary;
+    letter-spacing: 0.02em;
+    margin-bottom: 0;
+  }
+
+  &__divider {
+    border: none;
+    border-top: 1px solid $border-subtle;
+    margin: 1rem 0 0.75rem;
+  }
+
+  @include for-normal-layout {
+    top: $nav-height;
+    right: 1.8rem;
+    left: auto;
+    min-width: 200px;
   }
 
   &__logout {
-    width: 100%;
-    background: $black-primary;
-    color: $white;
-    border: none;
-    padding: 0.5rem 1rem;
-    font-family: inherit;
     font-size: 0.75rem;
-    letter-spacing: 0.05em;
+    font-weight: 400;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: $gray-primary;
+    background: none;
+    border: none;
     cursor: pointer;
+    font-family: inherit;
+    padding: 0.25rem 0;
+    transition: color 200ms;
 
-    &:hover { opacity: 0.85; }
+    &:hover { color: $black-primary; }
   }
 }

@@ -148,10 +148,22 @@
 
 }
 
-.epicure-nav__cart-wrap {
+.epicure-nav__cart-wrap,
+.epicure-nav__user-wrap {
   position: relative;
   display: inline-flex;
   align-items: center;
+}
+
+.epicure-nav__user-dot {
+  position: absolute;
+  bottom: -2px;
+  right: -3px;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: $black-primary;
+  border: 1.5px solid $white;
 }
 
 .epicure-nav__cart-badge {
