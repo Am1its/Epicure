@@ -1,12 +1,14 @@
+@use '../setup/variables' as *;
+
 .epicure-user-dropdown {
   position: absolute;
   top: 60px;
   right: 1rem;
-  background: white;
+  background: $white;
   padding: 1.25rem;
-  z-index: 200;
+  z-index: $z-dropdown;
   min-width: 160px;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+  box-shadow: 0 4px 16px $shadow-subtle;
 
   &__name {
     font-size: 0.875rem;
@@ -17,8 +19,8 @@
 
   &__logout {
     width: 100%;
-    background: black;
-    color: white;
+    background: $black-primary;
+    color: $white;
     border: none;
     padding: 0.5rem 1rem;
     font-family: inherit;
@@ -26,8 +28,6 @@
     letter-spacing: 0.05em;
     cursor: pointer;
 
-    &:hover {
-      background: #333;
-    }
+    &:hover { opacity: 0.85; }
   }
 }
