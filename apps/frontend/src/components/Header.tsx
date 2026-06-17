@@ -7,22 +7,29 @@ import { NavDrawer } from './NavDrawer';
 import { SearchOverlay } from './SearchOverlay';
 import { CartPanel } from './CartPanel';
 import { SignInModal } from './SignInModal';
+import { UserDropdown } from './UserDropdown';
 import { TEXT } from '../lib/text';
 import { useCart } from '../context/CartContext';
+import { useAuth } from '../context/AuthContext';
 
-type ActivePanel = 'none' | 'drawer' | 'search' | 'cart' | 'signin';
+type ActivePanel = 'none' | 'drawer' | 'search' | 'cart' | 'signin' | 'userdropdown';
 
 export default function Header() {
   const [activePanel, setActivePanel] = useState<ActivePanel>('none');
   const pathname = usePathname();
   const [searchQuery, setSearchQuery] = useState('');
   const { totalItems } = useCart();
+  const { user } = useAuth();
 
   function toggle(panel: Exclude<ActivePanel, 'none'>) {
     setActivePanel(prev => {
       if (prev === panel) { setSearchQuery(''); return 'none'; }
       return panel;
     });
+  }
+
+  function handleUserIconClick() {
+    toggle(user ? 'userdropdown' : 'signin');
   }
 
   return (
@@ -101,14 +108,14 @@ export default function Header() {
               </div>
             )}
 
-            {/* Search icon — always visible; toggles search box on desktop */}
             <button aria-label={TEXT.nav.searchAriaLabel} onClick={() => toggle('search')}>
               <img src="/icons/search.svg" alt="" aria-hidden="true" width={22} height={22} />
             </button>
 
-            <button aria-label={TEXT.nav.accountAriaLabel} onClick={() => toggle('signin')}>
+            <button aria-label={TEXT.nav.accountAriaLabel} onClick={handleUserIconClick}>
               <img src="/icons/user.svg" alt="" aria-hidden="true" width={22} height={22} />
             </button>
+
             <button aria-label={TEXT.nav.cartAriaLabel} onClick={() => toggle('cart')}>
               <span className="epicure-nav__cart-wrap">
                 <img src="/icons/cart.svg" alt="" aria-hidden="true" width={22} height={22} />
@@ -127,6 +134,7 @@ export default function Header() {
       {activePanel === 'search' && <SearchOverlay onClose={() => setActivePanel('none')} />}
       {activePanel === 'cart' && <CartPanel onClose={() => setActivePanel('none')} />}
       {activePanel === 'signin' && <SignInModal onClose={() => setActivePanel('none')} />}
+      {activePanel === 'userdropdown' && <UserDropdown onClose={() => setActivePanel('none')} />}
     </>
   );
 }
