@@ -2,6 +2,7 @@ import { RestaurantCard } from '@org/ui-components';
 import type { Chef, Restaurant } from '@org/shared-types';
 import { strapiImageUrl } from '../lib/api';
 import { TEXT } from '../lib/text';
+import { Carousel } from './Carousel';
 
 interface Props {
   chef: Chef;
@@ -26,11 +27,11 @@ export function MobileChefSection({ chef, restaurants }: Props) {
       <p className="epicure-chef-week__restaurants-label">
         {(chef.name.split(' ')[0] || chef.name).toUpperCase()}&apos;S RESTAURANTS
       </p>
-      <div className="epicure-chef-week__cards-row">
+      <Carousel className="epicure-chef-week__cards-row">
         {restaurants.map(restaurant => (
           <RestaurantCard key={restaurant.id} restaurant={restaurant} imageUrl={strapiImageUrl(restaurant.image?.url)} />
         ))}
-      </div>
+      </Carousel>
       <a href="/restaurants" className="epicure-chef-week__all-link">
         {TEXT.chefOfTheWeek.allRestaurantsLink}
         <img src="/icons/Arrow.svg" alt="" aria-hidden="true" width={24} height={24} />
