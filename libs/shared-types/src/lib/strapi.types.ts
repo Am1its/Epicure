@@ -58,3 +58,14 @@ export interface SearchResults {
   restaurants: { id: number; name: string }[];
   chefs: { id: number; name: string }[];
 }
+
+export interface AuthUser {
+  id: number;
+  name: string;
+  email: string;
+}
+
+export interface AuthResponse {
+  jwt: string;
+  user: AuthUser;
+}
