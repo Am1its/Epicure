@@ -1,0 +1,63 @@
+@use '../setup/variables' as *;
+@use '../setup/mixins' as *;
+
+// Mobile only — hidden on desktop
+.epicure-app-section {
+  padding: 2rem 1.25rem 2.5rem;
+  background: $bg-light;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+
+  &__brand {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    margin-bottom: 0.5rem;
+  }
+
+  &__store-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+    width: 200px;
+    padding: 0.625rem 1rem;
+    border: 1px solid $black-primary;
+    border-radius: 6px;
+    color: $black-primary;
+    text-decoration: none;
+  }
+
+  &__store-text {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.2;
+    font-size: 0.9375rem;
+    font-weight: 500;
+  }
+
+  &__store-subtext {
+    font-size: 0.6875rem;
+    font-weight: 400;
+  }
+
+  &__about { margin-top: 1rem; }
+
+  &__about-title {
+    font-size: 1.125rem;
+    font-weight: 400;
+    letter-spacing: 1.25px;
+    color: $black-primary;
+    margin-bottom: 0.75rem;
+  }
+
+  &__about-text {
+    font-size: 1.125rem;
+    font-weight: 300;
+    color: $black-primary;
+    line-height: 1.75rem;
+    letter-spacing: 2.14px;
+  }
+
+  @include for-normal-layout { display: none; }
+}
