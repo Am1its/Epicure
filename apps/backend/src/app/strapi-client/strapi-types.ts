@@ -35,3 +35,14 @@ export interface StrapiRestaurant {
   longitude?: number;
   openingHours?: string;
 }
+
+export interface StrapiAuthUser {
+  id: number;
+  username: string;
+  email: string;
+}
+
+export interface StrapiAuthResponse {
+  jwt: string;
+  user: StrapiAuthUser;
+}
