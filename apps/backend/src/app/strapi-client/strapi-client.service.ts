@@ -70,10 +70,19 @@ export class StrapiClientService {
       throw new ServiceUnavailableException('Strapi is unreachable');
     }
     if (!res.ok) {
-      let errBody: unknown;
-      try { errBody = await res.json(); } catch { errBody = {}; }
-      throw new HttpException(errBody ?? {}, res.status);
+      let message = `Strapi returned ${res.status}`;
+      try {
+        const errBody = (await res.json()) as { error?: { message?: string }; message?: string };
+        message = errBody?.error?.message ?? errBody?.message ?? message;
+      } catch { /* ignore */ }
+      throw new HttpException({ message }, res.status);
     }
-    return res.json() as Promise<T>;
+    let result: T;
+    try {
+      result = (await res.json()) as T;
+    } catch {
+      throw new ServiceUnavailableException('Strapi returned invalid JSON');
+    }
+    return result;
   }
 }

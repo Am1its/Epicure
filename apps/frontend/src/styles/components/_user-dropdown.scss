@@ -2,11 +2,10 @@
 @use '../setup/mixins' as *;
 
 .epicure-user-dropdown {
-  position: absolute;
+  position: fixed;
   top: $nav-height-mobile;
   right: 0;
   left: 0;
-  min-width: unset;
   background: $white;
   padding: 1.25rem 1.5rem 1rem;
   z-index: $z-dropdown;

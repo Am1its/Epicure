@@ -1,6 +1,6 @@
 'use client';
 
-import { createContext, useContext, useState, useEffect, type ReactNode } from 'react';
+import { createContext, useContext, useState, type ReactNode } from 'react';
 import { postApi } from '../lib/api';
 import type { AuthUser, AuthResponse } from '@org/shared-types';
 
@@ -20,18 +20,17 @@ interface AuthContextValue extends AuthState {
 const AuthContext = createContext<AuthContextValue | null>(null);
 
 export function AuthProvider({ children }: { children: ReactNode }) {
-  const [state, setState] = useState<AuthState>({ user: null, token: null });
-
-  useEffect(() => {
+  const [state, setState] = useState<AuthState>(() => {
+    if (typeof window === 'undefined') return { user: null, token: null };
     const stored = localStorage.getItem(AUTH_STORAGE_KEY);
-    if (stored) {
-      try {
-        setState(JSON.parse(stored) as AuthState);
-      } catch {
-        localStorage.removeItem(AUTH_STORAGE_KEY);
-      }
+    if (!stored) return { user: null, token: null };
+    try {
+      return JSON.parse(stored) as AuthState;
+    } catch {
+      localStorage.removeItem(AUTH_STORAGE_KEY);
+      return { user: null, token: null };
     }
-  }, []);
+  });
 
   function persist(next: AuthState) {
     setState(next);

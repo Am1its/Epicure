@@ -49,19 +49,23 @@ export function SignInModal({ onClose }: SignInModalProps) {
     setPassword('');
   }
 
+  function safeClose() {
+    if (!loading) onClose();
+  }
+
   return (
     <>
       {/* Desktop: X outside modal — transform on modal clips fixed children */}
       <button
         className="epicure-signin-modal__close-desktop"
-        onClick={onClose}
+        onClick={safeClose}
         aria-label={TEXT.signIn.closePanelAriaLabel}
       >
         <img src="/icons/x.svg" alt="" aria-hidden="true" width={20} height={20} />
       </button>
 
       <Modal
-        onClose={onClose}
+        onClose={safeClose}
         ariaLabel={TEXT.signIn.dialogAriaLabel}
         closeAriaLabel={TEXT.signIn.closeAriaLabel}
         backdropClassName="epicure-signin-backdrop"
@@ -70,7 +74,7 @@ export function SignInModal({ onClose }: SignInModalProps) {
         {/* Mobile: X inside modal */}
         <button
           className="epicure-signin-modal__close-mobile"
-          onClick={onClose}
+          onClick={safeClose}
           aria-label={TEXT.signIn.closePanelAriaLabel}
         >
           <img src="/icons/x.svg" alt="" aria-hidden="true" width={20} height={20} />

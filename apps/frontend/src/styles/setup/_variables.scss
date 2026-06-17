@@ -31,16 +31,19 @@ $layout-gutter-desktop: 128px;
 $z-header:          100;
 $z-filter-overlay:   20;
 $z-filter-dropdown: 1000;
-$z-panel-backdrop:  149;
-$z-panel:           150;
-$z-panel-top:       151;
-$z-dropdown:        200;
+$z-panel-backdrop:  1050;
+$z-panel:           1060;
+$z-panel-top:       1070;
+$z-dropdown:        1100;
 
 // Overlays, shadows, borders
-$modal-overlay:  rgba(0, 0, 0, 0.5);
-$shadow-panel:   rgba(0, 0, 0, 0.08);
-$border-subtle:  rgba(0, 0, 0, 0.1);
-$hover-overlay:  rgba(0, 0, 0, 0.04);
+$modal-overlay:   rgba(0, 0, 0, 0.5);
+$shadow-panel:    rgba(0, 0, 0, 0.08);
+$shadow-inset:    rgba(0, 0, 0, 0.25);
+$border-subtle:   rgba(0, 0, 0, 0.1);
+$border-hairline: rgba(0, 0, 0, 0.07);
+$hover-overlay:   rgba(0, 0, 0, 0.04);
+$label-muted:     rgba(0, 0, 0, 0.4);
 
 // Semantic
 $error-color:    #c0392b;
