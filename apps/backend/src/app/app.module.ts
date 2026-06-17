@@ -5,9 +5,10 @@ import { RestaurantsModule } from './restaurants/restaurants.module';
 import { ChefsModule } from './chefs/chefs.module';
 import { DishesModule } from './dishes/dishes.module';
 import { SearchModule } from './search/search.module';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
-  imports: [RestaurantsModule, ChefsModule, DishesModule, SearchModule],
+  imports: [RestaurantsModule, ChefsModule, DishesModule, SearchModule, AuthModule],
   controllers: [AppController],
   providers: [AppService],
 })
