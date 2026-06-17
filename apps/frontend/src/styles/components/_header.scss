@@ -3,8 +3,10 @@
 
 .epicure-header {
   background: $white;
-  position: sticky;
+  position: fixed;
   top: 0;
+  left: 0;
+  right: 0;
   z-index: $z-header;
 
   @include for-normal-layout {
@@ -144,4 +146,27 @@
     filter: brightness(0);
   }
 
+}
+
+.epicure-nav__cart-wrap {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+}
+
+.epicure-nav__cart-badge {
+  position: absolute;
+  top: -6px;
+  right: -8px;
+  background: $gold-secondary;
+  color: $white;
+  font-size: 0.625rem;
+  font-weight: 600;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
 }

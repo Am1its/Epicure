@@ -12,7 +12,10 @@
 @use 'components/nav-drawer';
 @use 'components/search-overlay';
 @use 'components/cart-panel';
+@use 'components/cart-item';
 @use 'components/sign-in-modal';
+@use 'components/dish-modal';
+@use 'components/delete-order-modal';
 @use 'components/restaurant-card';
 @use 'components/dish-card';
 @use 'components/chef-card';

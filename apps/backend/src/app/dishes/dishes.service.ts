@@ -30,6 +30,8 @@ export class DishesService {
       image: item.image,
       mealTime: item.mealTime,
       isSignatureDish: item.isSignatureDish,
+      sides: item.sides,
+      changes: item.changes,
     };
   }
 }

@@ -248,6 +248,11 @@
   }
 }
 
+.epicure-dish-grid-item {
+  cursor: pointer;
+  display: contents;
+}
+
 // ── Error state ───────────────────────────────────────────────────
 .epicure-detail-error {
   padding: 4rem 2rem;

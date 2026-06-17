@@ -18,6 +18,8 @@ export interface StrapiDish {
   image?: StrapiImage;
   mealTime?: 'Breakfast' | 'Lunch' | 'Dinner';
   isSignatureDish?: boolean;
+  sides?: string[];
+  changes?: string[];
 }
 
 export interface StrapiRestaurant {
