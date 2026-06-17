@@ -130,7 +130,7 @@
     font-size: 1rem;
     font-weight: 400;
     letter-spacing: 0.05em;
-    margin-top: 83px;
+    margin-top: 1.25rem;
     margin-bottom: 1rem;
     flex-shrink: 0;
   }
@@ -195,6 +195,7 @@
     max-height: 262px;
     flex: none;
     direction: rtl;
+    padding-left: 10px;
   }
 
   // restore desktop-only elements
