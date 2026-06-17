@@ -28,6 +28,21 @@ export async function fetchRestaurantsWithDistances(lat: number, lng: number): P
   return res.json();
 }
 
+export async function postApi<T>(path: string, body: Record<string, unknown>): Promise<T> {
+  const res = await fetch(`${BACKEND_URL}${path}`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(body),
+    cache: 'no-store',
+  });
+  if (!res.ok) {
+    let errBody: { error?: { message?: string }; message?: string } = {};
+    try { errBody = await res.json(); } catch { /* ignore */ }
+    throw new Error(errBody?.error?.message ?? errBody?.message ?? `API error ${res.status}`);
+  }
+  return res.json() as Promise<T>;
+}
+
 export function strapiImageUrl(url?: string): string {
   if (!url) return '/icons/logo.svg';
   if (url.startsWith('http')) return url;
