@@ -34,6 +34,7 @@ export interface StrapiRestaurant {
   latitude?: number;
   longitude?: number;
   openingHours?: string;
+  cuisine?: string;
 }
 
 export interface StrapiAuthUser {

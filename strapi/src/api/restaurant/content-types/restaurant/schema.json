@@ -50,6 +50,21 @@
     },
     "openingHours": {
       "type": "string"
+    },
+    "cuisine": {
+      "type": "enumeration",
+      "enum": [
+        "Italian",
+        "Japanese",
+        "Thai",
+        "Mediterranean",
+        "French",
+        "American",
+        "Israeli",
+        "Mexican",
+        "Indian",
+        "Chinese"
+      ]
     }
   }
 }
