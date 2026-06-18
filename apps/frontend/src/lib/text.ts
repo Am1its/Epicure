@@ -36,6 +36,11 @@ export const TEXT = {
     commentPlaceholder: 'Special requests, allergies, dietary restrictions, etc',
     orderHistory: 'ORDER HISTORY',
   },
+  signUp: {
+    dialogAriaLabel: 'Sign up',
+    closeAriaLabel: 'Close sign up',
+    closePanelAriaLabel: 'Close sign up panel',
+  },
   signIn: {
     dialogAriaLabel: 'Sign in',
     closeAriaLabel: 'Close sign in',

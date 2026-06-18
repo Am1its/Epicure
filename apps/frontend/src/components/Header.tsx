@@ -41,7 +41,16 @@ export default function Header({ brandName, logoUrl, navLinks }: HeaderProps) {
     { label: TEXT.shared.chefs, url: '/chefs' },
   ];
 
-  useClickOutside(searchInlineRef, () => { setSearchQuery(''); setActivePanel('none'); }, activePanel === 'search', searchButtonRef);
+  useClickOutside(
+    searchInlineRef,
+    () => {
+      if (!searchInlineRef.current?.offsetParent) return;
+      setSearchQuery('');
+      setActivePanel('none');
+    },
+    activePanel === 'search',
+    searchButtonRef,
+  );
 
   function toggle(panel: Exclude<ActivePanel, 'none'>) {
     setActivePanel(prev => {
