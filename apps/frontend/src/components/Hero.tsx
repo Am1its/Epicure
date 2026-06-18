@@ -57,7 +57,7 @@ export function Hero() {
                 <div className="epicure-hero__results-group">
                   <span className="epicure-hero__results-label">{TEXT.home.searchResultsChefs}</span>
                   {results.chefs.map(c => (
-                    <Link key={c.id} href={`/chefs?highlight=${c.id}`} className="epicure-hero__results-item" onClick={() => setQuery('')}>
+                    <Link key={c.id} href="/chefs" className="epicure-hero__results-item" onClick={() => { sessionStorage.setItem('epicure_pending_chef_highlight', String(c.id)); window.dispatchEvent(new CustomEvent('epicure:chef-highlight', { detail: c.id })); setQuery(''); }}>
                       {c.name}
                     </Link>
                   ))}

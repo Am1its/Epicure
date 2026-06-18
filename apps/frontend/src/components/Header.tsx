@@ -154,9 +154,9 @@ export default function Header({ brandName, logoUrl, navLinks }: HeaderProps) {
                         {searchResults.chefs.map(c => (
                           <Link
                             key={c.id}
-                            href={`/chefs?highlight=${c.id}`}
+                            href="/chefs"
                             className="epicure-nav__search-item"
-                            onClick={() => { setSearchQuery(''); setActivePanel('none'); }}
+                            onClick={() => { sessionStorage.setItem('epicure_pending_chef_highlight', String(c.id)); window.dispatchEvent(new CustomEvent('epicure:chef-highlight', { detail: c.id })); setSearchQuery(''); setActivePanel('none'); }}
                           >
                             {c.name}
                           </Link>

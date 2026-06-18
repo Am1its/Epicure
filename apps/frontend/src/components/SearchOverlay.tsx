@@ -82,9 +82,9 @@ export function SearchOverlay({ onClose }: SearchOverlayProps) {
                   {results.chefs.map(c => (
                     <Link
                       key={c.id}
-                      href={`/chefs?highlight=${c.id}`}
+                      href="/chefs"
                       className="epicure-search-overlay__results-item"
-                      onClick={onClose}
+                      onClick={() => { sessionStorage.setItem('epicure_pending_chef_highlight', String(c.id)); window.dispatchEvent(new CustomEvent('epicure:chef-highlight', { detail: c.id })); onClose(); }}
                     >
                       {c.name}
                     </Link>

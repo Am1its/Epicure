@@ -8,15 +8,27 @@ import { fetchApi, strapiImageUrl } from '../lib/api';
 
 type ChefTab = (typeof TEXT.chefsGrid.tabs)[number]['id'];
 
-interface ChefsGridProps {
-  initialHighlight?: number;
-}
-
-export function ChefsGrid({ initialHighlight }: ChefsGridProps) {
+export function ChefsGrid() {
   const [chefs, setChefs] = useState<Chef[]>([]);
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState<ChefTab>('all');
-  const [highlightId, setHighlightId] = useState<number | null>(initialHighlight ?? null);
+  const [highlightId, setHighlightId] = useState<number | null>(null);
+
+  useEffect(() => {
+    const pending = sessionStorage.getItem('epicure_pending_chef_highlight');
+    if (pending) {
+      sessionStorage.removeItem('epicure_pending_chef_highlight');
+      const id = parseInt(pending, 10);
+      if (!isNaN(id)) setHighlightId(id);
+    }
+    function onChefHighlight(e: Event) {
+      const id = (e as CustomEvent<number>).detail;
+      sessionStorage.removeItem('epicure_pending_chef_highlight');
+      setHighlightId(id);
+    }
+    window.addEventListener('epicure:chef-highlight', onChefHighlight);
+    return () => window.removeEventListener('epicure:chef-highlight', onChefHighlight);
+  }, []);
 
   useEffect(() => {
     fetchApi<Chef[]>('/api/chefs')
