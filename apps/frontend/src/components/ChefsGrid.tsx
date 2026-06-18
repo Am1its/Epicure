@@ -8,10 +8,15 @@ import { fetchApi, strapiImageUrl } from '../lib/api';
 
 type ChefTab = (typeof TEXT.chefsGrid.tabs)[number]['id'];
 
-export function ChefsGrid() {
+interface ChefsGridProps {
+  initialHighlight?: number;
+}
+
+export function ChefsGrid({ initialHighlight }: ChefsGridProps) {
   const [chefs, setChefs] = useState<Chef[]>([]);
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState<ChefTab>('all');
+  const [highlightId, setHighlightId] = useState<number | null>(initialHighlight ?? null);
 
   useEffect(() => {
     fetchApi<Chef[]>('/api/chefs')
@@ -19,6 +24,14 @@ export function ChefsGrid() {
       .catch((err) => { console.error('Failed to fetch chefs:', err); setChefs([]); })
       .finally(() => setLoading(false));
   }, []);
+
+  useEffect(() => {
+    if (!highlightId || chefs.length === 0) return;
+    const el = document.getElementById(`chef-${highlightId}`);
+    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    const timer = setTimeout(() => setHighlightId(null), 2000);
+    return () => clearTimeout(timer);
+  }, [highlightId, chefs]);
 
   const filtered = useMemo(() => {
     if (activeTab === 'new') return [...chefs].sort((a, b) => b.id - a.id);
@@ -60,7 +73,13 @@ export function ChefsGrid() {
       </div>
       <div className="epicure-chef-grid">
         {filtered.map(chef => (
-          <ChefCard key={chef.id} chef={chef} imageUrl={strapiImageUrl(chef.image?.url)} />
+          <div
+            key={chef.id}
+            id={`chef-${chef.id}`}
+            className={highlightId === chef.id ? 'epicure-chef-highlight' : ''}
+          >
+            <ChefCard chef={chef} imageUrl={strapiImageUrl(chef.image?.url)} />
+          </div>
         ))}
       </div>
     </>
