@@ -110,7 +110,7 @@ export function SignInModal({ onClose }: SignInModalProps) {
                 placeholder=" "
                 aria-label={TEXT.signIn.emailLabel}
                 value={email}
-                onChange={e => setEmail(e.target.value)}
+                onChange={e => { setEmail(e.target.value); setError(''); }}
                 required
               />
               <label className="epicure-signin-modal__label" htmlFor="signin-email">{TEXT.signIn.emailLabel}</label>
@@ -123,13 +123,13 @@ export function SignInModal({ onClose }: SignInModalProps) {
                 placeholder=" "
                 aria-label={TEXT.signIn.passwordLabel}
                 value={password}
-                onChange={e => setPassword(e.target.value)}
+                onChange={e => { setPassword(e.target.value); setError(''); }}
                 required
               />
               <label className="epicure-signin-modal__label" htmlFor="signin-password">{TEXT.signIn.passwordLabel}</label>
             </div>
 
-            {error && <p className="epicure-signin-modal__error">{error}</p>}
+            <p className="epicure-signin-modal__error" aria-live="polite">{error}</p>
 
             <button
               type="submit"

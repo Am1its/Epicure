@@ -75,8 +75,10 @@
   }
 
   &__error {
+    min-height: 1.25rem;
     color: $error-color;
-    font-size: 0.75rem;
+    font-size: 0.875rem;
+    text-align: center;
     margin: 0.25rem 0 0.5rem;
   }
 
