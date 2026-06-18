@@ -138,6 +138,7 @@ export const TEXT = {
     distanceFilter: 'Distance',
     distanceMyLocation: 'My location',
     ratingFilter: 'Rating',
+    cuisineFilter: 'Cuisine',
   },
   dishGrid: {
     tabs: ['Breakfast', 'Lunch', 'Dinner'] as const,
