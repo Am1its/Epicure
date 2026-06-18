@@ -75,6 +75,7 @@ export const TEXT = {
     searchClearAriaLabel: 'Clear search',
     searchResultsRestaurants: 'Restaurants:',
     searchResultsChefs: 'Chefs:',
+    searchResultsCuisines: 'Cuisines:',
     popularTitle: 'POPULAR RESTAURANT IN EPICURE:',
     signatureDishTitle: 'SIGNATURE DISH OF:',
     iconsTitle: 'THE MEANING OF OUR ICONS:',

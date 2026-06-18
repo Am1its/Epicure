@@ -35,7 +35,7 @@ export default function Header({ brandName, logoUrl, navLinks }: HeaderProps) {
   const searchButtonRef = useRef<HTMLButtonElement>(null);
   const searchInlineRef = useRef<HTMLDivElement>(null);
   const searchResults = useSearch(searchQuery);
-  const hasSearchResults = searchResults.restaurants.length > 0 || searchResults.chefs.length > 0;
+  const hasSearchResults = searchResults.restaurants.length > 0 || searchResults.chefs.length > 0 || searchResults.cuisines.length > 0;
   const resolvedNavLinks = navLinks ?? [
     { label: TEXT.shared.restaurants, url: '/restaurants' },
     { label: TEXT.shared.chefs, url: '/chefs' },
@@ -152,7 +152,29 @@ export default function Header({ brandName, logoUrl, navLinks }: HeaderProps) {
                       <div className="epicure-nav__search-group">
                         <span className="epicure-nav__search-label">{TEXT.home.searchResultsChefs}</span>
                         {searchResults.chefs.map(c => (
-                          <span key={c.id} className="epicure-nav__search-item">{c.name}</span>
+                          <Link
+                            key={c.id}
+                            href={`/chefs?highlight=${c.id}`}
+                            className="epicure-nav__search-item"
+                            onClick={() => { setSearchQuery(''); setActivePanel('none'); }}
+                          >
+                            {c.name}
+                          </Link>
+                        ))}
+                      </div>
+                    )}
+                    {searchResults.cuisines.length > 0 && (
+                      <div className="epicure-nav__search-group">
+                        <span className="epicure-nav__search-label">{TEXT.home.searchResultsCuisines}</span>
+                        {searchResults.cuisines.map(c => (
+                          <Link
+                            key={c.label}
+                            href={`/restaurants?cuisine=${encodeURIComponent(c.label)}`}
+                            className="epicure-nav__search-item"
+                            onClick={() => { setSearchQuery(''); setActivePanel('none'); }}
+                          >
+                            {c.label}
+                          </Link>
                         ))}
                       </div>
                     )}

@@ -11,7 +11,7 @@ export function Hero() {
   const results = useSearch(query);
   const searchRef = useRef<HTMLDivElement>(null);
 
-  const hasResults = results.restaurants.length > 0 || results.chefs.length > 0;
+  const hasResults = results.restaurants.length > 0 || results.chefs.length > 0 || results.cuisines.length > 0;
 
   useClickOutside(searchRef, () => setQuery(''), query.length > 0);
 
@@ -47,7 +47,7 @@ export function Hero() {
                 <div className="epicure-hero__results-group">
                   <span className="epicure-hero__results-label">{TEXT.home.searchResultsRestaurants}</span>
                   {results.restaurants.map(r => (
-                    <Link key={r.id} href={`/restaurants/${r.id}`} className="epicure-hero__results-item">
+                    <Link key={r.id} href={`/restaurants/${r.id}`} className="epicure-hero__results-item" onClick={() => setQuery('')}>
                       {r.name}
                     </Link>
                   ))}
@@ -57,7 +57,19 @@ export function Hero() {
                 <div className="epicure-hero__results-group">
                   <span className="epicure-hero__results-label">{TEXT.home.searchResultsChefs}</span>
                   {results.chefs.map(c => (
-                    <span key={c.id} className="epicure-hero__results-item">{c.name}</span>
+                    <Link key={c.id} href={`/chefs?highlight=${c.id}`} className="epicure-hero__results-item" onClick={() => setQuery('')}>
+                      {c.name}
+                    </Link>
+                  ))}
+                </div>
+              )}
+              {results.cuisines.length > 0 && (
+                <div className="epicure-hero__results-group">
+                  <span className="epicure-hero__results-label">{TEXT.home.searchResultsCuisines}</span>
+                  {results.cuisines.map(c => (
+                    <Link key={c.label} href={`/restaurants?cuisine=${encodeURIComponent(c.label)}`} className="epicure-hero__results-item" onClick={() => setQuery('')}>
+                      {c.label}
+                    </Link>
                   ))}
                 </div>
               )}

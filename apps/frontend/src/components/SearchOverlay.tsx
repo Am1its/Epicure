@@ -13,7 +13,7 @@ interface SearchOverlayProps {
 export function SearchOverlay({ onClose }: SearchOverlayProps) {
   const [query, setQuery] = useState('');
   const results = useSearch(query);
-  const hasResults = results.restaurants.length > 0 || results.chefs.length > 0;
+  const hasResults = results.restaurants.length > 0 || results.chefs.length > 0 || results.cuisines.length > 0;
   const bodyRef = useRef<HTMLDivElement>(null);
 
   useClickOutside(bodyRef, () => setQuery(''), query.length > 0);
@@ -80,7 +80,29 @@ export function SearchOverlay({ onClose }: SearchOverlayProps) {
                 <div className="epicure-search-overlay__results-group">
                   <span className="epicure-search-overlay__results-label">{TEXT.home.searchResultsChefs}</span>
                   {results.chefs.map(c => (
-                    <span key={c.id} className="epicure-search-overlay__results-item">{c.name}</span>
+                    <Link
+                      key={c.id}
+                      href={`/chefs?highlight=${c.id}`}
+                      className="epicure-search-overlay__results-item"
+                      onClick={onClose}
+                    >
+                      {c.name}
+                    </Link>
+                  ))}
+                </div>
+              )}
+              {results.cuisines.length > 0 && (
+                <div className="epicure-search-overlay__results-group">
+                  <span className="epicure-search-overlay__results-label">{TEXT.home.searchResultsCuisines}</span>
+                  {results.cuisines.map(c => (
+                    <Link
+                      key={c.label}
+                      href={`/restaurants?cuisine=${encodeURIComponent(c.label)}`}
+                      className="epicure-search-overlay__results-item"
+                      onClick={onClose}
+                    >
+                      {c.label}
+                    </Link>
                   ))}
                 </div>
               )}
