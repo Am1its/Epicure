@@ -46,3 +46,17 @@ export interface StrapiAuthResponse {
   jwt: string;
   user: StrapiAuthUser;
 }
+
+export interface StrapiNavLink {
+  id: number;
+  label: string;
+  url: string;
+}
+
+export interface StrapiNavigation {
+  id: number;
+  brandName: string;
+  logo?: { url: string };
+  navLinks: StrapiNavLink[];
+  footerLinks: StrapiNavLink[];
+}
