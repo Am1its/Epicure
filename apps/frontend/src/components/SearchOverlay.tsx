@@ -14,9 +14,9 @@ export function SearchOverlay({ onClose }: SearchOverlayProps) {
   const [query, setQuery] = useState('');
   const results = useSearch(query);
   const hasResults = results.restaurants.length > 0 || results.chefs.length > 0;
-  const inputWrapRef = useRef<HTMLDivElement>(null);
+  const bodyRef = useRef<HTMLDivElement>(null);
 
-  useClickOutside(inputWrapRef, () => setQuery(''), query.length > 0);
+  useClickOutside(bodyRef, () => setQuery(''), query.length > 0);
 
   return (
     <>
@@ -37,8 +37,8 @@ export function SearchOverlay({ onClose }: SearchOverlayProps) {
           <span className="epicure-search-overlay__title">{TEXT.searchOverlay.title}</span>
           <span className="epicure-search-overlay__spacer" aria-hidden="true" />
         </div>
-        <div className="epicure-search-overlay__body">
-          <div className="epicure-search-overlay__input-wrap" ref={inputWrapRef}>
+        <div className="epicure-search-overlay__body" ref={bodyRef}>
+          <div className="epicure-search-overlay__input-wrap">
             <img src="/icons/search.svg" alt="" aria-hidden="true" width={18} height={18} />
             <input
               type="text"
