@@ -140,6 +140,8 @@ export const TEXT = {
     distanceMyLocation: 'My location',
     ratingFilter: 'Rating',
     cuisineFilter: 'Cuisine',
+    noResults: 'No restaurants match your filters.',
+    clearAllFilters: 'Clear all filters',
   },
   dishGrid: {
     tabs: ['Breakfast', 'Lunch', 'Dinner'] as const,

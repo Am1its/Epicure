@@ -114,6 +114,14 @@ export function RestaurantsGrid() {
     [restaurants, selectedRatings, priceRange, globalPrices, activeTab, distanceKm, selectedCuisines],
   );
 
+  function clearAllFilters() {
+    setSelectedRatings(new Set());
+    setPriceRange(null);
+    setDistanceKm(20);
+    setSelectedCuisines(new Set());
+    setActiveTab('all');
+  }
+
   const filterConfigs: FilterConfig[] = [
     {
       id: 'price',
@@ -208,6 +216,13 @@ export function RestaurantsGrid() {
 
       {activeTab === 'map' ? (
         <MapView restaurants={filtered} />
+      ) : filtered.length === 0 ? (
+        <div className="epicure-restaurant-grid__empty">
+          <p>{TEXT.restaurantsGrid.noResults}</p>
+          <button className="epicure-filter-clear-btn" onClick={clearAllFilters}>
+            {TEXT.restaurantsGrid.clearAllFilters}
+          </button>
+        </div>
       ) : (
         <div className="epicure-restaurant-grid">
           {filtered.map(restaurant => (

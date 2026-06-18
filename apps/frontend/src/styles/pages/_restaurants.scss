@@ -13,6 +13,25 @@
   @include for-normal-layout { display: none; }
 }
 
+.epicure-restaurant-grid__empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1.5rem;
+  min-height: 300px;
+  padding: 2rem;
+
+  p {
+    font-size: 1rem;
+    font-weight: 300;
+    color: $black-primary;
+    opacity: 0.55;
+    margin: 0;
+    text-align: center;
+  }
+}
+
 .epicure-restaurant-grid {
   display: grid;
   grid-template-columns: 1fr;
