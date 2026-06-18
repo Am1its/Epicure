@@ -25,8 +25,8 @@ export function NavDrawer({ onClose }: NavDrawerProps) {
         </button>
         <nav>
           <ul className="epicure-nav-drawer__main-links">
-            <li><Link href="/restaurants">{TEXT.shared.restaurants}</Link></li>
-            <li><Link href="/chefs">{TEXT.shared.chefs}</Link></li>
+            <li><Link href="/restaurants" onClick={onClose}>{TEXT.shared.restaurants}</Link></li>
+            <li><Link href="/chefs" onClick={onClose}>{TEXT.shared.chefs}</Link></li>
           </ul>
           <ul className="epicure-nav-drawer__footer-links">
             <li><a href="#" aria-disabled="true" onClick={e => e.preventDefault()}>{TEXT.shared.contactUs}</a></li>
