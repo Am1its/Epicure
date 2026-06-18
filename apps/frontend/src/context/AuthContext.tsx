@@ -22,11 +22,12 @@ const AuthContext = createContext<AuthContextValue | null>(null);
 function isValidAuthState(val: unknown): val is AuthState {
   if (!val || typeof val !== 'object') return false;
   const v = val as Record<string, unknown>;
-  if (v['user'] === null) return typeof v['token'] === 'string' || v['token'] === null;
+  if (v['user'] === null) return v['token'] === null;
   const u = v['user'];
   if (!u || typeof u !== 'object') return false;
   const user = u as Record<string, unknown>;
-  return typeof user['id'] === 'number' && typeof user['name'] === 'string' && typeof user['email'] === 'string';
+  return typeof user['id'] === 'number' && typeof user['name'] === 'string' && typeof user['email'] === 'string'
+    && typeof v['token'] === 'string';
 }
 
 export function AuthProvider({ children }: { children: ReactNode }) {
