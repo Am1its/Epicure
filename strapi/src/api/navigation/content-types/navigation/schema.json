@@ -1,0 +1,35 @@
+{
+  "kind": "singleType",
+  "collectionName": "navigations",
+  "info": {
+    "singularName": "navigation",
+    "pluralName": "navigations",
+    "displayName": "Navigation"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "brandName": {
+      "type": "string",
+      "required": true
+    },
+    "logo": {
+      "type": "media",
+      "multiple": false,
+      "required": false,
+      "allowedTypes": ["images"]
+    },
+    "navLinks": {
+      "type": "component",
+      "repeatable": true,
+      "component": "navigation.nav-link"
+    },
+    "footerLinks": {
+      "type": "component",
+      "repeatable": true,
+      "component": "navigation.nav-link"
+    }
+  }
+}
