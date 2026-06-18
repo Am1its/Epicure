@@ -12,6 +12,8 @@ import { UserDropdown } from './UserDropdown';
 import { TEXT } from '../lib/text';
 import { useCart } from '../context/CartContext';
 import { useAuth } from '../context/AuthContext';
+import { useSearch } from '../hooks/useSearch';
+import { useClickOutside } from '../hooks/useClickOutside';
 
 type ActivePanel = 'none' | 'drawer' | 'search' | 'cart' | 'signin' | 'signup' | 'userdropdown';
 
@@ -22,6 +24,12 @@ export default function Header() {
   const { totalItems } = useCart();
   const { user } = useAuth();
   const userButtonRef = useRef<HTMLButtonElement>(null);
+  const searchButtonRef = useRef<HTMLButtonElement>(null);
+  const searchInlineRef = useRef<HTMLDivElement>(null);
+  const searchResults = useSearch(searchQuery);
+  const hasSearchResults = searchResults.restaurants.length > 0 || searchResults.chefs.length > 0;
+
+  useClickOutside(searchInlineRef, () => { setSearchQuery(''); setActivePanel('none'); }, activePanel === 'search', searchButtonRef);
 
   function toggle(panel: Exclude<ActivePanel, 'none'>) {
     setActivePanel(prev => {
@@ -89,7 +97,7 @@ export default function Header() {
           <div className="epicure-nav__actions">
             {/* Desktop inline search — appears to the left of the search icon */}
             {activePanel === 'search' && (
-              <div className="epicure-nav__search-inline">
+              <div className="epicure-nav__search-inline" ref={searchInlineRef}>
                 <input
                   type="text"
                   placeholder={TEXT.searchOverlay.placeholder}
@@ -107,10 +115,37 @@ export default function Header() {
                     <img src="/icons/x.svg" alt="" aria-hidden="true" width={12} height={12} />
                   </button>
                 )}
+                {searchQuery && hasSearchResults && (
+                  <div className="epicure-nav__search-results">
+                    {searchResults.restaurants.length > 0 && (
+                      <div className="epicure-nav__search-group">
+                        <span className="epicure-nav__search-label">{TEXT.home.searchResultsRestaurants}</span>
+                        {searchResults.restaurants.map(r => (
+                          <Link
+                            key={r.id}
+                            href={`/restaurants/${r.id}`}
+                            className="epicure-nav__search-item"
+                            onClick={() => { setSearchQuery(''); setActivePanel('none'); }}
+                          >
+                            {r.name}
+                          </Link>
+                        ))}
+                      </div>
+                    )}
+                    {searchResults.chefs.length > 0 && (
+                      <div className="epicure-nav__search-group">
+                        <span className="epicure-nav__search-label">{TEXT.home.searchResultsChefs}</span>
+                        {searchResults.chefs.map(c => (
+                          <span key={c.id} className="epicure-nav__search-item">{c.name}</span>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                )}
               </div>
             )}
 
-            <button aria-label={TEXT.nav.searchAriaLabel} onClick={() => toggle('search')}>
+            <button ref={searchButtonRef} aria-label={TEXT.nav.searchAriaLabel} onClick={() => toggle('search')}>
               <img src="/icons/search.svg" alt="" aria-hidden="true" width={22} height={22} />
             </button>
 

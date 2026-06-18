@@ -79,9 +79,7 @@
 
 @include for-normal-layout {
   .epicure-nav {
-    max-width: $max-width;
-    margin: 0 auto;
-    padding: 0 2rem;
+    padding: 0 4.5rem;
     height: $nav-height;
     justify-content: flex-start;
   }
@@ -116,12 +114,50 @@
   }
 
   .epicure-nav__search-inline {
+    position: relative;
     display: flex;
     align-items: center;
     width: 410px;
     height: 41px;
     border: 1px solid $border-search;
     padding: 0 0.75rem;
+  }
+
+  .epicure-nav__search-results {
+    position: absolute;
+    top: calc(100% + 4px);
+    left: 0;
+    right: 0;
+    background: $white;
+    border: 1px solid $border-subtle;
+    box-shadow: 0 4px 16px $shadow-subtle;
+    padding: 0.75rem 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    z-index: $z-dropdown;
+  }
+
+  .epicure-nav__search-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+
+  .epicure-nav__search-label {
+    font-size: 0.8125rem;
+    font-weight: 300;
+    color: $black-primary;
+    opacity: 0.6;
+  }
+
+  .epicure-nav__search-item {
+    font-size: 0.9375rem;
+    font-weight: 500;
+    color: $black-primary;
+    text-decoration: none;
+
+    &:hover { opacity: 0.7; }
   }
 
   .epicure-nav__search-input {
