@@ -1,3 +1,5 @@
+'use client';
+
 import { TEXT } from '../lib/text';
 
 interface CuisineFilterProps {
