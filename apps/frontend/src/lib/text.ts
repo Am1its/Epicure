@@ -117,6 +117,11 @@ export const TEXT = {
     decreaseAriaLabel: 'Decrease quantity',
     increaseAriaLabel: 'Increase quantity',
   },
+  chefModal: {
+    dialogAriaLabel: 'Chef details',
+    closeAriaLabel: 'Close chef details',
+    restaurantsTitle: 'RESTAURANTS',
+  },
   deleteOrder: {
     dialogAriaLabel: 'Delete order confirmation',
     icon: '?',

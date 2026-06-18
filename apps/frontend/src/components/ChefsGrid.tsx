@@ -6,6 +6,7 @@ import { ChefCard } from '@org/ui-components';
 import { TEXT } from '../lib/text';
 import { fetchApi, strapiImageUrl } from '../lib/api';
 import { CHEF_HIGHLIGHT_EVENT, PENDING_CHEF_KEY } from '../lib/events';
+import { ChefModal } from './ChefModal';
 
 type ChefTab = (typeof TEXT.chefsGrid.tabs)[number]['id'];
 
@@ -14,6 +15,7 @@ export function ChefsGrid() {
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState<ChefTab>('all');
   const [highlightId, setHighlightId] = useState<number | null>(null);
+  const [selectedChef, setSelectedChef] = useState<Chef | null>(null);
 
   useEffect(() => {
     const pending = sessionStorage.getItem(PENDING_CHEF_KEY);
@@ -40,7 +42,11 @@ export function ChefsGrid() {
     if (!highlightId || chefs.length === 0) return;
     const el = document.getElementById(`chef-${highlightId}`);
     if (el) el.scrollIntoView({ behavior: 'smooth', block: 'center' });
-    const timer = setTimeout(() => setHighlightId(null), 2000);
+    const timer = setTimeout(() => {
+      const chef = chefs.find(c => c.id === highlightId);
+      if (chef) setSelectedChef(chef);
+      setHighlightId(null);
+    }, 800);
     return () => clearTimeout(timer);
   }, [highlightId, chefs]);
 
@@ -66,6 +72,9 @@ export function ChefsGrid() {
 
   return (
     <>
+      {selectedChef && (
+        <ChefModal chef={selectedChef} onClose={() => setSelectedChef(null)} />
+      )}
       <div className="epicure-page-tabs-wrap">
         <div className="epicure-page-tabs" role="tablist">
           {TEXT.chefsGrid.tabs.map(tab => (
@@ -84,13 +93,16 @@ export function ChefsGrid() {
       </div>
       <div className="epicure-chef-grid">
         {filtered.map(chef => (
-          <div
+          <button
             key={chef.id}
             id={`chef-${chef.id}`}
-            className={highlightId === chef.id ? 'epicure-chef-highlight' : ''}
+            type="button"
+            className={`epicure-chef-grid__item${highlightId === chef.id ? ' epicure-chef-highlight' : ''}`}
+            onClick={() => setSelectedChef(chef)}
+            aria-label={chef.name}
           >
             <ChefCard chef={chef} imageUrl={strapiImageUrl(chef.image?.url)} />
-          </div>
+          </button>
         ))}
       </div>
     </>

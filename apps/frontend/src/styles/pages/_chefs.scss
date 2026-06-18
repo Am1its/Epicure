@@ -51,6 +51,16 @@
   100% { outline-color: transparent; }
 }
 
+.epicure-chef-grid__item {
+  display: block;
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  text-align: left;
+  width: 100%;
+}
+
 .epicure-chef-grid {
   display: grid;
   grid-template-columns: 1fr;
