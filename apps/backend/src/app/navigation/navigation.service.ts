@@ -14,8 +14,8 @@ export class NavigationService {
     return {
       brandName: data.brandName,
       logoUrl: data.logo?.url ?? null,
-      navLinks: data.navLinks.map(l => ({ label: l.label, url: l.url })),
-      footerLinks: data.footerLinks.map(l => ({ label: l.label, url: l.url })),
+      navLinks: (data.navLinks ?? []).map(l => ({ label: l.label, url: l.url })),
+      footerLinks: (data.footerLinks ?? []).map(l => ({ label: l.label, url: l.url })),
     };
   }
 }

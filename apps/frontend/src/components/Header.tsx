@@ -86,9 +86,9 @@ export default function Header({ brandName, logoUrl, navLinks }: HeaderProps) {
               <li key={link.url}>
                 <Link
                   href={link.url}
-                  className={pathname.startsWith(link.url) ? 'epicure-nav__link--active' : ''}
+                  className={(link.url === '/' ? pathname === '/' : pathname.startsWith(link.url)) ? 'epicure-nav__link--active' : ''}
                   onClick={(e) => {
-                    if (pathname.startsWith(link.url)) {
+                    if (link.url === '/' ? pathname === '/' : pathname.startsWith(link.url)) {
                       e.preventDefault();
                       window.location.href = link.url;
                     }

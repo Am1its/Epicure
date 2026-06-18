@@ -24,7 +24,7 @@ export async function fetchApi<T>(path: string, init?: RequestInit): Promise<T> 
   const res = await fetch(`${BACKEND_URL}${path}`, {
     ...baseInit,
     ...init,
-    headers: { ...authHeaders(), ...(init?.headers as Record<string, string> ?? {}) },
+    headers: { ...(init?.headers as Record<string, string> ?? {}), ...authHeaders() },
   });
   if (!res.ok) throw new Error(await extractErrorMessage(res, path));
   return res.json();
