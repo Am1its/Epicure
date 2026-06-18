@@ -49,6 +49,7 @@ export class RestaurantsService {
       latitude: item.latitude,
       longitude: item.longitude,
       openingHours: item.openingHours,
+      cuisine: item.cuisine,
       chef: item.chef
         ? { id: item.chef.id, name: item.chef.name, image: item.chef.image }
         : undefined,
