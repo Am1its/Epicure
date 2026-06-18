@@ -35,6 +35,7 @@ export const TEXT = {
     addComment: 'Add A Comment',
     commentPlaceholder: 'Special requests, allergies, dietary restrictions, etc',
     orderHistory: 'ORDER HISTORY',
+    deleteItemAriaLabel: 'Remove item from cart',
   },
   signUp: {
     dialogAriaLabel: 'Sign up',

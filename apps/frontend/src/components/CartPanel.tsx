@@ -27,7 +27,7 @@ export function CartPanel({ onClose }: CartPanelProps) {
         onClick={onClose}
         aria-label={TEXT.cart.closeAriaLabel}
       />
-      <div className="epicure-cart-panel" role="dialog" aria-label={TEXT.cart.dialogAriaLabel}>
+      <div className={`epicure-cart-panel${cartItems.length === 0 ? ' epicure-cart-panel--empty' : ''}`} role="dialog" aria-label={TEXT.cart.dialogAriaLabel}>
         {cartItems.length === 0 ? (
           <CartEmpty />
         ) : (

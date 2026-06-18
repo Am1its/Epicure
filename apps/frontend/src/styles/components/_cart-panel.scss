@@ -179,6 +179,10 @@
     width: 497px;
     height: 778px;
     max-height: calc(100vh - #{$nav-height});
+
+  &--empty {
+    height: 586px;
+  }
     border-bottom: none;
     box-shadow: 0 4px 24px $shadow-subtle;
     padding: 2rem 78px;

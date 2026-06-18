@@ -1,10 +1,16 @@
+'use client';
+
 import type { CartItem as CartItemType } from '@org/shared-types';
+import { useCart } from '../../context/CartContext';
+import { TEXT } from '../../lib/text';
 
 interface CartItemProps {
   item: CartItemType;
 }
 
 export function CartItem({ item }: CartItemProps) {
+  const { removeFromCart } = useCart();
+
   return (
     <div className="epicure-cart-item">
       <img src={item.imageUrl} alt={item.dish.name} className="epicure-cart-item__image" />
@@ -31,6 +37,14 @@ export function CartItem({ item }: CartItemProps) {
           </span>
         </div>
       </div>
+      <button
+        type="button"
+        className="epicure-cart-item__delete"
+        onClick={() => removeFromCart(item.dish.id)}
+        aria-label={TEXT.cart.deleteItemAriaLabel}
+      >
+        <img src="/icons/trash.svg" alt="" aria-hidden="true" width={18} height={18} />
+      </button>
     </div>
   );
 }
