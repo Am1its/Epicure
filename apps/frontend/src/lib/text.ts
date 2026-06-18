@@ -143,6 +143,7 @@ export const TEXT = {
     cuisineBannerPrefix: 'Showing:',
     noResults: 'No restaurants match your filters.',
     clearAllFilters: 'Clear all filters',
+    clearLabel: 'CLEAR',
   },
   dishGrid: {
     tabs: ['Breakfast', 'Lunch', 'Dinner'] as const,

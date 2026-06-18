@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useRef } from 'react';
+import { useState, useRef, useCallback } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { NavDrawer } from './NavDrawer';
@@ -16,6 +16,7 @@ import { useSearch } from '../hooks/useSearch';
 import { useClickOutside } from '../hooks/useClickOutside';
 import type { NavLink } from '@org/shared-types';
 import { strapiImageUrl } from '../lib/api';
+import { dispatchCuisineFilter, dispatchChefHighlight } from '../lib/events';
 
 type ActivePanel = 'none' | 'drawer' | 'search' | 'cart' | 'signin' | 'signup' | 'userdropdown';
 
@@ -41,22 +42,17 @@ export default function Header({ brandName, logoUrl, navLinks }: HeaderProps) {
     { label: TEXT.shared.chefs, url: '/chefs' },
   ];
 
-  useClickOutside(
-    searchInlineRef,
-    () => {
-      if (!searchInlineRef.current?.offsetParent) return;
-      setSearchQuery('');
-      setActivePanel('none');
-    },
-    activePanel === 'search',
-    searchButtonRef,
-  );
+  const handleSearchClickOutside = useCallback(() => {
+    if (!searchInlineRef.current?.offsetParent) return;
+    setSearchQuery('');
+    setActivePanel('none');
+  }, []);
+
+  useClickOutside(searchInlineRef, handleSearchClickOutside, activePanel === 'search', searchButtonRef);
 
   function toggle(panel: Exclude<ActivePanel, 'none'>) {
-    setActivePanel(prev => {
-      if (prev === panel) { setSearchQuery(''); return 'none'; }
-      return panel;
-    });
+    setSearchQuery('');
+    setActivePanel(prev => (prev === panel ? 'none' : panel));
   }
 
   function handleUserIconClick() {
@@ -156,7 +152,7 @@ export default function Header({ brandName, logoUrl, navLinks }: HeaderProps) {
                             key={c.id}
                             href="/chefs"
                             className="epicure-nav__search-item"
-                            onClick={() => { sessionStorage.setItem('epicure_pending_chef_highlight', String(c.id)); window.dispatchEvent(new CustomEvent('epicure:chef-highlight', { detail: c.id })); setSearchQuery(''); setActivePanel('none'); }}
+                            onClick={() => { dispatchChefHighlight(c.id); setSearchQuery(''); setActivePanel('none'); }}
                           >
                             {c.name}
                           </Link>
@@ -171,7 +167,7 @@ export default function Header({ brandName, logoUrl, navLinks }: HeaderProps) {
                             key={c.label}
                             href="/restaurants"
                             className="epicure-nav__search-item"
-                            onClick={() => { sessionStorage.setItem('epicure_pending_cuisine_filter', JSON.stringify([c.label])); window.dispatchEvent(new CustomEvent('epicure:cuisine-filter', { detail: [c.label] })); setSearchQuery(''); setActivePanel('none'); }}
+                            onClick={() => { dispatchCuisineFilter([c.label]); setSearchQuery(''); setActivePanel('none'); }}
                           >
                             {c.label}
                           </Link>

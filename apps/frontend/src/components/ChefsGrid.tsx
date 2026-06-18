@@ -5,6 +5,7 @@ import type { Chef } from '@org/shared-types';
 import { ChefCard } from '@org/ui-components';
 import { TEXT } from '../lib/text';
 import { fetchApi, strapiImageUrl } from '../lib/api';
+import { CHEF_HIGHLIGHT_EVENT, PENDING_CHEF_KEY } from '../lib/events';
 
 type ChefTab = (typeof TEXT.chefsGrid.tabs)[number]['id'];
 
@@ -15,19 +16,17 @@ export function ChefsGrid() {
   const [highlightId, setHighlightId] = useState<number | null>(null);
 
   useEffect(() => {
-    const pending = sessionStorage.getItem('epicure_pending_chef_highlight');
+    const pending = sessionStorage.getItem(PENDING_CHEF_KEY);
     if (pending) {
-      sessionStorage.removeItem('epicure_pending_chef_highlight');
+      sessionStorage.removeItem(PENDING_CHEF_KEY);
       const id = parseInt(pending, 10);
       if (!isNaN(id)) setHighlightId(id);
     }
     function onChefHighlight(e: Event) {
-      const id = (e as CustomEvent<number>).detail;
-      sessionStorage.removeItem('epicure_pending_chef_highlight');
-      setHighlightId(id);
+      setHighlightId((e as CustomEvent<number>).detail);
     }
-    window.addEventListener('epicure:chef-highlight', onChefHighlight);
-    return () => window.removeEventListener('epicure:chef-highlight', onChefHighlight);
+    window.addEventListener(CHEF_HIGHLIGHT_EVENT, onChefHighlight);
+    return () => window.removeEventListener(CHEF_HIGHLIGHT_EVENT, onChefHighlight);
   }, []);
 
   useEffect(() => {

@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { TEXT } from '../lib/text';
 import { useClickOutside } from '../hooks/useClickOutside';
 import { useSearch } from '../hooks/useSearch';
+import { dispatchCuisineFilter, dispatchChefHighlight } from '../lib/events';
 
 export function Hero() {
   const [query, setQuery] = useState('');
@@ -57,7 +58,7 @@ export function Hero() {
                 <div className="epicure-hero__results-group">
                   <span className="epicure-hero__results-label">{TEXT.home.searchResultsChefs}</span>
                   {results.chefs.map(c => (
-                    <Link key={c.id} href="/chefs" className="epicure-hero__results-item" onClick={() => { sessionStorage.setItem('epicure_pending_chef_highlight', String(c.id)); window.dispatchEvent(new CustomEvent('epicure:chef-highlight', { detail: c.id })); setQuery(''); }}>
+                    <Link key={c.id} href="/chefs" className="epicure-hero__results-item" onClick={() => { dispatchChefHighlight(c.id); setQuery(''); }}>
                       {c.name}
                     </Link>
                   ))}
@@ -67,7 +68,7 @@ export function Hero() {
                 <div className="epicure-hero__results-group">
                   <span className="epicure-hero__results-label">{TEXT.home.searchResultsCuisines}</span>
                   {results.cuisines.map(c => (
-                    <Link key={c.label} href="/restaurants" className="epicure-hero__results-item" onClick={() => { sessionStorage.setItem('epicure_pending_cuisine_filter', JSON.stringify([c.label])); window.dispatchEvent(new CustomEvent('epicure:cuisine-filter', { detail: [c.label] })); setQuery(''); }}>
+                    <Link key={c.label} href="/restaurants" className="epicure-hero__results-item" onClick={() => { dispatchCuisineFilter([c.label]); setQuery(''); }}>
                       {c.label}
                     </Link>
                   ))}

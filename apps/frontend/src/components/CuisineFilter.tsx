@@ -23,7 +23,7 @@ export function CuisineFilter({ availableCuisines, selected, onToggle, onClear }
         </button>
       ))}
       {selected.size > 0 && (
-        <button className="epicure-filter-clear-btn" onClick={onClear}>CLEAR</button>
+        <button className="epicure-filter-clear-btn" onClick={onClear}>{TEXT.restaurantsGrid.clearLabel}</button>
       )}
     </>
   );

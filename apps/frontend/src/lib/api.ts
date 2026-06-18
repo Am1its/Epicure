@@ -20,11 +20,14 @@ async function extractErrorMessage(res: Response, path: string): Promise<string>
 }
 
 export async function fetchApi<T>(path: string, init?: RequestInit): Promise<T> {
-  const baseInit: RequestInit = init ? {} : { cache: 'no-store' };
+  // Default to no-store unless the caller provides explicit caching directives (cache or next.revalidate)
+  const hasCustomCache =
+    init?.cache != null ||
+    (init as RequestInit & { next?: { revalidate?: number } })?.next?.revalidate != null;
   const res = await fetch(`${BACKEND_URL}${path}`, {
-    ...baseInit,
+    ...(hasCustomCache ? {} : { cache: 'no-store' }),
     ...init,
-    headers: { ...(init?.headers as Record<string, string> ?? {}), ...authHeaders() },
+    headers: { ...authHeaders(), ...(init?.headers as Record<string, string> ?? {}) },
   });
   if (!res.ok) throw new Error(await extractErrorMessage(res, path));
   return res.json();

@@ -11,6 +11,7 @@ import { RatingFilter } from './RatingFilter';
 import { CuisineFilter } from './CuisineFilter';
 import { TEXT } from '../lib/text';
 import { fetchRestaurantsWithDistances, strapiImageUrl } from '../lib/api';
+import { CUISINE_FILTER_EVENT, PENDING_CUISINE_KEY } from '../lib/events';
 import { useUserLocation } from '../hooks/useUserLocation';
 import { isOpenNow } from '../lib/openingHours';
 
@@ -38,28 +39,20 @@ export function RestaurantsGrid() {
   const [priceRange, setPriceRange] = useState<[number, number] | null>(null);
   const [distanceKm, setDistanceKm] = useState<number>(20);
   const [selectedCuisines, setSelectedCuisines] = useState<Set<string>>(new Set());
-  const [ratingOpen, setRatingOpen] = useState(false);
+  const [openFilterId, setOpenFilterId] = useState<string | null>(null);
 
   useEffect(() => {
-    // Cross-page navigation: read from sessionStorage on mount
-    const pending = sessionStorage.getItem('epicure_pending_cuisine_filter');
+    const pending = sessionStorage.getItem(PENDING_CUISINE_KEY);
     if (pending) {
-      sessionStorage.removeItem('epicure_pending_cuisine_filter');
+      sessionStorage.removeItem(PENDING_CUISINE_KEY);
       try { setSelectedCuisines(new Set(JSON.parse(pending) as string[])); } catch { /* ignore */ }
     }
-
-    // Same-page navigation: listen for the custom event
     function onCuisineFilter(e: Event) {
-      const cuisines = (e as CustomEvent<string[]>).detail;
-      sessionStorage.removeItem('epicure_pending_cuisine_filter');
-      setSelectedCuisines(new Set(cuisines));
+      setSelectedCuisines(new Set((e as CustomEvent<string[]>).detail));
     }
-    window.addEventListener('epicure:cuisine-filter', onCuisineFilter);
-    return () => window.removeEventListener('epicure:cuisine-filter', onCuisineFilter);
+    window.addEventListener(CUISINE_FILTER_EVENT, onCuisineFilter);
+    return () => window.removeEventListener(CUISINE_FILTER_EVENT, onCuisineFilter);
   }, []);
-  const [priceOpen, setPriceOpen] = useState(false);
-  const [distanceOpen, setDistanceOpen] = useState(false);
-  const [cuisineOpen, setCuisineOpen] = useState(false);
 
   useEffect(() => {
     if (!coords) return;
@@ -101,7 +94,7 @@ export function RestaurantsGrid() {
         .filter(r => activeTab !== 'open' || isOpenNow(r.openingHours))
         .filter(r => selectedRatings.size === 0 || selectedRatings.has(r.rating))
         .filter(r => r.distance == null || r.distance <= distanceKm)
-        .filter(r => selectedCuisines.size === 0 || selectedCuisines.has(r.cuisine ?? ''))
+        .filter(r => selectedCuisines.size === 0 || (r.cuisine !== undefined && selectedCuisines.has(r.cuisine)))
         .filter(r => {
           if (!priceRange) return true;
           const [lo, hi] = priceRange;
@@ -126,42 +119,47 @@ export function RestaurantsGrid() {
     setPriceRange(null);
     setDistanceKm(20);
     setSelectedCuisines(new Set());
+    setOpenFilterId(null);
     setActiveTab('all');
+  }
+
+  function toggleFilter(id: string) {
+    setOpenFilterId(prev => (prev === id ? null : id));
   }
 
   const filterConfigs: FilterConfig[] = [
     {
       id: 'price',
       label: TEXT.restaurantsGrid.priceFilter,
-      isOpen: priceOpen,
-      onToggle: () => { setPriceOpen(o => !o); setDistanceOpen(false); setRatingOpen(false); setCuisineOpen(false); },
-      onClose: () => setPriceOpen(false),
+      isOpen: openFilterId === 'price',
+      onToggle: () => toggleFilter('price'),
+      onClose: () => setOpenFilterId(null),
       dropdownClassName: 'epicure-filter-dropdown--slider',
       content: <PriceFilter globalPrices={globalPrices} value={sliderValue} onChange={setPriceRange} onClear={() => setPriceRange(null)} />,
     },
     {
       id: 'distance',
       label: TEXT.restaurantsGrid.distanceFilter,
-      isOpen: distanceOpen,
-      onToggle: () => { setDistanceOpen(o => !o); setPriceOpen(false); setRatingOpen(false); setCuisineOpen(false); },
-      onClose: () => setDistanceOpen(false),
+      isOpen: openFilterId === 'distance',
+      onToggle: () => toggleFilter('distance'),
+      onClose: () => setOpenFilterId(null),
       dropdownClassName: 'epicure-filter-dropdown--slider',
       content: <DistanceFilter value={distanceKm} onChange={setDistanceKm} onClear={() => setDistanceKm(20)} />,
     },
     {
       id: 'rating',
       label: TEXT.restaurantsGrid.ratingFilter,
-      isOpen: ratingOpen,
-      onToggle: () => { setRatingOpen(o => !o); setPriceOpen(false); setDistanceOpen(false); setCuisineOpen(false); },
-      onClose: () => setRatingOpen(false),
+      isOpen: openFilterId === 'rating',
+      onToggle: () => toggleFilter('rating'),
+      onClose: () => setOpenFilterId(null),
       content: <RatingFilter selectedRatings={selectedRatings} onToggle={toggleRating} onClear={() => setSelectedRatings(new Set())} />,
     },
     {
       id: 'cuisine',
       label: TEXT.restaurantsGrid.cuisineFilter,
-      isOpen: cuisineOpen,
-      onToggle: () => { setCuisineOpen(o => !o); setPriceOpen(false); setDistanceOpen(false); setRatingOpen(false); },
-      onClose: () => setCuisineOpen(false),
+      isOpen: openFilterId === 'cuisine',
+      onToggle: () => toggleFilter('cuisine'),
+      onClose: () => setOpenFilterId(null),
       content: (
         <CuisineFilter
           availableCuisines={availableCuisines}
