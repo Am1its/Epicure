@@ -41,14 +41,21 @@ export function RestaurantsGrid() {
   const [ratingOpen, setRatingOpen] = useState(false);
 
   useEffect(() => {
+    // Cross-page navigation: read from sessionStorage on mount
     const pending = sessionStorage.getItem('epicure_pending_cuisine_filter');
     if (pending) {
       sessionStorage.removeItem('epicure_pending_cuisine_filter');
-      try {
-        const cuisines: string[] = JSON.parse(pending);
-        setSelectedCuisines(new Set(cuisines));
-      } catch { /* ignore malformed */ }
+      try { setSelectedCuisines(new Set(JSON.parse(pending) as string[])); } catch { /* ignore */ }
     }
+
+    // Same-page navigation: listen for the custom event
+    function onCuisineFilter(e: Event) {
+      const cuisines = (e as CustomEvent<string[]>).detail;
+      sessionStorage.removeItem('epicure_pending_cuisine_filter');
+      setSelectedCuisines(new Set(cuisines));
+    }
+    window.addEventListener('epicure:cuisine-filter', onCuisineFilter);
+    return () => window.removeEventListener('epicure:cuisine-filter', onCuisineFilter);
   }, []);
   const [priceOpen, setPriceOpen] = useState(false);
   const [distanceOpen, setDistanceOpen] = useState(false);

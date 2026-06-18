@@ -99,7 +99,7 @@ export function SearchOverlay({ onClose }: SearchOverlayProps) {
                       key={c.label}
                       href="/restaurants"
                       className="epicure-search-overlay__results-item"
-                      onClick={() => { sessionStorage.setItem('epicure_pending_cuisine_filter', JSON.stringify([c.label])); onClose(); }}
+                      onClick={() => { sessionStorage.setItem('epicure_pending_cuisine_filter', JSON.stringify([c.label])); window.dispatchEvent(new CustomEvent('epicure:cuisine-filter', { detail: [c.label] })); onClose(); }}
                     >
                       {c.label}
                     </Link>
