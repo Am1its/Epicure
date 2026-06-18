@@ -13,6 +13,30 @@
   @include for-normal-layout { display: none; }
 }
 
+.epicure-cuisine-banner {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1.25rem;
+  background: $cream-secondary;
+  font-size: 0.875rem;
+  font-weight: 300;
+  color: $black-primary;
+
+  span { flex: 1; }
+
+  &__clear {
+    display: flex;
+    align-items: center;
+    padding: 0.25rem;
+    filter: brightness(0);
+    opacity: 0.6;
+    &:hover { opacity: 1; }
+  }
+
+  @include for-normal-layout { display: none; }
+}
+
 .epicure-restaurant-grid__empty {
   display: flex;
   flex-direction: column;

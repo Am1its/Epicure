@@ -214,6 +214,19 @@ export function RestaurantsGrid() {
         ))}
       </div>
 
+      {selectedCuisines.size > 0 && (
+        <div className="epicure-cuisine-banner">
+          <span>{TEXT.restaurantsGrid.cuisineBannerPrefix} {[...selectedCuisines].join(', ')}</span>
+          <button
+            className="epicure-cuisine-banner__clear"
+            onClick={() => setSelectedCuisines(new Set())}
+            aria-label={TEXT.restaurantsGrid.clearAllFilters}
+          >
+            <img src="/icons/x.svg" alt="" aria-hidden="true" width={12} height={12} />
+          </button>
+        </div>
+      )}
+
       {activeTab === 'map' ? (
         <MapView restaurants={filtered} />
       ) : filtered.length === 0 ? (

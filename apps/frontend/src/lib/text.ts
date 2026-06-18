@@ -140,6 +140,7 @@ export const TEXT = {
     distanceMyLocation: 'My location',
     ratingFilter: 'Rating',
     cuisineFilter: 'Cuisine',
+    cuisineBannerPrefix: 'Showing:',
     noResults: 'No restaurants match your filters.',
     clearAllFilters: 'Clear all filters',
   },
