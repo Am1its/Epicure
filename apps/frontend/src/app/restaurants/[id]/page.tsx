@@ -1,5 +1,3 @@
-import Header from '../../../components/Header';
-import Footer from '../../../components/Footer';
 import { DishGrid } from '../../../components/DishGrid';
 import { OpenNowBadge } from '../../../components/OpenNowBadge';
 import { fetchApi, strapiImageUrl } from '../../../lib/api';
@@ -24,18 +22,15 @@ export default async function RestaurantDetailPage({
   if (!restaurant) {
     return (
       <div>
-        <Header />
         <main className="epicure-detail-error">
           <p>{TEXT.restaurantDetail.notFound}</p>
         </main>
-        <Footer />
       </div>
     );
   }
 
   return (
     <div>
-      <Header />
       <main>
         <img
           src={strapiImageUrl(restaurant.image?.url)}
@@ -55,7 +50,6 @@ export default async function RestaurantDetailPage({
           restaurantName={restaurant.name}
         />
       </main>
-      <Footer />
     </div>
   );
 }
