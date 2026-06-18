@@ -4,25 +4,26 @@ import { TEXT } from '../lib/text';
 
 interface CuisineFilterProps {
   availableCuisines: string[];
-  selected: string | null;
-  onSelect: (c: string | null) => void;
+  selected: Set<string>;
+  onToggle: (c: string) => void;
+  onClear: () => void;
 }
 
-export function CuisineFilter({ availableCuisines, selected, onSelect }: CuisineFilterProps) {
+export function CuisineFilter({ availableCuisines, selected, onToggle, onClear }: CuisineFilterProps) {
   return (
     <>
       <p className="epicure-filter-dropdown__title">{TEXT.restaurantsGrid.cuisineFilter}</p>
       {availableCuisines.map(c => (
         <button
           key={c}
-          className={`epicure-filter-dropdown__option${selected === c ? ' epicure-filter-dropdown__option--active' : ''}`}
-          onClick={() => onSelect(selected === c ? null : c)}
+          className={`epicure-filter-dropdown__option${selected.has(c) ? ' epicure-filter-dropdown__option--active' : ''}`}
+          onClick={() => onToggle(c)}
         >
           {c}
         </button>
       ))}
-      {selected && (
-        <button className="epicure-filter-clear-btn" onClick={() => onSelect(null)}>CLEAR</button>
+      {selected.size > 0 && (
+        <button className="epicure-filter-clear-btn" onClick={onClear}>CLEAR</button>
       )}
     </>
   );

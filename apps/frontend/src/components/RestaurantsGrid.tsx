@@ -28,11 +28,7 @@ interface FilterConfig {
   content: ReactNode;
 }
 
-interface RestaurantsGridProps {
-  initialCuisine?: string;
-}
-
-export function RestaurantsGrid({ initialCuisine }: RestaurantsGridProps) {
+export function RestaurantsGrid() {
   const { coords, loading: locationLoading } = useUserLocation();
   const [restaurants, setRestaurants] = useState<Restaurant[]>([]);
   const [fetchLoading, setFetchLoading] = useState(true);
@@ -41,8 +37,19 @@ export function RestaurantsGrid({ initialCuisine }: RestaurantsGridProps) {
   const [selectedRatings, setSelectedRatings] = useState<Set<number>>(new Set());
   const [priceRange, setPriceRange] = useState<[number, number] | null>(null);
   const [distanceKm, setDistanceKm] = useState<number>(20);
-  const [selectedCuisine, setSelectedCuisine] = useState<string | null>(initialCuisine ?? null);
+  const [selectedCuisines, setSelectedCuisines] = useState<Set<string>>(new Set());
   const [ratingOpen, setRatingOpen] = useState(false);
+
+  useEffect(() => {
+    const pending = sessionStorage.getItem('epicure_pending_cuisine_filter');
+    if (pending) {
+      sessionStorage.removeItem('epicure_pending_cuisine_filter');
+      try {
+        const cuisines: string[] = JSON.parse(pending);
+        setSelectedCuisines(new Set(cuisines));
+      } catch { /* ignore malformed */ }
+    }
+  }, []);
   const [priceOpen, setPriceOpen] = useState(false);
   const [distanceOpen, setDistanceOpen] = useState(false);
   const [cuisineOpen, setCuisineOpen] = useState(false);
@@ -87,7 +94,7 @@ export function RestaurantsGrid({ initialCuisine }: RestaurantsGridProps) {
         .filter(r => activeTab !== 'open' || isOpenNow(r.openingHours))
         .filter(r => selectedRatings.size === 0 || selectedRatings.has(r.rating))
         .filter(r => r.distance == null || r.distance <= distanceKm)
-        .filter(r => !selectedCuisine || r.cuisine === selectedCuisine)
+        .filter(r => selectedCuisines.size === 0 || selectedCuisines.has(r.cuisine ?? ''))
         .filter(r => {
           if (!priceRange) return true;
           const [lo, hi] = priceRange;
@@ -104,7 +111,7 @@ export function RestaurantsGrid({ initialCuisine }: RestaurantsGridProps) {
           }
           return 0;
         }),
-    [restaurants, selectedRatings, priceRange, globalPrices, activeTab, distanceKm, selectedCuisine],
+    [restaurants, selectedRatings, priceRange, globalPrices, activeTab, distanceKm, selectedCuisines],
   );
 
   const filterConfigs: FilterConfig[] = [
@@ -136,15 +143,22 @@ export function RestaurantsGrid({ initialCuisine }: RestaurantsGridProps) {
     },
     {
       id: 'cuisine',
-      label: selectedCuisine ?? TEXT.restaurantsGrid.cuisineFilter,
+      label: TEXT.restaurantsGrid.cuisineFilter,
       isOpen: cuisineOpen,
       onToggle: () => { setCuisineOpen(o => !o); setPriceOpen(false); setDistanceOpen(false); setRatingOpen(false); },
       onClose: () => setCuisineOpen(false),
       content: (
         <CuisineFilter
           availableCuisines={availableCuisines}
-          selected={selectedCuisine}
-          onSelect={c => { setSelectedCuisine(c); setCuisineOpen(false); }}
+          selected={selectedCuisines}
+          onToggle={c => {
+            setSelectedCuisines(prev => {
+              const next = new Set(prev);
+              if (next.has(c)) next.delete(c); else next.add(c);
+              return next;
+            });
+          }}
+          onClear={() => setSelectedCuisines(new Set())}
         />
       ),
     },
