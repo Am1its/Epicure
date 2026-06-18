@@ -14,10 +14,18 @@ import { useCart } from '../context/CartContext';
 import { useAuth } from '../context/AuthContext';
 import { useSearch } from '../hooks/useSearch';
 import { useClickOutside } from '../hooks/useClickOutside';
+import type { NavLink } from '@org/shared-types';
+import { strapiImageUrl } from '../lib/api';
 
 type ActivePanel = 'none' | 'drawer' | 'search' | 'cart' | 'signin' | 'signup' | 'userdropdown';
 
-export default function Header() {
+interface HeaderProps {
+  brandName?: string;
+  logoUrl?: string | null;
+  navLinks?: NavLink[];
+}
+
+export default function Header({ brandName, logoUrl, navLinks }: HeaderProps) {
   const [activePanel, setActivePanel] = useState<ActivePanel>('none');
   const pathname = usePathname();
   const [searchQuery, setSearchQuery] = useState('');
@@ -28,6 +36,10 @@ export default function Header() {
   const searchInlineRef = useRef<HTMLDivElement>(null);
   const searchResults = useSearch(searchQuery);
   const hasSearchResults = searchResults.restaurants.length > 0 || searchResults.chefs.length > 0;
+  const resolvedNavLinks = navLinks ?? [
+    { label: TEXT.shared.restaurants, url: '/restaurants' },
+    { label: TEXT.shared.chefs, url: '/chefs' },
+  ];
 
   useClickOutside(searchInlineRef, () => { setSearchQuery(''); setActivePanel('none'); }, activePanel === 'search', searchButtonRef);
 
@@ -57,40 +69,35 @@ export default function Header() {
 
           {/* Logo — centered on mobile, left on desktop */}
           <Link href="/" className="epicure-nav__logo" aria-label={TEXT.nav.logoAriaLabel}>
-            <img src="/icons/logo.svg" alt="" aria-hidden="true" width={34} height={34} className="epicure-nav__logo-icon" />
-            <span>{TEXT.nav.brandName}</span>
+            <img
+              src={logoUrl ? strapiImageUrl(logoUrl) : '/icons/logo.svg'}
+              alt=""
+              aria-hidden="true"
+              width={34}
+              height={34}
+              className="epicure-nav__logo-icon"
+            />
+            <span>{brandName ?? TEXT.nav.brandName}</span>
           </Link>
 
           {/* Desktop nav links — hidden on mobile */}
           <ul className="epicure-nav__links">
-            <li>
-              <Link
-                href="/restaurants"
-                className={pathname.startsWith('/restaurants') ? 'epicure-nav__link--active' : ''}
-                onClick={(e) => {
-                  if (pathname.startsWith('/restaurants')) {
-                    e.preventDefault();
-                    window.location.href = '/restaurants';
-                  }
-                }}
-              >
-                {TEXT.shared.restaurants}
-              </Link>
-            </li>
-            <li>
-              <Link
-                href="/chefs"
-                className={pathname.startsWith('/chefs') ? 'epicure-nav__link--active' : ''}
-                onClick={(e) => {
-                  if (pathname.startsWith('/chefs')) {
-                    e.preventDefault();
-                    window.location.href = '/chefs';
-                  }
-                }}
-              >
-                {TEXT.shared.chefs}
-              </Link>
-            </li>
+            {resolvedNavLinks.map(link => (
+              <li key={link.url}>
+                <Link
+                  href={link.url}
+                  className={pathname.startsWith(link.url) ? 'epicure-nav__link--active' : ''}
+                  onClick={(e) => {
+                    if (pathname.startsWith(link.url)) {
+                      e.preventDefault();
+                      window.location.href = link.url;
+                    }
+                  }}
+                >
+                  {link.label}
+                </Link>
+              </li>
+            ))}
           </ul>
 
           {/* Action icons */}
