@@ -97,9 +97,9 @@ export function SearchOverlay({ onClose }: SearchOverlayProps) {
                   {results.cuisines.map(c => (
                     <Link
                       key={c.label}
-                      href={`/restaurants?cuisine=${encodeURIComponent(c.label)}`}
+                      href="/restaurants"
                       className="epicure-search-overlay__results-item"
-                      onClick={onClose}
+                      onClick={() => { sessionStorage.setItem('epicure_pending_cuisine_filter', JSON.stringify([c.label])); onClose(); }}
                     >
                       {c.label}
                     </Link>

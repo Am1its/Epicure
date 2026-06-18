@@ -67,7 +67,7 @@ export function Hero() {
                 <div className="epicure-hero__results-group">
                   <span className="epicure-hero__results-label">{TEXT.home.searchResultsCuisines}</span>
                   {results.cuisines.map(c => (
-                    <Link key={c.label} href={`/restaurants?cuisine=${encodeURIComponent(c.label)}`} className="epicure-hero__results-item" onClick={() => setQuery('')}>
+                    <Link key={c.label} href="/restaurants" className="epicure-hero__results-item" onClick={() => { sessionStorage.setItem('epicure_pending_cuisine_filter', JSON.stringify([c.label])); setQuery(''); }}>
                       {c.label}
                     </Link>
                   ))}

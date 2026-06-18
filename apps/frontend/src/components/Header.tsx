@@ -169,9 +169,9 @@ export default function Header({ brandName, logoUrl, navLinks }: HeaderProps) {
                         {searchResults.cuisines.map(c => (
                           <Link
                             key={c.label}
-                            href={`/restaurants?cuisine=${encodeURIComponent(c.label)}`}
+                            href="/restaurants"
                             className="epicure-nav__search-item"
-                            onClick={() => { setSearchQuery(''); setActivePanel('none'); }}
+                            onClick={() => { sessionStorage.setItem('epicure_pending_cuisine_filter', JSON.stringify([c.label])); setSearchQuery(''); setActivePanel('none'); }}
                           >
                             {c.label}
                           </Link>
