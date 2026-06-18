@@ -7,12 +7,13 @@ import { NavDrawer } from './NavDrawer';
 import { SearchOverlay } from './SearchOverlay';
 import { CartPanel } from './CartPanel';
 import { SignInModal } from './SignInModal';
+import { SignUpModal } from './SignUpModal';
 import { UserDropdown } from './UserDropdown';
 import { TEXT } from '../lib/text';
 import { useCart } from '../context/CartContext';
 import { useAuth } from '../context/AuthContext';
 
-type ActivePanel = 'none' | 'drawer' | 'search' | 'cart' | 'signin' | 'userdropdown';
+type ActivePanel = 'none' | 'drawer' | 'search' | 'cart' | 'signin' | 'signup' | 'userdropdown';
 
 export default function Header() {
   const [activePanel, setActivePanel] = useState<ActivePanel>('none');
@@ -137,7 +138,18 @@ export default function Header() {
       {activePanel === 'drawer' && <NavDrawer onClose={() => setActivePanel('none')} />}
       {activePanel === 'search' && <SearchOverlay onClose={() => setActivePanel('none')} />}
       {activePanel === 'cart' && <CartPanel onClose={() => setActivePanel('none')} />}
-      {activePanel === 'signin' && <SignInModal onClose={() => setActivePanel('none')} />}
+      {activePanel === 'signin' && (
+        <SignInModal
+          onClose={() => setActivePanel('none')}
+          onSwitchToSignUp={() => setActivePanel('signup')}
+        />
+      )}
+      {activePanel === 'signup' && (
+        <SignUpModal
+          onClose={() => setActivePanel('none')}
+          onSwitchToSignIn={() => setActivePanel('signin')}
+        />
+      )}
       {activePanel === 'userdropdown' && <UserDropdown onClose={() => setActivePanel('none')} triggerRef={userButtonRef} />}
     </>
   );

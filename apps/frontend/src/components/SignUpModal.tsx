@@ -5,25 +5,26 @@ import { useAuth } from '../context/AuthContext';
 import { TEXT } from '../lib/text';
 import { Modal } from './Modal';
 
-interface SignInModalProps {
+interface SignUpModalProps {
   onClose: () => void;
-  onSwitchToSignUp: () => void;
+  onSwitchToSignIn: () => void;
 }
 
-export function SignInModal({ onClose, onSwitchToSignUp }: SignInModalProps) {
-  const { login } = useAuth();
+export function SignUpModal({ onClose, onSwitchToSignIn }: SignUpModalProps) {
+  const { register } = useAuth();
+  const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
-  const isActive = email.length > 0 && password.length > 0;
+  const isActive = name.length > 0 && email.length > 0 && password.length > 0;
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setError('');
     setLoading(true);
     try {
-      await login(email, password);
+      await register(name, email, password);
       onClose();
     } catch (err) {
       setError(err instanceof Error ? err.message : TEXT.signIn.errorGeneric);
@@ -62,13 +63,26 @@ export function SignInModal({ onClose, onSwitchToSignUp }: SignInModalProps) {
         </button>
 
         <div className="epicure-signin-modal__content">
-          <h2 className="epicure-signin-modal__title">{TEXT.signIn.title}</h2>
+          <h2 className="epicure-signin-modal__title">{TEXT.signIn.signUpTitle}</h2>
           <p className="epicure-signin-modal__subtitle">{TEXT.signIn.subtitle}</p>
 
           <form onSubmit={handleSubmit}>
             <div className="epicure-signin-modal__field">
               <input
-                id="signin-email"
+                id="signup-name"
+                type="text"
+                className="epicure-signin-modal__input"
+                placeholder=" "
+                aria-label={TEXT.signIn.nameLabel}
+                value={name}
+                onChange={e => { setName(e.target.value); setError(''); }}
+                required
+              />
+              <label className="epicure-signin-modal__label" htmlFor="signup-name">{TEXT.signIn.nameLabel}</label>
+            </div>
+            <div className="epicure-signin-modal__field">
+              <input
+                id="signup-email"
                 type="email"
                 className="epicure-signin-modal__input"
                 placeholder=" "
@@ -77,11 +91,11 @@ export function SignInModal({ onClose, onSwitchToSignUp }: SignInModalProps) {
                 onChange={e => { setEmail(e.target.value); setError(''); }}
                 required
               />
-              <label className="epicure-signin-modal__label" htmlFor="signin-email">{TEXT.signIn.emailLabel}</label>
+              <label className="epicure-signin-modal__label" htmlFor="signup-email">{TEXT.signIn.emailLabel}</label>
             </div>
             <div className="epicure-signin-modal__field">
               <input
-                id="signin-password"
+                id="signup-password"
                 type="password"
                 className="epicure-signin-modal__input"
                 placeholder=" "
@@ -90,7 +104,7 @@ export function SignInModal({ onClose, onSwitchToSignUp }: SignInModalProps) {
                 onChange={e => { setPassword(e.target.value); setError(''); }}
                 required
               />
-              <label className="epicure-signin-modal__label" htmlFor="signin-password">{TEXT.signIn.passwordLabel}</label>
+              <label className="epicure-signin-modal__label" htmlFor="signup-password">{TEXT.signIn.passwordLabel}</label>
             </div>
 
             <p className="epicure-signin-modal__error" aria-live="polite">{error}</p>
@@ -100,29 +114,18 @@ export function SignInModal({ onClose, onSwitchToSignUp }: SignInModalProps) {
               className={`epicure-signin-modal__submit${isActive ? ' epicure-signin-modal__submit--active' : ''}`}
               disabled={loading}
             >
-              {TEXT.signIn.loginBtn}
+              {TEXT.signIn.signUpBtn}
             </button>
           </form>
         </div>
 
-        <a
-          href="#"
-          aria-disabled="true"
-          onClick={e => e.preventDefault()}
-          className="epicure-signin-modal__forgot"
-        >
-          {TEXT.signIn.forgotPassword}
-        </a>
-        <div className="epicure-signin-modal__divider">
-          <span>{TEXT.signIn.divider}</span>
-        </div>
         <button
           type="button"
-          className="epicure-signin-modal__signup"
-          onClick={onSwitchToSignUp}
+          className="epicure-signin-modal__forgot"
+          onClick={onSwitchToSignIn}
           disabled={loading}
         >
-          {TEXT.signIn.signUpBtn}
+          {TEXT.signIn.backToLogin}
         </button>
       </Modal>
     </>
