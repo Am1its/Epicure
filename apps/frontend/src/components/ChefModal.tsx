@@ -5,6 +5,8 @@ import Link from 'next/link';
 import type { Chef, Restaurant } from '@org/shared-types';
 import { fetchApi, strapiImageUrl } from '../lib/api';
 import { TEXT } from '../lib/text';
+import { Modal } from './Modal';
+import { Carousel } from './Carousel';
 
 interface ChefModalProps {
   chef: Chef;
@@ -27,63 +29,75 @@ export function ChefModal({ chef, onClose }: ChefModalProps) {
 
   return (
     <>
+      {/* Desktop X — outside Modal so position:fixed isn't clipped by transform ancestor */}
       <button
         type="button"
-        className="epicure-chef-modal__backdrop"
+        className="epicure-chef-modal__close-desktop"
         onClick={onClose}
         aria-label={TEXT.chefModal.closeAriaLabel}
-      />
-      <div className="epicure-chef-modal__outer">
+      >
+        <img src="/icons/x.svg" alt="" aria-hidden="true" width={24} height={24} />
+      </button>
+
+      <Modal
+        onClose={onClose}
+        ariaLabel={TEXT.chefModal.dialogAriaLabel}
+        closeAriaLabel={TEXT.chefModal.closeAriaLabel}
+        backdropClassName="epicure-chef-modal__backdrop"
+        className="epicure-chef-modal"
+      >
+        {/* Mobile X — in-flow inside modal */}
         <button
           type="button"
-          className="epicure-chef-modal__close"
+          className="epicure-chef-modal__close-mobile"
           onClick={onClose}
           aria-label={TEXT.chefModal.closeAriaLabel}
         >
           <img src="/icons/x.svg" alt="" aria-hidden="true" width={24} height={24} />
         </button>
-        <div className="epicure-chef-modal" role="dialog" aria-label={TEXT.chefModal.dialogAriaLabel}>
-          <div className="epicure-chef-modal__image-wrap">
-            {chef.image && (
-              <img
-                src={strapiImageUrl(chef.image.url)}
-                alt={chef.name}
-                className="epicure-chef-modal__image"
-              />
-            )}
-            <div className="epicure-chef-modal__name-band">
-              <span className="epicure-chef-modal__name">{chef.name}</span>
-            </div>
+
+        <div className="epicure-chef-modal__image-wrap">
+          {chef.image && (
+            <img
+              src={strapiImageUrl(chef.image.url)}
+              alt={chef.name}
+              className="epicure-chef-modal__image"
+            />
+          )}
+          <div className="epicure-chef-modal__name-band">
+            <span className="epicure-chef-modal__name">{chef.name}</span>
           </div>
-          {chef.bio && (
-            <p className="epicure-chef-modal__bio">{chef.bio}</p>
-          )}
-          {restaurants.length > 0 && (
-            <div className="epicure-chef-modal__restaurants">
-              <h3 className="epicure-chef-modal__restaurants-title">{TEXT.chefModal.restaurantsTitle}</h3>
-              <div className="epicure-chef-modal__carousel">
-                {restaurants.map(r => (
-                  <Link
-                    key={r.id}
-                    href={`/restaurants/${r.id}`}
-                    className="epicure-chef-modal__rest-item"
-                    onClick={onClose}
-                  >
-                    <img
-                      src={strapiImageUrl(r.image?.url)}
-                      alt={r.name}
-                      className="epicure-chef-modal__rest-img"
-                    />
-                    <div className="epicure-chef-modal__rest-info">
-                      <span className="epicure-chef-modal__rest-name">{r.name}</span>
-                    </div>
-                  </Link>
-                ))}
-              </div>
-            </div>
-          )}
         </div>
-      </div>
+
+        {chef.bio && (
+          <p className="epicure-chef-modal__bio">{chef.bio}</p>
+        )}
+
+        {restaurants.length > 0 && (
+          <div className="epicure-chef-modal__restaurants">
+            <h3 className="epicure-chef-modal__restaurants-title">{TEXT.chefModal.restaurantsTitle}</h3>
+            <Carousel className="epicure-chef-modal__carousel">
+              {restaurants.map(r => (
+                <Link
+                  key={r.id}
+                  href={`/restaurants/${r.id}`}
+                  className="epicure-chef-modal__rest-item"
+                  onClick={onClose}
+                >
+                  <img
+                    src={strapiImageUrl(r.image?.url)}
+                    alt={r.name}
+                    className="epicure-chef-modal__rest-img"
+                  />
+                  <div className="epicure-chef-modal__rest-info">
+                    <span className="epicure-chef-modal__rest-name">{r.name}</span>
+                  </div>
+                </Link>
+              ))}
+            </Carousel>
+          </div>
+        )}
+      </Modal>
     </>
   );
 }
