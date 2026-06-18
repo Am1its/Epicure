@@ -3,29 +3,56 @@ import type { Restaurant, SearchResults } from '@org/shared-types';
 export const BACKEND_URL = process.env['NEXT_PUBLIC_BACKEND_URL'] ?? 'http://localhost:3333';
 export const STRAPI_URL = process.env['NEXT_PUBLIC_STRAPI_URL'] ?? 'http://localhost:1337';
 
+let authToken: string | null = null;
+export function setAuthToken(token: string | null): void { authToken = token; }
+
+function authHeaders(): Record<string, string> {
+  return authToken ? { Authorization: `Bearer ${authToken}` } : {};
+}
+
+async function extractErrorMessage(res: Response, path: string): Promise<string> {
+  try {
+    const body: { error?: { message?: string }; message?: string } = await res.json();
+    return body?.error?.message ?? body?.message ?? `API error ${res.status}: ${path}`;
+  } catch {
+    return `API error ${res.status}: ${path}`;
+  }
+}
+
 export async function fetchApi<T>(path: string): Promise<T> {
-  const res = await fetch(`${BACKEND_URL}${path}`, { cache: 'no-store' });
-  if (!res.ok) throw new Error(`API error ${res.status}: ${path}`);
+  const res = await fetch(`${BACKEND_URL}${path}`, { cache: 'no-store', headers: authHeaders() });
+  if (!res.ok) throw new Error(await extractErrorMessage(res, path));
   return res.json();
 }
 
 export async function fetchSearch(q: string): Promise<SearchResults> {
-  const res = await fetch(`${BACKEND_URL}/api/search?q=${encodeURIComponent(q)}`, {
-    cache: 'no-store',
-  });
-  if (!res.ok) throw new Error(`API error ${res.status}: /api/search`);
+  const path = `/api/search?q=${encodeURIComponent(q)}`;
+  const res = await fetch(`${BACKEND_URL}${path}`, { cache: 'no-store', headers: authHeaders() });
+  if (!res.ok) throw new Error(await extractErrorMessage(res, path));
   return res.json();
 }
 
 export async function fetchRestaurantsWithDistances(lat: number, lng: number): Promise<Restaurant[]> {
-  const res = await fetch(`${BACKEND_URL}/api/restaurants/distances`, {
+  const path = '/api/restaurants/distances';
+  const res = await fetch(`${BACKEND_URL}${path}`, {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    headers: { 'Content-Type': 'application/json', ...authHeaders() },
     body: JSON.stringify({ lat, lng }),
     cache: 'no-store',
   });
-  if (!res.ok) throw new Error(`API error ${res.status}: /api/restaurants/distances`);
+  if (!res.ok) throw new Error(await extractErrorMessage(res, path));
   return res.json();
+}
+
+export async function postApi<T>(path: string, body: Record<string, unknown>): Promise<T> {
+  const res = await fetch(`${BACKEND_URL}${path}`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...authHeaders() },
+    body: JSON.stringify(body),
+    cache: 'no-store',
+  });
+  if (!res.ok) throw new Error(await extractErrorMessage(res, path));
+  return res.json() as Promise<T>;
 }
 
 export function strapiImageUrl(url?: string): string {

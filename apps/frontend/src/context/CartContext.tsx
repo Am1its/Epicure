@@ -30,6 +30,10 @@ const EMPTY_STATE: CartState = {
   comment: '',
 };
 
+function isValidCartState(val: unknown): val is CartState {
+  return !!val && typeof val === 'object' && Array.isArray((val as Record<string, unknown>)['cartItems']);
+}
+
 function itemsMatch(a: CartItem, b: CartItem): boolean {
   return (
     a.dish.id === b.dish.id &&
@@ -44,7 +48,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     const saved = loadCart<CartState>();
-    if (saved) setState(saved);
+    if (saved && isValidCartState(saved)) setState(saved);
   }, []);
 
   useEffect(() => {

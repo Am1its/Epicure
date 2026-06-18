@@ -1,5 +1,6 @@
 import {
   Injectable,
+  HttpException,
   NotFoundException,
   ServiceUnavailableException,
 } from '@nestjs/common';
@@ -55,5 +56,33 @@ export class StrapiClientService {
       throw new ServiceUnavailableException('Strapi returned invalid JSON');
     }
     return body.data;
+  }
+
+  async post<T>(path: string, body: Record<string, unknown>): Promise<T> {
+    let res: Response;
+    try {
+      res = await fetch(`${STRAPI_URL}${path}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(body),
+      });
+    } catch {
+      throw new ServiceUnavailableException('Strapi is unreachable');
+    }
+    if (!res.ok) {
+      let message = `Strapi returned ${res.status}`;
+      try {
+        const errBody = (await res.json()) as { error?: { message?: string }; message?: string };
+        message = errBody?.error?.message ?? errBody?.message ?? message;
+      } catch { /* ignore */ }
+      throw new HttpException({ message }, res.status);
+    }
+    let result: T;
+    try {
+      result = (await res.json()) as T;
+    } catch {
+      throw new ServiceUnavailableException('Strapi returned invalid JSON');
+    }
+    return result;
   }
 }
