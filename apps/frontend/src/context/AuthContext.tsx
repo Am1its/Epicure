@@ -1,7 +1,7 @@
 'use client';
 
 import { createContext, useContext, useState, type ReactNode } from 'react';
-import { postApi } from '../lib/api';
+import { postApi, setAuthToken } from '../lib/api';
 import type { AuthUser, AuthResponse } from '@org/shared-types';
 
 const AUTH_STORAGE_KEY = 'epicure_auth';
@@ -19,13 +19,29 @@ interface AuthContextValue extends AuthState {
 
 const AuthContext = createContext<AuthContextValue | null>(null);
 
+function isValidAuthState(val: unknown): val is AuthState {
+  if (!val || typeof val !== 'object') return false;
+  const v = val as Record<string, unknown>;
+  if (v['user'] === null) return typeof v['token'] === 'string' || v['token'] === null;
+  const u = v['user'];
+  if (!u || typeof u !== 'object') return false;
+  const user = u as Record<string, unknown>;
+  return typeof user['id'] === 'number' && typeof user['name'] === 'string' && typeof user['email'] === 'string';
+}
+
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [state, setState] = useState<AuthState>(() => {
     if (typeof window === 'undefined') return { user: null, token: null };
     const stored = localStorage.getItem(AUTH_STORAGE_KEY);
     if (!stored) return { user: null, token: null };
     try {
-      return JSON.parse(stored) as AuthState;
+      const parsed: unknown = JSON.parse(stored);
+      if (isValidAuthState(parsed)) {
+        setAuthToken(parsed.token);
+        return parsed;
+      }
+      localStorage.removeItem(AUTH_STORAGE_KEY);
+      return { user: null, token: null };
     } catch {
       localStorage.removeItem(AUTH_STORAGE_KEY);
       return { user: null, token: null };
@@ -33,6 +49,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   });
 
   function persist(next: AuthState) {
+    setAuthToken(next.token);
     setState(next);
     localStorage.setItem(AUTH_STORAGE_KEY, JSON.stringify(next));
   }
@@ -48,6 +65,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }
 
   function logout(): void {
+    setAuthToken(null);
     setState({ user: null, token: null });
     localStorage.removeItem(AUTH_STORAGE_KEY);
   }
