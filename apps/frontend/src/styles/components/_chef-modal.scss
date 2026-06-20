@@ -6,6 +6,7 @@
   @extend %backdrop;
   background: $modal-overlay;
   z-index: $z-panel-backdrop;
+  bottom: 6rem; // Mobile: leave footer strip visible
 }
 
 // Desktop X — hidden on mobile
@@ -20,10 +21,10 @@
   top: $nav-height-mobile;
   left: 0;
   right: 0;
-  bottom: 0;
+  bottom: 10rem;
   background: $white;
   z-index: $z-panel;
-  overflow-y: auto;
+  overflow: hidden;
   display: flex;
   flex-direction: column;
 
@@ -36,6 +37,7 @@
     cursor: pointer;
     padding: 0.25rem;
     z-index: 1;
+    img { filter: brightness(0) invert(1) drop-shadow(0 0 3px rgba(0, 0, 0, 0.7)); }
     &:hover { opacity: 0.7; }
   }
 
@@ -50,7 +52,7 @@
     width: 100%;
     height: 100%;
     object-fit: cover;
-    object-position: center top;
+    object-position: center 20%;
     display: block;
     filter: grayscale(100%);
   }
@@ -81,7 +83,7 @@
     line-height: 1.65;
     margin: 0;
     display: -webkit-box;
-    -webkit-line-clamp: 3;
+    -webkit-line-clamp: 6;
     -webkit-box-orient: vertical;
     overflow: hidden;
   }
@@ -180,6 +182,7 @@
     border-radius: 2px;
   }
 
+  .epicure-chef-modal__backdrop { bottom: 0; }
   .epicure-chef-modal__close-mobile { display: none; }
 
   .epicure-chef-modal__bio {
