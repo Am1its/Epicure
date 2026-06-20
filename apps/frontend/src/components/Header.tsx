@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useRef, useCallback } from 'react';
+import { useState, useRef, useCallback, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { NavDrawer } from './NavDrawer';
@@ -32,6 +32,8 @@ export default function Header({ brandName, logoUrl, navLinks }: HeaderProps) {
   const [searchQuery, setSearchQuery] = useState('');
   const { totalItems } = useCart();
   const { user } = useAuth();
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
   const userButtonRef = useRef<HTMLButtonElement>(null);
   const searchButtonRef = useRef<HTMLButtonElement>(null);
   const searchInlineRef = useRef<HTMLDivElement>(null);
@@ -144,21 +146,6 @@ export default function Header({ brandName, logoUrl, navLinks }: HeaderProps) {
                         ))}
                       </div>
                     )}
-                    {searchResults.chefs.length > 0 && (
-                      <div className="epicure-nav__search-group">
-                        <span className="epicure-nav__search-label">{TEXT.home.searchResultsChefs}</span>
-                        {searchResults.chefs.map(c => (
-                          <Link
-                            key={c.id}
-                            href="/chefs"
-                            className="epicure-nav__search-item"
-                            onClick={() => { dispatchChefHighlight(c.id); setSearchQuery(''); setActivePanel('none'); }}
-                          >
-                            {c.name}
-                          </Link>
-                        ))}
-                      </div>
-                    )}
                     {searchResults.cuisines.length > 0 && (
                       <div className="epicure-nav__search-group">
                         <span className="epicure-nav__search-label">{TEXT.home.searchResultsCuisines}</span>
@@ -170,6 +157,21 @@ export default function Header({ brandName, logoUrl, navLinks }: HeaderProps) {
                             onClick={() => { dispatchCuisineFilter([c.label]); setSearchQuery(''); setActivePanel('none'); }}
                           >
                             {c.label}
+                          </Link>
+                        ))}
+                      </div>
+                    )}
+                    {searchResults.chefs.length > 0 && (
+                      <div className="epicure-nav__search-group">
+                        <span className="epicure-nav__search-label">{TEXT.home.searchResultsChefs}</span>
+                        {searchResults.chefs.map(c => (
+                          <Link
+                            key={c.id}
+                            href="/chefs"
+                            className="epicure-nav__search-item"
+                            onClick={() => { dispatchChefHighlight(c.id); setSearchQuery(''); setActivePanel('none'); }}
+                          >
+                            {c.name}
                           </Link>
                         ))}
                       </div>
@@ -186,7 +188,7 @@ export default function Header({ brandName, logoUrl, navLinks }: HeaderProps) {
             <button ref={userButtonRef} aria-label={TEXT.nav.accountAriaLabel} onClick={handleUserIconClick}>
               <span className="epicure-nav__user-wrap">
                 <img src="/icons/user.svg" alt="" aria-hidden="true" width={22} height={22} />
-                {user && <span className="epicure-nav__user-dot" aria-hidden="true" />}
+                {mounted && user && <span className="epicure-nav__user-dot" aria-hidden="true" />}
               </span>
             </button>
 

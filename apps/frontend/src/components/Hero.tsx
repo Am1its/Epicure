@@ -54,22 +54,22 @@ export function Hero() {
                   ))}
                 </div>
               )}
-              {results.chefs.length > 0 && (
-                <div className="epicure-hero__results-group">
-                  <span className="epicure-hero__results-label">{TEXT.home.searchResultsChefs}</span>
-                  {results.chefs.map(c => (
-                    <Link key={c.id} href="/chefs" className="epicure-hero__results-item" onClick={() => { dispatchChefHighlight(c.id); setQuery(''); }}>
-                      {c.name}
-                    </Link>
-                  ))}
-                </div>
-              )}
               {results.cuisines.length > 0 && (
                 <div className="epicure-hero__results-group">
                   <span className="epicure-hero__results-label">{TEXT.home.searchResultsCuisines}</span>
                   {results.cuisines.map(c => (
                     <Link key={c.label} href="/restaurants" className="epicure-hero__results-item" onClick={() => { dispatchCuisineFilter([c.label]); setQuery(''); }}>
                       {c.label}
+                    </Link>
+                  ))}
+                </div>
+              )}
+              {results.chefs.length > 0 && (
+                <div className="epicure-hero__results-group">
+                  <span className="epicure-hero__results-label">{TEXT.home.searchResultsChefs}</span>
+                  {results.chefs.map(c => (
+                    <Link key={c.id} href="/chefs" className="epicure-hero__results-item" onClick={() => { dispatchChefHighlight(c.id); setQuery(''); }}>
+                      {c.name}
                     </Link>
                   ))}
                 </div>
