@@ -22,7 +22,7 @@ export default async function RootLayout({
   ).catch(() => null);
 
   return (
-    <html lang="en">
+    <html lang="en" data-scroll-behavior="smooth">
       <body>
         <AuthProvider>
           <CartProvider>
