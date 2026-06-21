@@ -25,6 +25,7 @@ export function ChefsGrid() {
       if (!isNaN(id)) setHighlightId(id);
     }
     function onChefHighlight(e: Event) {
+      sessionStorage.removeItem(PENDING_CHEF_KEY);
       setHighlightId((e as CustomEvent<number>).detail);
     }
     window.addEventListener(CHEF_HIGHLIGHT_EVENT, onChefHighlight);
