@@ -1,6 +1,6 @@
 'use client';
 
-import { createContext, useContext, useState, useEffect, type ReactNode } from 'react';
+import { createContext, useContext, useState, useEffect, useRef, type ReactNode } from 'react';
 import { postApi, setAuthToken, setOnUnauthorized } from '../lib/api';
 import type { AuthUser, AuthResponse } from '@org/shared-types';
 
@@ -71,8 +71,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     localStorage.removeItem(AUTH_STORAGE_KEY);
   }
 
+  const logoutRef = useRef(logout);
+  useEffect(() => { logoutRef.current = logout; });
+
   useEffect(() => {
-    setOnUnauthorized(logout);
+    setOnUnauthorized(() => logoutRef.current());
     return () => setOnUnauthorized(null);
   }, []);
 

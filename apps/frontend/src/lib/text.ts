@@ -144,6 +144,7 @@ export const TEXT = {
     priceFilter: 'Price Range',
     distanceFilter: 'Distance',
     distanceMyLocation: 'My location',
+    distanceLocationDenied: 'Enable location access in browser settings to use this filter',
     ratingFilter: 'Rating',
     cuisineFilter: 'Cuisine',
     cuisineBannerPrefix: 'Showing:',
