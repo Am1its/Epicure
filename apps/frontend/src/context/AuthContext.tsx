@@ -1,6 +1,6 @@
 'use client';
 
-import { createContext, useContext, useState, type ReactNode } from 'react';
+import { createContext, useContext, useState, useEffect, type ReactNode } from 'react';
 import { postApi, setAuthToken, setOnUnauthorized } from '../lib/api';
 import type { AuthUser, AuthResponse } from '@org/shared-types';
 
