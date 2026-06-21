@@ -6,6 +6,9 @@ export const STRAPI_URL = process.env['NEXT_PUBLIC_STRAPI_URL'] ?? 'http://local
 let authToken: string | null = null;
 export function setAuthToken(token: string | null): void { authToken = token; }
 
+let onUnauthorized: (() => void) | null = null;
+export function setOnUnauthorized(cb: (() => void) | null): void { onUnauthorized = cb; }
+
 function authHeaders(): Record<string, string> {
   return authToken ? { Authorization: `Bearer ${authToken}` } : {};
 }
@@ -29,14 +32,20 @@ export async function fetchApi<T>(path: string, init?: RequestInit): Promise<T> 
     ...init,
     headers: { ...authHeaders(), ...(init?.headers as Record<string, string> ?? {}) },
   });
-  if (!res.ok) throw new Error(await extractErrorMessage(res, path));
+  if (!res.ok) {
+    if (res.status === 401) onUnauthorized?.();
+    throw new Error(await extractErrorMessage(res, path));
+  }
   return res.json();
 }
 
 export async function fetchSearch(q: string): Promise<SearchResults> {
   const path = `/api/search?q=${encodeURIComponent(q)}`;
   const res = await fetch(`${BACKEND_URL}${path}`, { cache: 'no-store', headers: authHeaders() });
-  if (!res.ok) throw new Error(await extractErrorMessage(res, path));
+  if (!res.ok) {
+    if (res.status === 401) onUnauthorized?.();
+    throw new Error(await extractErrorMessage(res, path));
+  }
   return res.json();
 }
 
@@ -48,7 +57,10 @@ export async function fetchRestaurantsWithDistances(lat: number, lng: number): P
     body: JSON.stringify({ lat, lng }),
     cache: 'no-store',
   });
-  if (!res.ok) throw new Error(await extractErrorMessage(res, path));
+  if (!res.ok) {
+    if (res.status === 401) onUnauthorized?.();
+    throw new Error(await extractErrorMessage(res, path));
+  }
   return res.json();
 }
 

@@ -1,7 +1,7 @@
 'use client';
 
 import { createContext, useContext, useState, type ReactNode } from 'react';
-import { postApi, setAuthToken } from '../lib/api';
+import { postApi, setAuthToken, setOnUnauthorized } from '../lib/api';
 import type { AuthUser, AuthResponse } from '@org/shared-types';
 
 const AUTH_STORAGE_KEY = 'epicure_auth';
@@ -70,6 +70,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setState({ user: null, token: null });
     localStorage.removeItem(AUTH_STORAGE_KEY);
   }
+
+  useEffect(() => {
+    setOnUnauthorized(logout);
+    return () => setOnUnauthorized(null);
+  }, []);
 
   return (
     <AuthContext.Provider value={{ ...state, login, register, logout }}>
