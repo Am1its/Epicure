@@ -136,6 +136,9 @@
     flex-direction: column;
     gap: 0.75rem;
     z-index: $z-dropdown;
+    animation: epicure-results-enter $duration-fast $ease-out;
+
+    @include reduced-motion { animation: none; }
   }
 
   .epicure-nav__search-group {
