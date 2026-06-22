@@ -72,7 +72,7 @@ export function ChefsGrid() {
 
   if (loading) {
     return (
-      <div className="epicure-chef-grid">
+      <div ref={gridRef} className="epicure-chef-grid">
         {Array.from({ length: 6 }).map((_, i) => (
           <div key={i} className="epicure-chef-card-skeleton">
             <div className="epicure-chef-card-skeleton__image" />
