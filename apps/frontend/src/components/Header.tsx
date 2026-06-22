@@ -75,7 +75,12 @@ export default function Header({ brandName, logoUrl, navLinks }: HeaderProps) {
           </button>
 
           {/* Logo — centered on mobile, left on desktop */}
-          <Link href="/" className="epicure-nav__logo" aria-label={TEXT.nav.logoAriaLabel}>
+          <Link
+            href="/"
+            className="epicure-nav__logo"
+            aria-label={TEXT.nav.logoAriaLabel}
+            onClick={() => { if (pathname === '/') window.scrollTo({ top: 0, behavior: 'smooth' }); }}
+          >
             <img
               src={logoUrl ? strapiImageUrl(logoUrl) : '/icons/logo.svg'}
               alt=""

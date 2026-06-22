@@ -25,6 +25,7 @@ export function ChefsGrid() {
       if (!isNaN(id)) setHighlightId(id);
     }
     function onChefHighlight(e: Event) {
+      sessionStorage.removeItem(PENDING_CHEF_KEY);
       setHighlightId((e as CustomEvent<number>).detail);
     }
     window.addEventListener(CHEF_HIGHLIGHT_EVENT, onChefHighlight);
@@ -40,14 +41,20 @@ export function ChefsGrid() {
 
   useEffect(() => {
     if (!highlightId || chefs.length === 0) return;
-    const el = document.getElementById(`chef-${highlightId}`);
-    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'center' });
-    const timer = setTimeout(() => {
+    // Switch to 'all' so the chef card is guaranteed to be in the DOM
+    setActiveTab('all');
+    let modalTimer: ReturnType<typeof setTimeout>;
+    const scrollTimer = setTimeout(() => {
+      const el = document.getElementById(`chef-${highlightId}`);
+      if (el) el.scrollIntoView({ behavior: 'smooth', block: 'center' });
       const chef = chefs.find(c => c.id === highlightId);
-      if (chef) setSelectedChef(chef);
-      setHighlightId(null);
-    }, 800);
-    return () => clearTimeout(timer);
+      // Open modal only after scroll animation finishes
+      modalTimer = setTimeout(() => {
+        if (chef) setSelectedChef(chef);
+        setHighlightId(null);
+      }, 500);
+    }, 1000);
+    return () => { clearTimeout(scrollTimer); clearTimeout(modalTimer); };
   }, [highlightId, chefs]);
 
   const filtered = useMemo(() => {

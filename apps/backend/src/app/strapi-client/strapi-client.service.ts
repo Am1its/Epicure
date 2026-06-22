@@ -17,13 +17,16 @@ interface StrapiSingleResponse<T> {
 
 @Injectable()
 export class StrapiClientService {
-  async get<T>(path: string): Promise<T[]> {
-    let res: Response;
+  private async request(path: string, init?: RequestInit): Promise<Response> {
     try {
-      res = await fetch(`${STRAPI_URL}${path}`);
+      return await fetch(`${STRAPI_URL}${path}`, init);
     } catch {
       throw new ServiceUnavailableException('Strapi is unreachable');
     }
+  }
+
+  async get<T>(path: string): Promise<T[]> {
+    const res = await this.request(path);
     if (!res.ok) {
       throw new ServiceUnavailableException(`Strapi returned ${res.status}`);
     }
@@ -37,12 +40,7 @@ export class StrapiClientService {
   }
 
   async getById<T>(path: string): Promise<T> {
-    let res: Response;
-    try {
-      res = await fetch(`${STRAPI_URL}${path}`);
-    } catch {
-      throw new ServiceUnavailableException('Strapi is unreachable');
-    }
+    const res = await this.request(path);
     if (res.status === 404) {
       throw new NotFoundException('Resource not found');
     }
@@ -59,16 +57,11 @@ export class StrapiClientService {
   }
 
   async post<T>(path: string, body: Record<string, unknown>): Promise<T> {
-    let res: Response;
-    try {
-      res = await fetch(`${STRAPI_URL}${path}`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(body),
-      });
-    } catch {
-      throw new ServiceUnavailableException('Strapi is unreachable');
-    }
+    const res = await this.request(path, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body),
+    });
     if (!res.ok) {
       let message = `Strapi returned ${res.status}`;
       try {

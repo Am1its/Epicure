@@ -13,7 +13,7 @@ interface CartState {
 
 interface CartContextValue extends CartState {
   addToCart: (item: CartItem) => void;
-  removeFromCart: (dishId: number) => void;
+  removeFromCart: (item: CartItem) => void;
   clearCart: () => void;
   setComment: (comment: string) => void;
   conflictsWithCart: (restaurantId: number) => boolean;
@@ -75,9 +75,9 @@ export function CartProvider({ children }: { children: ReactNode }) {
     });
   }
 
-  function removeFromCart(dishId: number) {
+  function removeFromCart(item: CartItem) {
     setState(prev => {
-      const updated = prev.cartItems.filter(c => c.dish.id !== dishId);
+      const updated = prev.cartItems.filter(c => !itemsMatch(c, item));
       return {
         ...prev,
         cartItems: updated,

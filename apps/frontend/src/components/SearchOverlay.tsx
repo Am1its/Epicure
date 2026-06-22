@@ -78,21 +78,6 @@ export function SearchOverlay({ onClose }: SearchOverlayProps) {
                   ))}
                 </div>
               )}
-              {results.chefs.length > 0 && (
-                <div className="epicure-search-overlay__results-group">
-                  <span className="epicure-search-overlay__results-label">{TEXT.home.searchResultsChefs}</span>
-                  {results.chefs.map(c => (
-                    <Link
-                      key={c.id}
-                      href="/chefs"
-                      className="epicure-search-overlay__results-item"
-                      onClick={() => { dispatchChefHighlight(c.id); onClose(); }}
-                    >
-                      {c.name}
-                    </Link>
-                  ))}
-                </div>
-              )}
               {results.cuisines.length > 0 && (
                 <div className="epicure-search-overlay__results-group">
                   <span className="epicure-search-overlay__results-label">{TEXT.home.searchResultsCuisines}</span>
@@ -104,6 +89,21 @@ export function SearchOverlay({ onClose }: SearchOverlayProps) {
                       onClick={() => { dispatchCuisineFilter([c.label]); onClose(); }}
                     >
                       {c.label}
+                    </Link>
+                  ))}
+                </div>
+              )}
+              {results.chefs.length > 0 && (
+                <div className="epicure-search-overlay__results-group">
+                  <span className="epicure-search-overlay__results-label">{TEXT.home.searchResultsChefs}</span>
+                  {results.chefs.map(c => (
+                    <Link
+                      key={c.id}
+                      href="/chefs"
+                      className="epicure-search-overlay__results-item"
+                      onClick={() => { dispatchChefHighlight(c.id); onClose(); }}
+                    >
+                      {c.name}
                     </Link>
                   ))}
                 </div>

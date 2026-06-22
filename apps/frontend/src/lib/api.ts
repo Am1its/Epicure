@@ -71,7 +71,10 @@ export async function postApi<T>(path: string, body: Record<string, unknown>): P
     body: JSON.stringify(body),
     cache: 'no-store',
   });
-  if (!res.ok) throw new Error(await extractErrorMessage(res, path));
+  if (!res.ok) {
+    if (res.status === 401) onUnauthorized?.();
+    throw new Error(await extractErrorMessage(res, path));
+  }
   return res.json() as Promise<T>;
 }
 

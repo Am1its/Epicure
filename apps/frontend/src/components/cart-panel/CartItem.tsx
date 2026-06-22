@@ -40,7 +40,7 @@ export function CartItem({ item }: CartItemProps) {
       <button
         type="button"
         className="epicure-cart-item__delete"
-        onClick={() => removeFromCart(item.dish.id)}
+        onClick={() => removeFromCart(item)}
         aria-label={TEXT.cart.deleteItemAriaLabel}
       >
         <img src="/icons/trash.svg" alt="" aria-hidden="true" width={18} height={18} />

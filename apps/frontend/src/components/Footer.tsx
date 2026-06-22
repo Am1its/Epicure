@@ -16,7 +16,7 @@ export default function Footer({ footerLinks }: FooterProps) {
     <footer className="epicure-footer">
       <nav className="epicure-footer__links" aria-label={TEXT.footer.navAriaLabel}>
         {resolvedLinks.map(link => (
-          <a key={link.url} href={link.url}>{link.label}</a>
+          <a key={`${link.url}-${link.label}`} href={link.url}>{link.label}</a>
         ))}
       </nav>
     </footer>

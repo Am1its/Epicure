@@ -4,13 +4,12 @@ import { TEXT } from '../lib/text';
 
 interface DistanceFilterProps {
   value: number;
+  isDirty: boolean;
   onChange: (km: number) => void;
   onClear: () => void;
 }
 
-export function DistanceFilter({ value, onChange, onClear }: DistanceFilterProps) {
-  const isDirty = value !== 20;
-
+export function DistanceFilter({ value, isDirty, onChange, onClear }: DistanceFilterProps) {
   return (
     <>
       <p className="epicure-filter-dropdown__title">{TEXT.restaurantsGrid.distanceFilter}</p>

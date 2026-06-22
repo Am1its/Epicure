@@ -76,6 +76,27 @@
     color: $black-primary;
   }
 
+  &__denied {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 0.25rem;
+    text-align: center;
+
+    p {
+      font-size: 0.8125rem;
+      color: $black-primary;
+      opacity: 0.6;
+      line-height: 1.5;
+      margin: 0;
+    }
+  }
+
+  &__denied-icon {
+    opacity: 0.5;
+  }
+
   &__sublabel {
     font-size: 0.8125rem;
     text-align: center;

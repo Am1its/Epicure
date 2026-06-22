@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useMemo, type ReactNode } from 'react';
+import { useState, useEffect, useRef, useMemo, type ReactNode } from 'react';
 import dynamic from 'next/dynamic';
 import type { Restaurant } from '@org/shared-types';
 import { RestaurantCard } from '@org/ui-components';
@@ -10,9 +10,9 @@ import { DistanceFilter } from './DistanceFilter';
 import { RatingFilter } from './RatingFilter';
 import { CuisineFilter } from './CuisineFilter';
 import { TEXT } from '../lib/text';
-import { fetchRestaurantsWithDistances, strapiImageUrl } from '../lib/api';
+import { fetchApi, fetchRestaurantsWithDistances, strapiImageUrl } from '../lib/api';
 import { CUISINE_FILTER_EVENT, PENDING_CUISINE_KEY } from '../lib/events';
-import { useUserLocation } from '../hooks/useUserLocation';
+import { useLocationPermission } from '../hooks/useLocationPermission';
 import { isOpenNow } from '../lib/openingHours';
 
 const MapView = dynamic(() => import('./MapView').then(m => m.MapView), { ssr: false });
@@ -30,16 +30,57 @@ interface FilterConfig {
 }
 
 export function RestaurantsGrid() {
-  const { coords, loading: locationLoading } = useUserLocation();
+  const { status: locationStatus, coords, requestLocation } = useLocationPermission();
   const [restaurants, setRestaurants] = useState<Restaurant[]>([]);
   const [fetchLoading, setFetchLoading] = useState(true);
+  const pendingDistanceOpen = useRef(false);
+  const distancesLoaded = useRef(false);
 
   const [activeTab, setActiveTab] = useState<Tab>('all');
   const [selectedRatings, setSelectedRatings] = useState<Set<number>>(new Set());
   const [priceRange, setPriceRange] = useState<[number, number] | null>(null);
-  const [distanceKm, setDistanceKm] = useState<number>(20);
+  const [distanceKm, setDistanceKm] = useState<number | null>(null);
   const [selectedCuisines, setSelectedCuisines] = useState<Set<string>>(new Set());
   const [openFilterId, setOpenFilterId] = useState<string | null>(null);
+
+  // Fetch restaurants immediately — no location dependency.
+  // Guard: skip setRestaurants if distances already arrived (prevents race overwrite).
+  useEffect(() => {
+    fetchApi<Restaurant[]>('/api/restaurants')
+      .then(data => { if (!distancesLoaded.current) setRestaurants(data); })
+      .catch(err => { console.error('Failed to fetch restaurants:', err); setRestaurants([]); })
+      .finally(() => setFetchLoading(false));
+  }, []);
+
+  // Enrich with distances whenever coords become available — merge into existing order, don't replace
+  useEffect(() => {
+    if (!coords) return;
+    fetchRestaurantsWithDistances(coords.lat, coords.lng)
+      .then(data => {
+        distancesLoaded.current = true;
+        const distanceById = new Map(data.map(r => [r.id, r.distance]));
+        setRestaurants(prev => prev.map(r => ({ ...r, distance: distanceById.get(r.id) })));
+      })
+      .catch(err => console.error('Distance fetch failed:', err));
+  }, [coords]);
+
+  // Auto-open distance filter after grant or denial (so user sees the denied message without a second click)
+  useEffect(() => {
+    if ((locationStatus === 'granted' || locationStatus === 'denied') && pendingDistanceOpen.current) {
+      pendingDistanceOpen.current = false;
+      setOpenFilterId('distance');
+    }
+  }, [locationStatus]);
+
+  // Reset map tab when viewport drops below desktop breakpoint
+  useEffect(() => {
+    const mql = window.matchMedia('(max-width: 767px)');
+    function handleChange(e: MediaQueryListEvent) {
+      if (e.matches) setActiveTab(prev => prev === 'map' ? 'all' : prev);
+    }
+    mql.addEventListener('change', handleChange);
+    return () => mql.removeEventListener('change', handleChange);
+  }, []);
 
   useEffect(() => {
     const pending = sessionStorage.getItem(PENDING_CUISINE_KEY);
@@ -53,14 +94,6 @@ export function RestaurantsGrid() {
     window.addEventListener(CUISINE_FILTER_EVENT, onCuisineFilter);
     return () => window.removeEventListener(CUISINE_FILTER_EVENT, onCuisineFilter);
   }, []);
-
-  useEffect(() => {
-    if (!coords) return;
-    fetchRestaurantsWithDistances(coords.lat, coords.lng)
-      .then(setRestaurants)
-      .catch((err) => { console.error('Failed to fetch restaurants:', err); setRestaurants([]); })
-      .finally(() => setFetchLoading(false));
-  }, [coords]);
 
   const globalPrices = useMemo(() => {
     const all = restaurants.flatMap(r =>
@@ -93,7 +126,7 @@ export function RestaurantsGrid() {
       restaurants
         .filter(r => activeTab !== 'open' || isOpenNow(r.openingHours))
         .filter(r => selectedRatings.size === 0 || selectedRatings.has(r.rating))
-        .filter(r => r.distance == null || r.distance <= distanceKm)
+        .filter(r => distanceKm === null || r.distance == null || r.distance <= distanceKm)
         .filter(r => selectedCuisines.size === 0 || (r.cuisine !== undefined && selectedCuisines.has(r.cuisine)))
         .filter(r => {
           if (!priceRange) return true;
@@ -117,7 +150,7 @@ export function RestaurantsGrid() {
   function clearAllFilters() {
     setSelectedRatings(new Set());
     setPriceRange(null);
-    setDistanceKm(20);
+    setDistanceKm(null);
     setSelectedCuisines(new Set());
     setOpenFilterId(null);
     setActiveTab('all');
@@ -125,6 +158,20 @@ export function RestaurantsGrid() {
 
   function toggleFilter(id: string) {
     setOpenFilterId(prev => (prev === id ? null : id));
+  }
+
+  function handleDistanceToggle() {
+    if (locationStatus === 'denied') {
+      toggleFilter('distance');
+      return;
+    }
+    if (locationStatus === 'idle') {
+      pendingDistanceOpen.current = true;
+      requestLocation();
+      return;
+    }
+    if (locationStatus === 'requesting') return;
+    toggleFilter('distance');
   }
 
   const filterConfigs: FilterConfig[] = [
@@ -136,15 +183,6 @@ export function RestaurantsGrid() {
       onClose: () => setOpenFilterId(null),
       dropdownClassName: 'epicure-filter-dropdown--slider',
       content: <PriceFilter globalPrices={globalPrices} value={sliderValue} onChange={setPriceRange} onClear={() => setPriceRange(null)} />,
-    },
-    {
-      id: 'distance',
-      label: TEXT.restaurantsGrid.distanceFilter,
-      isOpen: openFilterId === 'distance',
-      onToggle: () => toggleFilter('distance'),
-      onClose: () => setOpenFilterId(null),
-      dropdownClassName: 'epicure-filter-dropdown--slider',
-      content: <DistanceFilter value={distanceKm} onChange={setDistanceKm} onClear={() => setDistanceKm(20)} />,
     },
     {
       id: 'rating',
@@ -175,9 +213,32 @@ export function RestaurantsGrid() {
         />
       ),
     },
+    {
+      id: 'distance',
+      label: TEXT.restaurantsGrid.distanceFilter,
+      isOpen: openFilterId === 'distance',
+      onToggle: handleDistanceToggle,
+      onClose: () => setOpenFilterId(null),
+      dropdownClassName: 'epicure-filter-dropdown--slider',
+      content: locationStatus === 'denied'
+        ? (
+          <div className="epicure-filter-dropdown__denied">
+            <img src="/icons/location.svg" alt="" aria-hidden="true" width={24} height={24} className="epicure-filter-dropdown__denied-icon" />
+            <p>{TEXT.restaurantsGrid.distanceLocationDenied}</p>
+          </div>
+        )
+        : (
+          <DistanceFilter
+            value={distanceKm ?? 20}
+            isDirty={distanceKm !== null}
+            onChange={setDistanceKm}
+            onClear={() => setDistanceKm(null)}
+          />
+        ),
+    },
   ];
 
-  if (locationLoading || fetchLoading) {
+  if (fetchLoading) {
     return (
       <div className="epicure-restaurant-grid">
         {Array.from({ length: 6 }).map((_, i) => (
