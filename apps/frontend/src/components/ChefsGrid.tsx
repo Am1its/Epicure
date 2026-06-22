@@ -5,6 +5,8 @@ import type { Chef } from '@org/shared-types';
 import { ChefCard } from '@org/ui-components';
 import { TEXT } from '../lib/text';
 import { fetchApi, strapiImageUrl } from '../lib/api';
+import { CHEF_HIGHLIGHT_EVENT, PENDING_CHEF_KEY } from '../lib/events';
+import { ChefModal } from './ChefModal';
 
 type ChefTab = (typeof TEXT.chefsGrid.tabs)[number]['id'];
 
@@ -12,6 +14,22 @@ export function ChefsGrid() {
   const [chefs, setChefs] = useState<Chef[]>([]);
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState<ChefTab>('all');
+  const [highlightId, setHighlightId] = useState<number | null>(null);
+  const [selectedChef, setSelectedChef] = useState<Chef | null>(null);
+
+  useEffect(() => {
+    const pending = sessionStorage.getItem(PENDING_CHEF_KEY);
+    if (pending) {
+      sessionStorage.removeItem(PENDING_CHEF_KEY);
+      const id = parseInt(pending, 10);
+      if (!isNaN(id)) setHighlightId(id);
+    }
+    function onChefHighlight(e: Event) {
+      setHighlightId((e as CustomEvent<number>).detail);
+    }
+    window.addEventListener(CHEF_HIGHLIGHT_EVENT, onChefHighlight);
+    return () => window.removeEventListener(CHEF_HIGHLIGHT_EVENT, onChefHighlight);
+  }, []);
 
   useEffect(() => {
     fetchApi<Chef[]>('/api/chefs')
@@ -19,6 +37,18 @@ export function ChefsGrid() {
       .catch((err) => { console.error('Failed to fetch chefs:', err); setChefs([]); })
       .finally(() => setLoading(false));
   }, []);
+
+  useEffect(() => {
+    if (!highlightId || chefs.length === 0) return;
+    const el = document.getElementById(`chef-${highlightId}`);
+    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    const timer = setTimeout(() => {
+      const chef = chefs.find(c => c.id === highlightId);
+      if (chef) setSelectedChef(chef);
+      setHighlightId(null);
+    }, 800);
+    return () => clearTimeout(timer);
+  }, [highlightId, chefs]);
 
   const filtered = useMemo(() => {
     if (activeTab === 'new') return [...chefs].sort((a, b) => b.id - a.id);
@@ -42,6 +72,9 @@ export function ChefsGrid() {
 
   return (
     <>
+      {selectedChef && (
+        <ChefModal chef={selectedChef} onClose={() => setSelectedChef(null)} />
+      )}
       <div className="epicure-page-tabs-wrap">
         <div className="epicure-page-tabs" role="tablist">
           {TEXT.chefsGrid.tabs.map(tab => (
@@ -60,7 +93,16 @@ export function ChefsGrid() {
       </div>
       <div className="epicure-chef-grid">
         {filtered.map(chef => (
-          <ChefCard key={chef.id} chef={chef} imageUrl={strapiImageUrl(chef.image?.url)} />
+          <button
+            key={chef.id}
+            id={`chef-${chef.id}`}
+            type="button"
+            className={`epicure-chef-grid__item${highlightId === chef.id ? ' epicure-chef-highlight' : ''}`}
+            onClick={() => setSelectedChef(chef)}
+            aria-label={chef.name}
+          >
+            <ChefCard chef={chef} imageUrl={strapiImageUrl(chef.image?.url)} />
+          </button>
         ))}
       </div>
     </>

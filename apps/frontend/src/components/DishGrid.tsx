@@ -47,21 +47,27 @@ export function DishGrid({ dishes, restaurantId, restaurantName }: DishGridProps
           ))}
         </div>
       </div>
-      <div id="dish-grid-panel" role="tabpanel" className="epicure-dish-grid">
-        {filtered.map(dish => (
-          <div
-            key={dish.id}
-            className="epicure-dish-grid-item"
-            role="button"
-            tabIndex={0}
-            aria-label={TEXT.dishGrid.openAriaLabel(dish.name)}
-            onClick={() => handleDishClick(dish)}
-            onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleDishClick(dish); } }}
-          >
-            <DishCard dish={dish} imageUrl={strapiImageUrl(dish.image?.url)} />
-          </div>
-        ))}
-      </div>
+      {filtered.length === 0 ? (
+        <div className="epicure-dish-grid__empty">
+          <p>{TEXT.dishGrid.nodishes}</p>
+        </div>
+      ) : (
+        <div id="dish-grid-panel" role="tabpanel" className="epicure-dish-grid">
+          {filtered.map(dish => (
+            <div
+              key={dish.id}
+              className="epicure-dish-grid-item"
+              role="button"
+              tabIndex={0}
+              aria-label={TEXT.dishGrid.openAriaLabel(dish.name)}
+              onClick={() => handleDishClick(dish)}
+              onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleDishClick(dish); } }}
+            >
+              <DishCard dish={dish} imageUrl={strapiImageUrl(dish.image?.url)} />
+            </div>
+          ))}
+        </div>
+      )}
 
       {selectedDish && (
         <DishModal

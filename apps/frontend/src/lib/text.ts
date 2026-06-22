@@ -35,6 +35,7 @@ export const TEXT = {
     addComment: 'Add A Comment',
     commentPlaceholder: 'Special requests, allergies, dietary restrictions, etc',
     orderHistory: 'ORDER HISTORY',
+    deleteItemAriaLabel: 'Remove item from cart',
   },
   signUp: {
     dialogAriaLabel: 'Sign up',
@@ -75,6 +76,7 @@ export const TEXT = {
     searchClearAriaLabel: 'Clear search',
     searchResultsRestaurants: 'Restaurants:',
     searchResultsChefs: 'Chefs:',
+    searchResultsCuisines: 'Cuisines:',
     popularTitle: 'POPULAR RESTAURANT IN EPICURE:',
     signatureDishTitle: 'SIGNATURE DISH OF:',
     iconsTitle: 'THE MEANING OF OUR ICONS:',
@@ -115,6 +117,11 @@ export const TEXT = {
     decreaseAriaLabel: 'Decrease quantity',
     increaseAriaLabel: 'Increase quantity',
   },
+  chefModal: {
+    dialogAriaLabel: 'Chef details',
+    closeAriaLabel: 'Close chef details',
+    restaurantsTitle: 'RESTAURANTS',
+  },
   deleteOrder: {
     dialogAriaLabel: 'Delete order confirmation',
     icon: '?',
@@ -138,10 +145,16 @@ export const TEXT = {
     distanceFilter: 'Distance',
     distanceMyLocation: 'My location',
     ratingFilter: 'Rating',
+    cuisineFilter: 'Cuisine',
+    cuisineBannerPrefix: 'Showing:',
+    noResults: 'No restaurants match your filters.',
+    clearAllFilters: 'Clear all filters',
+    clearLabel: 'CLEAR',
   },
   dishGrid: {
     tabs: ['Breakfast', 'Lunch', 'Dinner'] as const,
     openAriaLabel: (dishName: string) => `View ${dishName} details`,
+    nodishes: 'No dishes available for this meal time.',
   },
   chefsGrid: {
     tabs: [

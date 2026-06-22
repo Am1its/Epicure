@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useRef } from 'react';
+import { useState, useRef, useCallback, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { NavDrawer } from './NavDrawer';
@@ -16,6 +16,7 @@ import { useSearch } from '../hooks/useSearch';
 import { useClickOutside } from '../hooks/useClickOutside';
 import type { NavLink } from '@org/shared-types';
 import { strapiImageUrl } from '../lib/api';
+import { dispatchCuisineFilter, dispatchChefHighlight } from '../lib/events';
 
 type ActivePanel = 'none' | 'drawer' | 'search' | 'cart' | 'signin' | 'signup' | 'userdropdown';
 
@@ -31,32 +32,29 @@ export default function Header({ brandName, logoUrl, navLinks }: HeaderProps) {
   const [searchQuery, setSearchQuery] = useState('');
   const { totalItems } = useCart();
   const { user } = useAuth();
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
   const userButtonRef = useRef<HTMLButtonElement>(null);
   const searchButtonRef = useRef<HTMLButtonElement>(null);
   const searchInlineRef = useRef<HTMLDivElement>(null);
   const searchResults = useSearch(searchQuery);
-  const hasSearchResults = searchResults.restaurants.length > 0 || searchResults.chefs.length > 0;
+  const hasSearchResults = searchResults.restaurants.length > 0 || searchResults.chefs.length > 0 || searchResults.cuisines.length > 0;
   const resolvedNavLinks = navLinks ?? [
     { label: TEXT.shared.restaurants, url: '/restaurants' },
     { label: TEXT.shared.chefs, url: '/chefs' },
   ];
 
-  useClickOutside(
-    searchInlineRef,
-    () => {
-      if (!searchInlineRef.current?.offsetParent) return;
-      setSearchQuery('');
-      setActivePanel('none');
-    },
-    activePanel === 'search',
-    searchButtonRef,
-  );
+  const handleSearchClickOutside = useCallback(() => {
+    if (!searchInlineRef.current?.offsetParent) return;
+    setSearchQuery('');
+    setActivePanel('none');
+  }, []);
+
+  useClickOutside(searchInlineRef, handleSearchClickOutside, activePanel === 'search', searchButtonRef);
 
   function toggle(panel: Exclude<ActivePanel, 'none'>) {
-    setActivePanel(prev => {
-      if (prev === panel) { setSearchQuery(''); return 'none'; }
-      return panel;
-    });
+    setSearchQuery('');
+    setActivePanel(prev => (prev === panel ? 'none' : panel));
   }
 
   function handleUserIconClick() {
@@ -148,11 +146,33 @@ export default function Header({ brandName, logoUrl, navLinks }: HeaderProps) {
                         ))}
                       </div>
                     )}
+                    {searchResults.cuisines.length > 0 && (
+                      <div className="epicure-nav__search-group">
+                        <span className="epicure-nav__search-label">{TEXT.home.searchResultsCuisines}</span>
+                        {searchResults.cuisines.map(c => (
+                          <Link
+                            key={c.label}
+                            href="/restaurants"
+                            className="epicure-nav__search-item"
+                            onClick={() => { dispatchCuisineFilter([c.label]); setSearchQuery(''); setActivePanel('none'); }}
+                          >
+                            {c.label}
+                          </Link>
+                        ))}
+                      </div>
+                    )}
                     {searchResults.chefs.length > 0 && (
                       <div className="epicure-nav__search-group">
                         <span className="epicure-nav__search-label">{TEXT.home.searchResultsChefs}</span>
                         {searchResults.chefs.map(c => (
-                          <span key={c.id} className="epicure-nav__search-item">{c.name}</span>
+                          <Link
+                            key={c.id}
+                            href="/chefs"
+                            className="epicure-nav__search-item"
+                            onClick={() => { dispatchChefHighlight(c.id); setSearchQuery(''); setActivePanel('none'); }}
+                          >
+                            {c.name}
+                          </Link>
                         ))}
                       </div>
                     )}
@@ -168,7 +188,7 @@ export default function Header({ brandName, logoUrl, navLinks }: HeaderProps) {
             <button ref={userButtonRef} aria-label={TEXT.nav.accountAriaLabel} onClick={handleUserIconClick}>
               <span className="epicure-nav__user-wrap">
                 <img src="/icons/user.svg" alt="" aria-hidden="true" width={22} height={22} />
-                {user && <span className="epicure-nav__user-dot" aria-hidden="true" />}
+                {mounted && user && <span className="epicure-nav__user-dot" aria-hidden="true" />}
               </span>
             </button>
 

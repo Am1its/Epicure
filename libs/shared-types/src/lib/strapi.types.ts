@@ -42,6 +42,7 @@ export interface Restaurant {
   latitude?: number;
   longitude?: number;
   openingHours?: string;
+  cuisine?: string;
 }
 
 export interface CartItem {
@@ -57,6 +58,7 @@ export interface CartItem {
 export interface SearchResults {
   restaurants: { id: number; name: string }[];
   chefs: { id: number; name: string }[];
+  cuisines: { label: string }[];
 }
 
 export interface AuthUser {

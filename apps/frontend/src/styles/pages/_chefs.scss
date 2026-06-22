@@ -40,6 +40,27 @@
   }
 }
 
+.epicure-chef-highlight {
+  outline: 3px solid $gold-secondary;
+  outline-offset: 2px;
+  animation: chef-highlight-fade 2s forwards;
+}
+
+@keyframes chef-highlight-fade {
+  0%   { outline-color: $gold-secondary; }
+  100% { outline-color: transparent; }
+}
+
+.epicure-chef-grid__item {
+  display: block;
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  text-align: left;
+  width: 100%;
+}
+
 .epicure-chef-grid {
   display: grid;
   grid-template-columns: 1fr;

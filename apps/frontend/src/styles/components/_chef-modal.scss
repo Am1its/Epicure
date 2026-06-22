@@ -1,0 +1,191 @@
+@use '../setup/variables' as *;
+@use '../setup/mixins' as *;
+@use '../setup/placeholders' as *;
+
+.epicure-chef-modal__backdrop {
+  @extend %backdrop;
+  background: $modal-overlay;
+  z-index: $z-panel-backdrop;
+  bottom: 6rem; // Mobile: leave footer strip visible
+}
+
+// Desktop X — hidden on mobile
+.epicure-chef-modal__close-desktop {
+  display: none;
+}
+
+// ─── Modal panel ──────────────────────────────────────────────────────────────
+
+.epicure-chef-modal {
+  position: fixed;
+  top: $nav-height-mobile;
+  left: 0;
+  right: 0;
+  bottom: 10rem;
+  background: $white;
+  z-index: $z-panel;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+
+  &__close-mobile {
+    position: absolute;
+    top: 0.75rem;
+    right: 0.75rem;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0.25rem;
+    z-index: 1;
+    img { filter: brightness(0) invert(1) drop-shadow(0 0 3px rgba(0, 0, 0, 0.7)); }
+    &:hover { opacity: 0.7; }
+  }
+
+  &__image-wrap {
+    position: relative;
+    width: 100%;
+    height: 260px;
+    flex-shrink: 0;
+  }
+
+  &__image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center 20%;
+    display: block;
+    filter: grayscale(100%);
+  }
+
+  &__name-band {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: $card-name-overlay;
+    height: 78px;
+    display: flex;
+    align-items: center;
+    padding: 0 1.25rem;
+  }
+
+  &__name {
+    font-size: 1.125rem;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    color: $black-primary;
+  }
+
+  &__bio {
+    padding: 1rem 1.25rem 0;
+    font-size: 0.875rem;
+    color: $gray-primary;
+    line-height: 1.65;
+    margin: 0;
+    display: -webkit-box;
+    -webkit-line-clamp: 6;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  &__restaurants {
+    padding: 1rem 1.25rem 1.25rem;
+    flex-shrink: 0;
+  }
+
+  &__restaurants-title {
+    font-size: 0.75rem;
+    font-weight: 400;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: $black-primary;
+    margin: 0 0 0.75rem;
+  }
+
+  &__carousel {
+    display: flex;
+    flex-direction: row;
+    gap: 0.75rem;
+    overflow-x: auto;
+    overflow-y: hidden;
+    padding-bottom: 4px;
+    scrollbar-width: none;
+    &::-webkit-scrollbar { display: none; }
+  }
+
+  &__rest-item {
+    flex-shrink: 0;
+    width: 140px;
+    text-decoration: none;
+    color: $black-primary;
+    display: block;
+    &:hover { opacity: 0.85; }
+  }
+
+  &__rest-img {
+    width: 140px;
+    height: 96px;
+    object-fit: cover;
+    display: block;
+  }
+
+  &__rest-info {
+    background: $cream-secondary;
+    padding: 0.5rem 0.625rem;
+    min-height: 48px;
+    display: flex;
+    align-items: center;
+  }
+
+  &__rest-name {
+    font-size: 0.75rem;
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    width: 100%;
+  }
+}
+
+// ─── Desktop ──────────────────────────────────────────────────────────────────
+
+@include for-normal-layout {
+  // Desktop X: above the top-left corner of the centered modal
+  // Modal: width 500px, height 600px, centered via translate(-50%,-50%)
+  // Top edge = calc(50vh - 300px) → X sits 36px above that
+  .epicure-chef-modal__close-desktop {
+    display: block;
+    position: fixed;
+    top: calc(50vh - 336px);
+    left: calc(50% - 250px);
+    z-index: $z-panel-top;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0.25rem;
+
+    img { filter: brightness(0) invert(1); }
+    &:hover { opacity: 0.8; }
+  }
+
+  .epicure-chef-modal {
+    top: 50%;
+    left: 50%;
+    right: auto;
+    bottom: auto;
+    transform: translate(-50%, -50%);
+    width: 500px;
+    height: 600px;
+    overflow: hidden;
+    box-shadow: 0 8px 40px rgba(0, 0, 0, 0.2);
+    border-radius: 2px;
+  }
+
+  .epicure-chef-modal__backdrop { bottom: 0; }
+  .epicure-chef-modal__close-mobile { display: none; }
+
+  .epicure-chef-modal__bio {
+    -webkit-line-clamp: 5;
+  }
+}

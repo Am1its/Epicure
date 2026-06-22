@@ -1,10 +1,11 @@
 'use client';
 
-import { useState, useRef } from 'react';
+import { useState, useRef, useCallback } from 'react';
 import Link from 'next/link';
 import { TEXT } from '../lib/text';
 import { useSearch } from '../hooks/useSearch';
 import { useClickOutside } from '../hooks/useClickOutside';
+import { dispatchCuisineFilter, dispatchChefHighlight } from '../lib/events';
 
 interface SearchOverlayProps {
   onClose: () => void;
@@ -13,10 +14,11 @@ interface SearchOverlayProps {
 export function SearchOverlay({ onClose }: SearchOverlayProps) {
   const [query, setQuery] = useState('');
   const results = useSearch(query);
-  const hasResults = results.restaurants.length > 0 || results.chefs.length > 0;
-  const bodyRef = useRef<HTMLDivElement>(null);
+  const hasResults = results.restaurants.length > 0 || results.chefs.length > 0 || results.cuisines.length > 0;
+  const overlayRef = useRef<HTMLDivElement>(null);
+  const clearQuery = useCallback(() => setQuery(''), []);
 
-  useClickOutside(bodyRef, () => setQuery(''), query.length > 0);
+  useClickOutside(overlayRef, clearQuery, query.length > 0);
 
   return (
     <>
@@ -25,7 +27,7 @@ export function SearchOverlay({ onClose }: SearchOverlayProps) {
         onClick={onClose}
         aria-hidden="true"
       />
-      <div className="epicure-search-overlay" role="dialog" aria-label={TEXT.searchOverlay.dialogAriaLabel}>
+      <div className="epicure-search-overlay" role="dialog" aria-label={TEXT.searchOverlay.dialogAriaLabel} ref={overlayRef}>
         <div className="epicure-search-overlay__header">
           <button
             className="epicure-search-overlay__close"
@@ -37,7 +39,7 @@ export function SearchOverlay({ onClose }: SearchOverlayProps) {
           <span className="epicure-search-overlay__title">{TEXT.searchOverlay.title}</span>
           <span className="epicure-search-overlay__spacer" aria-hidden="true" />
         </div>
-        <div className="epicure-search-overlay__body" ref={bodyRef}>
+        <div className="epicure-search-overlay__body">
           <div className="epicure-search-overlay__input-wrap">
             <img src="/icons/search.svg" alt="" aria-hidden="true" width={18} height={18} />
             <input
@@ -80,7 +82,29 @@ export function SearchOverlay({ onClose }: SearchOverlayProps) {
                 <div className="epicure-search-overlay__results-group">
                   <span className="epicure-search-overlay__results-label">{TEXT.home.searchResultsChefs}</span>
                   {results.chefs.map(c => (
-                    <span key={c.id} className="epicure-search-overlay__results-item">{c.name}</span>
+                    <Link
+                      key={c.id}
+                      href="/chefs"
+                      className="epicure-search-overlay__results-item"
+                      onClick={() => { dispatchChefHighlight(c.id); onClose(); }}
+                    >
+                      {c.name}
+                    </Link>
+                  ))}
+                </div>
+              )}
+              {results.cuisines.length > 0 && (
+                <div className="epicure-search-overlay__results-group">
+                  <span className="epicure-search-overlay__results-label">{TEXT.home.searchResultsCuisines}</span>
+                  {results.cuisines.map(c => (
+                    <Link
+                      key={c.label}
+                      href="/restaurants"
+                      className="epicure-search-overlay__results-item"
+                      onClick={() => { dispatchCuisineFilter([c.label]); onClose(); }}
+                    >
+                      {c.label}
+                    </Link>
                   ))}
                 </div>
               )}

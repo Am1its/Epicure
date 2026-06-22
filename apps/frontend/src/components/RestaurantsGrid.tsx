@@ -8,8 +8,10 @@ import { Filter } from './Filter';
 import { PriceFilter } from './PriceFilter';
 import { DistanceFilter } from './DistanceFilter';
 import { RatingFilter } from './RatingFilter';
+import { CuisineFilter } from './CuisineFilter';
 import { TEXT } from '../lib/text';
 import { fetchRestaurantsWithDistances, strapiImageUrl } from '../lib/api';
+import { CUISINE_FILTER_EVENT, PENDING_CUISINE_KEY } from '../lib/events';
 import { useUserLocation } from '../hooks/useUserLocation';
 import { isOpenNow } from '../lib/openingHours';
 
@@ -36,9 +38,21 @@ export function RestaurantsGrid() {
   const [selectedRatings, setSelectedRatings] = useState<Set<number>>(new Set());
   const [priceRange, setPriceRange] = useState<[number, number] | null>(null);
   const [distanceKm, setDistanceKm] = useState<number>(20);
-  const [ratingOpen, setRatingOpen] = useState(false);
-  const [priceOpen, setPriceOpen] = useState(false);
-  const [distanceOpen, setDistanceOpen] = useState(false);
+  const [selectedCuisines, setSelectedCuisines] = useState<Set<string>>(new Set());
+  const [openFilterId, setOpenFilterId] = useState<string | null>(null);
+
+  useEffect(() => {
+    const pending = sessionStorage.getItem(PENDING_CUISINE_KEY);
+    if (pending) {
+      sessionStorage.removeItem(PENDING_CUISINE_KEY);
+      try { setSelectedCuisines(new Set(JSON.parse(pending) as string[])); } catch { /* ignore */ }
+    }
+    function onCuisineFilter(e: Event) {
+      setSelectedCuisines(new Set((e as CustomEvent<string[]>).detail));
+    }
+    window.addEventListener(CUISINE_FILTER_EVENT, onCuisineFilter);
+    return () => window.removeEventListener(CUISINE_FILTER_EVENT, onCuisineFilter);
+  }, []);
 
   useEffect(() => {
     if (!coords) return;
@@ -60,6 +74,12 @@ export function RestaurantsGrid() {
 
   const sliderValue: [number, number] = priceRange ?? [globalPrices.min, globalPrices.max];
 
+  const availableCuisines = useMemo(
+    () =>
+      [...new Set(restaurants.map(r => r.cuisine).filter((c): c is string => !!c))].sort(),
+    [restaurants],
+  );
+
   const toggleRating = (r: number) => {
     setSelectedRatings(prev => {
       const next = new Set(prev);
@@ -74,6 +94,7 @@ export function RestaurantsGrid() {
         .filter(r => activeTab !== 'open' || isOpenNow(r.openingHours))
         .filter(r => selectedRatings.size === 0 || selectedRatings.has(r.rating))
         .filter(r => r.distance == null || r.distance <= distanceKm)
+        .filter(r => selectedCuisines.size === 0 || (r.cuisine !== undefined && selectedCuisines.has(r.cuisine)))
         .filter(r => {
           if (!priceRange) return true;
           const [lo, hi] = priceRange;
@@ -90,35 +111,69 @@ export function RestaurantsGrid() {
           }
           return 0;
         }),
-    [restaurants, selectedRatings, priceRange, globalPrices, activeTab, distanceKm],
+    [restaurants, selectedRatings, priceRange, globalPrices, activeTab, distanceKm, selectedCuisines],
   );
+
+  function clearAllFilters() {
+    setSelectedRatings(new Set());
+    setPriceRange(null);
+    setDistanceKm(20);
+    setSelectedCuisines(new Set());
+    setOpenFilterId(null);
+    setActiveTab('all');
+  }
+
+  function toggleFilter(id: string) {
+    setOpenFilterId(prev => (prev === id ? null : id));
+  }
 
   const filterConfigs: FilterConfig[] = [
     {
       id: 'price',
       label: TEXT.restaurantsGrid.priceFilter,
-      isOpen: priceOpen,
-      onToggle: () => { setPriceOpen(o => !o); setDistanceOpen(false); setRatingOpen(false); },
-      onClose: () => setPriceOpen(false),
+      isOpen: openFilterId === 'price',
+      onToggle: () => toggleFilter('price'),
+      onClose: () => setOpenFilterId(null),
       dropdownClassName: 'epicure-filter-dropdown--slider',
       content: <PriceFilter globalPrices={globalPrices} value={sliderValue} onChange={setPriceRange} onClear={() => setPriceRange(null)} />,
     },
     {
       id: 'distance',
       label: TEXT.restaurantsGrid.distanceFilter,
-      isOpen: distanceOpen,
-      onToggle: () => { setDistanceOpen(o => !o); setPriceOpen(false); setRatingOpen(false); },
-      onClose: () => setDistanceOpen(false),
+      isOpen: openFilterId === 'distance',
+      onToggle: () => toggleFilter('distance'),
+      onClose: () => setOpenFilterId(null),
       dropdownClassName: 'epicure-filter-dropdown--slider',
       content: <DistanceFilter value={distanceKm} onChange={setDistanceKm} onClear={() => setDistanceKm(20)} />,
     },
     {
       id: 'rating',
       label: TEXT.restaurantsGrid.ratingFilter,
-      isOpen: ratingOpen,
-      onToggle: () => { setRatingOpen(o => !o); setPriceOpen(false); setDistanceOpen(false); },
-      onClose: () => setRatingOpen(false),
+      isOpen: openFilterId === 'rating',
+      onToggle: () => toggleFilter('rating'),
+      onClose: () => setOpenFilterId(null),
       content: <RatingFilter selectedRatings={selectedRatings} onToggle={toggleRating} onClear={() => setSelectedRatings(new Set())} />,
+    },
+    {
+      id: 'cuisine',
+      label: TEXT.restaurantsGrid.cuisineFilter,
+      isOpen: openFilterId === 'cuisine',
+      onToggle: () => toggleFilter('cuisine'),
+      onClose: () => setOpenFilterId(null),
+      content: (
+        <CuisineFilter
+          availableCuisines={availableCuisines}
+          selected={selectedCuisines}
+          onToggle={c => {
+            setSelectedCuisines(prev => {
+              const next = new Set(prev);
+              if (next.has(c)) next.delete(c); else next.add(c);
+              return next;
+            });
+          }}
+          onClear={() => setSelectedCuisines(new Set())}
+        />
+      ),
     },
   ];
 
@@ -164,8 +219,28 @@ export function RestaurantsGrid() {
         ))}
       </div>
 
+      {selectedCuisines.size > 0 && (
+        <div className="epicure-cuisine-banner">
+          <span>{TEXT.restaurantsGrid.cuisineBannerPrefix} {[...selectedCuisines].join(', ')}</span>
+          <button
+            className="epicure-cuisine-banner__clear"
+            onClick={() => setSelectedCuisines(new Set())}
+            aria-label={TEXT.restaurantsGrid.clearAllFilters}
+          >
+            <img src="/icons/x.svg" alt="" aria-hidden="true" width={12} height={12} />
+          </button>
+        </div>
+      )}
+
       {activeTab === 'map' ? (
         <MapView restaurants={filtered} />
+      ) : filtered.length === 0 ? (
+        <div className="epicure-restaurant-grid__empty">
+          <p>{TEXT.restaurantsGrid.noResults}</p>
+          <button className="epicure-filter-clear-btn" onClick={clearAllFilters}>
+            {TEXT.restaurantsGrid.clearAllFilters}
+          </button>
+        </div>
       ) : (
         <div className="epicure-restaurant-grid">
           {filtered.map(restaurant => (
