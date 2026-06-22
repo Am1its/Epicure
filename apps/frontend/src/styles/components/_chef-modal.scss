@@ -13,6 +13,7 @@
   z-index: $z-panel-backdrop;
   bottom: 6rem; // Mobile: leave footer strip visible
   animation: epicure-fade-in $duration-slow $ease-out;
+  @include reduced-motion { animation: none; }
 }
 
 // Desktop X — hidden on mobile
@@ -190,6 +191,7 @@
     box-shadow: 0 8px 40px rgba(0, 0, 0, 0.2);
     border-radius: 2px;
     animation: epicure-fade-in $duration-slow $ease-out;
+    @include reduced-motion { animation: none; }
   }
 
   .epicure-chef-modal__backdrop { bottom: 0; }

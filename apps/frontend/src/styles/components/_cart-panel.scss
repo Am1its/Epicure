@@ -12,6 +12,7 @@
   background: transparent;
   z-index: $z-panel-backdrop;
   animation: epicure-fade-in $duration-base $ease-out;
+  @include reduced-motion { animation: none; }
 }
 
 .epicure-cart-panel {

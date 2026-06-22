@@ -7,6 +7,7 @@
   background: transparent;
   z-index: $z-panel-backdrop;
   animation: epicure-fade-in $duration-slow $ease-out;
+  @include reduced-motion { animation: none; }
 }
 
 .epicure-signin-modal {

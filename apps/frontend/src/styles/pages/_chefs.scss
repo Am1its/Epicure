@@ -76,6 +76,9 @@
     padding: 2rem 2rem 3rem;
   }
 
+}
+
+@include for-normal-layout {
   .epicure-chef-grid {
     .epicure-chef-grid__item {
       opacity: 0;
