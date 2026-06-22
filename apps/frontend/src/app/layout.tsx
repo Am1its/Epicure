@@ -30,6 +30,7 @@ export default async function RootLayout({
               brandName={nav?.brandName}
               logoUrl={nav?.logoUrl}
               navLinks={nav?.navLinks}
+              footerLinks={nav?.footerLinks}
             />
             {children}
             <Footer footerLinks={nav?.footerLinks} />

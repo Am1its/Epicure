@@ -24,9 +24,10 @@ interface HeaderProps {
   brandName?: string;
   logoUrl?: string | null;
   navLinks?: NavLink[];
+  footerLinks?: NavLink[];
 }
 
-export default function Header({ brandName, logoUrl, navLinks }: HeaderProps) {
+export default function Header({ brandName, logoUrl, navLinks, footerLinks }: HeaderProps) {
   const [activePanel, setActivePanel] = useState<ActivePanel>('none');
   const pathname = usePathname();
   const [searchQuery, setSearchQuery] = useState('');
@@ -221,7 +222,7 @@ export default function Header({ brandName, logoUrl, navLinks }: HeaderProps) {
         </nav>
       </header>
 
-      {activePanel === 'drawer' && <NavDrawer onClose={() => setActivePanel('none')} />}
+      {activePanel === 'drawer' && <NavDrawer onClose={() => setActivePanel('none')} navLinks={resolvedNavLinks} footerLinks={footerLinks} />}
       {activePanel === 'search' && <SearchOverlay onClose={() => setActivePanel('none')} />}
       {activePanel === 'cart' && <CartPanel onClose={() => setActivePanel('none')} />}
       {activePanel === 'signin' && (
