@@ -69,3 +69,15 @@ export interface AuthResponse {
   jwt: string;
   user: AuthUser;
 }
+
+export interface NavLink {
+  label: string;
+  url: string;
+}
+
+export interface NavigationResponse {
+  brandName: string;
+  logoUrl: string | null;
+  navLinks: NavLink[];
+  footerLinks: NavLink[];
+}

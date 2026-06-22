@@ -1,5 +1,3 @@
-import Header from '../components/Header';
-import Footer from '../components/Footer';
 import { MobileSection } from '../components/MobileSection';
 import { MobileChefSection } from '../components/MobileChefSection';
 import { MobileAppSection } from '../components/MobileAppSection';
@@ -34,7 +32,6 @@ export default async function HomePage() {
 
   return (
     <div>
-      <Header />
       <main>
         <Hero />
 
@@ -72,7 +69,6 @@ export default async function HomePage() {
         <MobileAppSection />
         <DesktopAboutSection />
       </main>
-      <Footer />
     </div>
   );
 }

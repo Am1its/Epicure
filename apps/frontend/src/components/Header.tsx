@@ -12,16 +12,45 @@ import { UserDropdown } from './UserDropdown';
 import { TEXT } from '../lib/text';
 import { useCart } from '../context/CartContext';
 import { useAuth } from '../context/AuthContext';
+import { useSearch } from '../hooks/useSearch';
+import { useClickOutside } from '../hooks/useClickOutside';
+import type { NavLink } from '@org/shared-types';
+import { strapiImageUrl } from '../lib/api';
 
 type ActivePanel = 'none' | 'drawer' | 'search' | 'cart' | 'signin' | 'signup' | 'userdropdown';
 
-export default function Header() {
+interface HeaderProps {
+  brandName?: string;
+  logoUrl?: string | null;
+  navLinks?: NavLink[];
+}
+
+export default function Header({ brandName, logoUrl, navLinks }: HeaderProps) {
   const [activePanel, setActivePanel] = useState<ActivePanel>('none');
   const pathname = usePathname();
   const [searchQuery, setSearchQuery] = useState('');
   const { totalItems } = useCart();
   const { user } = useAuth();
   const userButtonRef = useRef<HTMLButtonElement>(null);
+  const searchButtonRef = useRef<HTMLButtonElement>(null);
+  const searchInlineRef = useRef<HTMLDivElement>(null);
+  const searchResults = useSearch(searchQuery);
+  const hasSearchResults = searchResults.restaurants.length > 0 || searchResults.chefs.length > 0;
+  const resolvedNavLinks = navLinks ?? [
+    { label: TEXT.shared.restaurants, url: '/restaurants' },
+    { label: TEXT.shared.chefs, url: '/chefs' },
+  ];
+
+  useClickOutside(
+    searchInlineRef,
+    () => {
+      if (!searchInlineRef.current?.offsetParent) return;
+      setSearchQuery('');
+      setActivePanel('none');
+    },
+    activePanel === 'search',
+    searchButtonRef,
+  );
 
   function toggle(panel: Exclude<ActivePanel, 'none'>) {
     setActivePanel(prev => {
@@ -49,47 +78,42 @@ export default function Header() {
 
           {/* Logo — centered on mobile, left on desktop */}
           <Link href="/" className="epicure-nav__logo" aria-label={TEXT.nav.logoAriaLabel}>
-            <img src="/icons/logo.svg" alt="" aria-hidden="true" width={34} height={34} className="epicure-nav__logo-icon" />
-            <span>{TEXT.nav.brandName}</span>
+            <img
+              src={logoUrl ? strapiImageUrl(logoUrl) : '/icons/logo.svg'}
+              alt=""
+              aria-hidden="true"
+              width={34}
+              height={34}
+              className="epicure-nav__logo-icon"
+            />
+            <span>{brandName ?? TEXT.nav.brandName}</span>
           </Link>
 
           {/* Desktop nav links — hidden on mobile */}
           <ul className="epicure-nav__links">
-            <li>
-              <Link
-                href="/restaurants"
-                className={pathname.startsWith('/restaurants') ? 'epicure-nav__link--active' : ''}
-                onClick={(e) => {
-                  if (pathname.startsWith('/restaurants')) {
-                    e.preventDefault();
-                    window.location.href = '/restaurants';
-                  }
-                }}
-              >
-                {TEXT.shared.restaurants}
-              </Link>
-            </li>
-            <li>
-              <Link
-                href="/chefs"
-                className={pathname.startsWith('/chefs') ? 'epicure-nav__link--active' : ''}
-                onClick={(e) => {
-                  if (pathname.startsWith('/chefs')) {
-                    e.preventDefault();
-                    window.location.href = '/chefs';
-                  }
-                }}
-              >
-                {TEXT.shared.chefs}
-              </Link>
-            </li>
+            {resolvedNavLinks.map(link => (
+              <li key={link.url}>
+                <Link
+                  href={link.url}
+                  className={(link.url === '/' ? pathname === '/' : pathname.startsWith(link.url)) ? 'epicure-nav__link--active' : ''}
+                  onClick={(e) => {
+                    if (link.url === '/' ? pathname === '/' : pathname.startsWith(link.url)) {
+                      e.preventDefault();
+                      window.location.href = link.url;
+                    }
+                  }}
+                >
+                  {link.label}
+                </Link>
+              </li>
+            ))}
           </ul>
 
           {/* Action icons */}
           <div className="epicure-nav__actions">
             {/* Desktop inline search — appears to the left of the search icon */}
             {activePanel === 'search' && (
-              <div className="epicure-nav__search-inline">
+              <div className="epicure-nav__search-inline" ref={searchInlineRef}>
                 <input
                   type="text"
                   placeholder={TEXT.searchOverlay.placeholder}
@@ -107,10 +131,37 @@ export default function Header() {
                     <img src="/icons/x.svg" alt="" aria-hidden="true" width={12} height={12} />
                   </button>
                 )}
+                {searchQuery && hasSearchResults && (
+                  <div className="epicure-nav__search-results">
+                    {searchResults.restaurants.length > 0 && (
+                      <div className="epicure-nav__search-group">
+                        <span className="epicure-nav__search-label">{TEXT.home.searchResultsRestaurants}</span>
+                        {searchResults.restaurants.map(r => (
+                          <Link
+                            key={r.id}
+                            href={`/restaurants/${r.id}`}
+                            className="epicure-nav__search-item"
+                            onClick={() => { setSearchQuery(''); setActivePanel('none'); }}
+                          >
+                            {r.name}
+                          </Link>
+                        ))}
+                      </div>
+                    )}
+                    {searchResults.chefs.length > 0 && (
+                      <div className="epicure-nav__search-group">
+                        <span className="epicure-nav__search-label">{TEXT.home.searchResultsChefs}</span>
+                        {searchResults.chefs.map(c => (
+                          <span key={c.id} className="epicure-nav__search-item">{c.name}</span>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                )}
               </div>
             )}
 
-            <button aria-label={TEXT.nav.searchAriaLabel} onClick={() => toggle('search')}>
+            <button ref={searchButtonRef} aria-label={TEXT.nav.searchAriaLabel} onClick={() => toggle('search')}>
               <img src="/icons/search.svg" alt="" aria-hidden="true" width={22} height={22} />
             </button>
 

@@ -42,22 +42,22 @@ export function SignUpModal({ onClose, onSwitchToSignIn }: SignUpModalProps) {
       <button
         className="epicure-signin-modal__close-desktop"
         onClick={safeClose}
-        aria-label={TEXT.signIn.closePanelAriaLabel}
+        aria-label={TEXT.signUp.closePanelAriaLabel}
       >
         <img src="/icons/x.svg" alt="" aria-hidden="true" width={20} height={20} />
       </button>
 
       <Modal
         onClose={safeClose}
-        ariaLabel={TEXT.signIn.dialogAriaLabel}
-        closeAriaLabel={TEXT.signIn.closeAriaLabel}
+        ariaLabel={TEXT.signUp.dialogAriaLabel}
+        closeAriaLabel={TEXT.signUp.closeAriaLabel}
         backdropClassName="epicure-signin-backdrop"
         className="epicure-signin-modal"
       >
         <button
           className="epicure-signin-modal__close-mobile"
           onClick={safeClose}
-          aria-label={TEXT.signIn.closePanelAriaLabel}
+          aria-label={TEXT.signUp.closePanelAriaLabel}
         >
           <img src="/icons/x.svg" alt="" aria-hidden="true" width={20} height={20} />
         </button>

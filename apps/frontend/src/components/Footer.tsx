@@ -1,12 +1,23 @@
+import type { NavLink } from '@org/shared-types';
 import { TEXT } from '../lib/text';
 
-export default function Footer() {
+interface FooterProps {
+  footerLinks?: NavLink[];
+}
+
+export default function Footer({ footerLinks }: FooterProps) {
+  const resolvedLinks = footerLinks ?? [
+    { label: TEXT.shared.contactUs, url: '/contact' },
+    { label: TEXT.shared.termOfUse, url: '/terms' },
+    { label: TEXT.shared.privacyPolicy, url: '/privacy' },
+  ];
+
   return (
     <footer className="epicure-footer">
       <nav className="epicure-footer__links" aria-label={TEXT.footer.navAriaLabel}>
-        <a href="/contact">{TEXT.shared.contactUs}</a>
-        <a href="/terms">{TEXT.shared.termOfUse}</a>
-        <a href="/privacy">{TEXT.shared.privacyPolicy}</a>
+        {resolvedLinks.map(link => (
+          <a key={link.url} href={link.url}>{link.label}</a>
+        ))}
       </nav>
     </footer>
   );

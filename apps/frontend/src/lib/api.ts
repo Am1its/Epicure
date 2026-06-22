@@ -19,8 +19,13 @@ async function extractErrorMessage(res: Response, path: string): Promise<string>
   }
 }
 
-export async function fetchApi<T>(path: string): Promise<T> {
-  const res = await fetch(`${BACKEND_URL}${path}`, { cache: 'no-store', headers: authHeaders() });
+export async function fetchApi<T>(path: string, init?: RequestInit): Promise<T> {
+  const baseInit: RequestInit = init ? {} : { cache: 'no-store' };
+  const res = await fetch(`${BACKEND_URL}${path}`, {
+    ...baseInit,
+    ...init,
+    headers: { ...(init?.headers as Record<string, string> ?? {}), ...authHeaders() },
+  });
   if (!res.ok) throw new Error(await extractErrorMessage(res, path));
   return res.json();
 }
