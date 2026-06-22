@@ -49,16 +49,17 @@ export function ChefsGrid() {
     if (!highlightId || chefs.length === 0) return;
     // Switch to 'all' so the chef card is guaranteed to be in the DOM
     setActiveTab('all');
+    const isMobile = window.matchMedia('(max-width: 767px)').matches;
     let modalTimer: ReturnType<typeof setTimeout>;
     const scrollTimer = setTimeout(() => {
       const el = document.getElementById(`chef-${highlightId}`);
       if (el) el.scrollIntoView({ behavior: 'smooth', block: 'center' });
       const chef = chefs.find(c => c.id === highlightId);
-      // Open modal only after scroll animation finishes
+      // On mobile the chef may be far down the page — give the scroll more time
       modalTimer = setTimeout(() => {
         if (chef) setSelectedChef(chef);
         setHighlightId(null);
-      }, 500);
+      }, isMobile ? 1200 : 500);
     }, 1000);
     return () => { clearTimeout(scrollTimer); clearTimeout(modalTimer); };
   }, [highlightId, chefs]);
