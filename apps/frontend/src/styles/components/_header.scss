@@ -73,7 +73,10 @@
   }
 }
 
-.epicure-nav__search-inline { display: none; } // shown only on desktop
+.epicure-nav__search-inline {
+  display: flex;
+  align-items: center;
+}
 
 // ─── Desktop overrides (≥768px) ───────────────────────────────────────────────
 
