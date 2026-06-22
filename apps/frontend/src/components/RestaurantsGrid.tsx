@@ -241,23 +241,6 @@ export function RestaurantsGrid() {
     },
   ];
 
-  if (fetchLoading) {
-    return (
-      <div className="epicure-restaurant-grid">
-        {Array.from({ length: 6 }).map((_, i) => (
-          <div key={i} className="epicure-restaurant-card-skeleton">
-            <div className="epicure-restaurant-card-skeleton__image" />
-            <div className="epicure-restaurant-card-skeleton__info">
-              <div className="epicure-restaurant-card-skeleton__line epicure-restaurant-card-skeleton__line--name" />
-              <div className="epicure-restaurant-card-skeleton__line epicure-restaurant-card-skeleton__line--chef" />
-              <div className="epicure-restaurant-card-skeleton__line epicure-restaurant-card-skeleton__line--stars" />
-            </div>
-          </div>
-        ))}
-      </div>
-    );
-  }
-
   return (
     <>
       <div className="epicure-page-tabs-wrap">
@@ -278,40 +261,57 @@ export function RestaurantsGrid() {
         </div>
       </div>
 
-      <div className="epicure-filter-row">
-        {filterConfigs.map(({ id, content, ...props }) => (
-          <Filter key={id} {...props}>{content}</Filter>
-        ))}
-      </div>
-
-      {selectedCuisines.size > 0 && (
-        <div className="epicure-cuisine-banner">
-          <span>{TEXT.restaurantsGrid.cuisineBannerPrefix} {[...selectedCuisines].join(', ')}</span>
-          <button
-            className="epicure-cuisine-banner__clear"
-            onClick={() => setSelectedCuisines(new Set())}
-            aria-label={TEXT.restaurantsGrid.clearAllFilters}
-          >
-            <img src="/icons/x.svg" alt="" aria-hidden="true" width={12} height={12} />
-          </button>
-        </div>
-      )}
-
-      {activeTab === 'map' ? (
-        <MapView restaurants={filtered} />
-      ) : filtered.length === 0 ? (
-        <div className="epicure-restaurant-grid__empty">
-          <p>{TEXT.restaurantsGrid.noResults}</p>
-          <button className="epicure-filter-clear-btn" onClick={clearAllFilters}>
-            {TEXT.restaurantsGrid.clearAllFilters}
-          </button>
-        </div>
-      ) : (
+      {fetchLoading ? (
         <div className="epicure-restaurant-grid">
-          {filtered.map(restaurant => (
-            <RestaurantCard key={restaurant.id} restaurant={restaurant} imageUrl={strapiImageUrl(restaurant.image?.url)} />
+          {Array.from({ length: 6 }).map((_, i) => (
+            <div key={i} className="epicure-restaurant-card-skeleton">
+              <div className="epicure-restaurant-card-skeleton__image" />
+              <div className="epicure-restaurant-card-skeleton__info">
+                <div className="epicure-restaurant-card-skeleton__line epicure-restaurant-card-skeleton__line--name" />
+                <div className="epicure-restaurant-card-skeleton__line epicure-restaurant-card-skeleton__line--chef" />
+                <div className="epicure-restaurant-card-skeleton__line epicure-restaurant-card-skeleton__line--stars" />
+              </div>
+            </div>
           ))}
         </div>
+      ) : (
+        <>
+          <div className="epicure-filter-row">
+            {filterConfigs.map(({ id, content, ...props }) => (
+              <Filter key={id} {...props}>{content}</Filter>
+            ))}
+          </div>
+
+          {selectedCuisines.size > 0 && (
+            <div className="epicure-cuisine-banner">
+              <span>{TEXT.restaurantsGrid.cuisineBannerPrefix} {[...selectedCuisines].join(', ')}</span>
+              <button
+                className="epicure-cuisine-banner__clear"
+                onClick={() => setSelectedCuisines(new Set())}
+                aria-label={TEXT.restaurantsGrid.clearAllFilters}
+              >
+                <img src="/icons/x.svg" alt="" aria-hidden="true" width={12} height={12} />
+              </button>
+            </div>
+          )}
+
+          {activeTab === 'map' ? (
+            <MapView restaurants={filtered} />
+          ) : filtered.length === 0 ? (
+            <div className="epicure-restaurant-grid__empty">
+              <p>{TEXT.restaurantsGrid.noResults}</p>
+              <button className="epicure-filter-clear-btn" onClick={clearAllFilters}>
+                {TEXT.restaurantsGrid.clearAllFilters}
+              </button>
+            </div>
+          ) : (
+            <div className="epicure-restaurant-grid">
+              {filtered.map(restaurant => (
+                <RestaurantCard key={restaurant.id} restaurant={restaurant} imageUrl={strapiImageUrl(restaurant.image?.url)} />
+              ))}
+            </div>
+          )}
+        </>
       )}
     </>
   );

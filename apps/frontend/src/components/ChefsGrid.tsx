@@ -70,19 +70,6 @@ export function ChefsGrid() {
     return chefs;
   }, [chefs, activeTab]);
 
-  if (loading) {
-    return (
-      <div ref={gridRef} className="epicure-chef-grid">
-        {Array.from({ length: 6 }).map((_, i) => (
-          <div key={i} className="epicure-chef-card-skeleton">
-            <div className="epicure-chef-card-skeleton__image" />
-            <div className="epicure-chef-card-skeleton__info" />
-          </div>
-        ))}
-      </div>
-    );
-  }
-
   return (
     <>
       {selectedChef && (
@@ -105,23 +92,34 @@ export function ChefsGrid() {
           <span className="epicure-page-tabs__indicator" aria-hidden="true" />
         </div>
       </div>
-      <div
-        ref={gridRef}
-        className={`epicure-chef-grid${gridVisible ? ' epicure-chef-grid--visible' : ''}`}
-      >
-        {filtered.map(chef => (
-          <button
-            key={chef.id}
-            id={`chef-${chef.id}`}
-            type="button"
-            className={`epicure-chef-grid__item${highlightId === chef.id ? ' epicure-chef-highlight' : ''}`}
-            onClick={() => setSelectedChef(chef)}
-            aria-label={chef.name}
-          >
-            <ChefCard chef={chef} imageUrl={strapiImageUrl(chef.image?.url)} />
-          </button>
-        ))}
-      </div>
+      {loading ? (
+        <div ref={gridRef} className="epicure-chef-grid">
+          {Array.from({ length: 6 }).map((_, i) => (
+            <div key={i} className="epicure-chef-card-skeleton">
+              <div className="epicure-chef-card-skeleton__image" />
+              <div className="epicure-chef-card-skeleton__info" />
+            </div>
+          ))}
+        </div>
+      ) : (
+        <div
+          ref={gridRef}
+          className={`epicure-chef-grid${gridVisible ? ' epicure-chef-grid--visible' : ''}`}
+        >
+          {filtered.map(chef => (
+            <button
+              key={chef.id}
+              id={`chef-${chef.id}`}
+              type="button"
+              className={`epicure-chef-grid__item${highlightId === chef.id ? ' epicure-chef-highlight' : ''}`}
+              onClick={() => setSelectedChef(chef)}
+              aria-label={chef.name}
+            >
+              <ChefCard chef={chef} imageUrl={strapiImageUrl(chef.image?.url)} />
+            </button>
+          ))}
+        </div>
+      )}
     </>
   );
 }
