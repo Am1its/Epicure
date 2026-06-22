@@ -1,12 +1,13 @@
 'use client';
 
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo, useRef } from 'react';
 import type { Chef } from '@org/shared-types';
 import { ChefCard } from '@org/ui-components';
 import { TEXT } from '../lib/text';
 import { fetchApi, strapiImageUrl } from '../lib/api';
 import { CHEF_HIGHLIGHT_EVENT, PENDING_CHEF_KEY } from '../lib/events';
 import { ChefModal } from './ChefModal';
+import { useIntersectionObserver } from '../hooks/useIntersectionObserver';
 
 type ChefTab = (typeof TEXT.chefsGrid.tabs)[number]['id'];
 
@@ -16,6 +17,8 @@ export function ChefsGrid() {
   const [activeTab, setActiveTab] = useState<ChefTab>('all');
   const [highlightId, setHighlightId] = useState<number | null>(null);
   const [selectedChef, setSelectedChef] = useState<Chef | null>(null);
+  const gridRef = useRef<HTMLDivElement>(null);
+  const gridVisible = useIntersectionObserver(gridRef);
 
   useEffect(() => {
     const pending = sessionStorage.getItem(PENDING_CHEF_KEY);
@@ -98,7 +101,10 @@ export function ChefsGrid() {
           ))}
         </div>
       </div>
-      <div className="epicure-chef-grid">
+      <div
+        ref={gridRef}
+        className={`epicure-chef-grid${gridVisible ? ' epicure-chef-grid--visible' : ''}`}
+      >
         {filtered.map(chef => (
           <button
             key={chef.id}

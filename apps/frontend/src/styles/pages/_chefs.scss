@@ -75,4 +75,31 @@
     margin: 0 auto;
     padding: 2rem 2rem 3rem;
   }
+
+  .epicure-chef-grid {
+    .epicure-chef-grid__item {
+      opacity: 0;
+      transform: translateY(16px);
+      transition: opacity $duration-slow $ease-out, transform $duration-slow $ease-out;
+
+      &:nth-child(2) { transition-delay: 40ms; }
+      &:nth-child(3) { transition-delay: 80ms; }
+      &:nth-child(4) { transition-delay: 120ms; }
+      &:nth-child(5) { transition-delay: 160ms; }
+      &:nth-child(6) { transition-delay: 200ms; }
+    }
+
+    &--visible .epicure-chef-grid__item {
+      opacity: 1;
+      transform: none;
+    }
+  }
+
+  @include reduced-motion {
+    .epicure-chef-grid .epicure-chef-grid__item {
+      transition: none;
+      opacity: 1;
+      transform: none;
+    }
+  }
 }
