@@ -1,10 +1,17 @@
 @use '../setup/variables' as *;
+@use '../setup/mixins' as *;
 @use '../setup/placeholders' as *;
+
+@keyframes epicure-drawer-slide-in {
+  from { transform: translateX(-100%); }
+  to   { transform: translateX(0); }
+}
 
 .epicure-nav-drawer__backdrop {
   @extend %backdrop;
   background: transparent;
   z-index: $z-panel-backdrop;
+  animation: epicure-fade-in $duration-base $ease-out;
 }
 
 .epicure-nav-drawer {
@@ -15,6 +22,9 @@
   flex-direction: column;
   padding: 1rem 1rem 40px;
   overflow: hidden;
+  animation: epicure-drawer-slide-in $duration-base $ease-out;
+
+  @include reduced-motion { animation: none; }
 
   &__close {
     align-self: flex-start;

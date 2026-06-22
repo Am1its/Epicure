@@ -2,10 +2,16 @@
 @use '../setup/mixins' as *;
 @use '../setup/placeholders' as *;
 
+@keyframes epicure-cart-slide-down {
+  from { opacity: 0; transform: translateY(-12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
 .epicure-cart-backdrop {
   @extend %backdrop;
   background: transparent;
   z-index: $z-panel-backdrop;
+  animation: epicure-fade-in $duration-base $ease-out;
 }
 
 .epicure-cart-panel {
@@ -22,6 +28,9 @@
   box-shadow: 0 4px 16px $shadow-panel;
   max-height: calc(100vh - #{$nav-height-mobile});
   overflow: hidden;
+  animation: epicure-cart-slide-down $duration-base $ease-out;
+
+  @include reduced-motion { animation: none; }
 
   &__body {
     display: flex;

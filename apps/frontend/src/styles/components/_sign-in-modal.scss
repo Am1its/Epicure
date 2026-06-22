@@ -6,6 +6,7 @@
   @extend %backdrop;
   background: transparent;
   z-index: $z-panel-backdrop;
+  animation: epicure-fade-in $duration-slow $ease-out;
 }
 
 .epicure-signin-modal {
@@ -16,6 +17,9 @@
   flex-direction: column;
   gap: 0.75rem;
   box-shadow: inset 0 4px 8px -4px $shadow-inset;
+  animation: epicure-panel-fade-rise $duration-slow $ease-out;
+
+  @include reduced-motion { animation: none; }
 
   &__close-mobile {
     margin: -1rem -1.25rem 0;
