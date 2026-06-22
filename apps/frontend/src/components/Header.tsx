@@ -45,7 +45,8 @@ export default function Header({ brandName, logoUrl, navLinks }: HeaderProps) {
   ];
 
   const handleSearchClickOutside = useCallback(() => {
-    if (!searchInlineRef.current?.offsetParent) return;
+    // On mobile the SearchOverlay manages its own close — only act on desktop
+    if (!window.matchMedia('(min-width: 768px)').matches) return;
     setSearchQuery('');
     setActivePanel('none');
   }, []);
