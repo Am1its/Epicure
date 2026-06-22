@@ -12,12 +12,18 @@
   transition: box-shadow 200ms;
 
   &:hover { box-shadow: 0 6px 20px $shadow-subtle; }
+  &:hover &__image { transform: scale(1.04); }
+
+  @include reduced-motion {
+    &__image { transition: none; }
+  }
 
   &__image {
     width: 100%;
     aspect-ratio: 16 / 9;
     object-fit: cover;
     display: block;
+    transition: transform $duration-base $ease-out;
   }
 
   &__info {

@@ -12,6 +12,16 @@
     object-position: top center;
     display: block;
     filter: grayscale(100%);
+    transition: filter $duration-base $ease-out, transform $duration-base $ease-out;
+  }
+
+  &:hover &__image {
+    filter: grayscale(0%);
+    transform: scale(1.03);
+  }
+
+  @include reduced-motion {
+    &__image { transition: none; }
   }
 
   &__info {
