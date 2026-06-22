@@ -8,6 +8,7 @@ import { fetchApi, strapiImageUrl } from '../lib/api';
 import { CHEF_HIGHLIGHT_EVENT, PENDING_CHEF_KEY } from '../lib/events';
 import { ChefModal } from './ChefModal';
 import { useIntersectionObserver } from '../hooks/useIntersectionObserver';
+import { useTabIndicator } from '../hooks/useTabIndicator';
 
 type ChefTab = (typeof TEXT.chefsGrid.tabs)[number]['id'];
 
@@ -19,6 +20,8 @@ export function ChefsGrid() {
   const [selectedChef, setSelectedChef] = useState<Chef | null>(null);
   const gridRef = useRef<HTMLDivElement>(null);
   const gridVisible = useIntersectionObserver(gridRef);
+  const tabsRef = useRef<HTMLDivElement>(null);
+  useTabIndicator(tabsRef, activeTab);
 
   useEffect(() => {
     const pending = sessionStorage.getItem(PENDING_CHEF_KEY);
@@ -86,7 +89,7 @@ export function ChefsGrid() {
         <ChefModal chef={selectedChef} onClose={() => setSelectedChef(null)} />
       )}
       <div className="epicure-page-tabs-wrap">
-        <div className="epicure-page-tabs" role="tablist">
+        <div ref={tabsRef} className="epicure-page-tabs" role="tablist">
           {TEXT.chefsGrid.tabs.map(tab => (
             <button
               key={tab.id}
@@ -99,6 +102,7 @@ export function ChefsGrid() {
               {tab.label}
             </button>
           ))}
+          <span className="epicure-page-tabs__indicator" aria-hidden="true" />
         </div>
       </div>
       <div

@@ -13,6 +13,7 @@ import { TEXT } from '../lib/text';
 import { fetchApi, fetchRestaurantsWithDistances, strapiImageUrl } from '../lib/api';
 import { CUISINE_FILTER_EVENT, PENDING_CUISINE_KEY } from '../lib/events';
 import { useLocationPermission } from '../hooks/useLocationPermission';
+import { useTabIndicator } from '../hooks/useTabIndicator';
 import { isOpenNow } from '../lib/openingHours';
 
 const MapView = dynamic(() => import('./MapView').then(m => m.MapView), { ssr: false });
@@ -37,6 +38,8 @@ export function RestaurantsGrid() {
   const distancesLoaded = useRef(false);
 
   const [activeTab, setActiveTab] = useState<Tab>('all');
+  const tabsRef = useRef<HTMLDivElement>(null);
+  useTabIndicator(tabsRef, activeTab);
   const [selectedRatings, setSelectedRatings] = useState<Set<number>>(new Set());
   const [priceRange, setPriceRange] = useState<[number, number] | null>(null);
   const [distanceKm, setDistanceKm] = useState<number | null>(null);
@@ -258,7 +261,7 @@ export function RestaurantsGrid() {
   return (
     <>
       <div className="epicure-page-tabs-wrap">
-        <div className="epicure-page-tabs" role="tablist">
+        <div ref={tabsRef} className="epicure-page-tabs" role="tablist">
           {TEXT.restaurantsGrid.tabs.map(tab => (
             <button
               key={tab.id}
@@ -271,6 +274,7 @@ export function RestaurantsGrid() {
               {tab.label}
             </button>
           ))}
+          <span className="epicure-page-tabs__indicator" aria-hidden="true" />
         </div>
       </div>
 

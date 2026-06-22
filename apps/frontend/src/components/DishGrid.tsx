@@ -1,10 +1,11 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import type { Dish } from '@org/shared-types';
 import { DishCard } from '@org/ui-components';
 import { strapiImageUrl } from '../lib/api';
 import { TEXT } from '../lib/text';
+import { useTabIndicator } from '../hooks/useTabIndicator';
 import { DishModal } from './DishModal';
 
 type MealTime = (typeof TEXT.dishGrid.tabs)[number];
@@ -17,6 +18,8 @@ interface DishGridProps {
 
 export function DishGrid({ dishes, restaurantId, restaurantName }: DishGridProps) {
   const [activeTab, setActiveTab] = useState<MealTime>(TEXT.dishGrid.tabs[0]);
+  const tabsRef = useRef<HTMLDivElement>(null);
+  useTabIndicator(tabsRef, activeTab);
   const [selectedDish, setSelectedDish] = useState<Dish | null>(null);
   const [selectedImageUrl, setSelectedImageUrl] = useState<string>('');
 
@@ -31,7 +34,7 @@ export function DishGrid({ dishes, restaurantId, restaurantName }: DishGridProps
   return (
     <>
       <div className="epicure-detail-tabs epicure-page-tabs-wrap">
-        <div className="epicure-page-tabs" role="tablist">
+        <div ref={tabsRef} className="epicure-page-tabs" role="tablist">
           {tabs.map(tab => (
             <button
               key={tab}
@@ -45,6 +48,7 @@ export function DishGrid({ dishes, restaurantId, restaurantName }: DishGridProps
               {tab}
             </button>
           ))}
+          <span className="epicure-page-tabs__indicator" aria-hidden="true" />
         </div>
       </div>
       {filtered.length === 0 ? (

@@ -15,6 +15,7 @@
   padding: 0 1rem;
   overflow-x: auto;
   scrollbar-width: none;
+  position: relative;
   &::-webkit-scrollbar { display: none; }
 
   @include for-normal-layout {
@@ -25,6 +26,25 @@
     padding: 0 2rem;
     overflow-x: unset;
   }
+}
+
+.epicure-page-tabs__indicator {
+  display: none;
+
+  @include for-normal-layout {
+    display: block;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    height: 2px;
+    background: $gold-secondary;
+    width: var(--tab-width, 0px);
+    transform: translateX(var(--tab-offset, 0px));
+    transition: transform $duration-base $ease-out, width $duration-base $ease-out;
+    pointer-events: none;
+  }
+
+  @include reduced-motion { transition: none; }
 }
 
 .epicure-page-tab {
