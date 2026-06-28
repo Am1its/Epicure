@@ -55,7 +55,11 @@ export function CartProvider({ children }: { children: ReactNode }) {
   }, []);
 
   useEffect(() => {
-    saveCart(state);
+    const stateToSave = {
+      ...state,
+      cartItems: state.cartItems.map(({ pendingRemove: _pr, ...item }) => item),
+    };
+    saveCart(stateToSave);
   }, [state]);
 
   function addToCart(item: CartItem) {
@@ -65,7 +69,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
         return {
           ...prev,
           cartItems: prev.cartItems.map(c =>
-            itemsMatch(c, item) ? { ...c, quantity: c.quantity + item.quantity } : c
+            itemsMatch(c, item) ? { ...c, quantity: c.quantity + item.quantity, pendingRemove: false } : c
           ),
         };
       }
@@ -131,14 +135,12 @@ export function CartProvider({ children }: { children: ReactNode }) {
   }
 
   function conflictsWithCart(incomingRestaurantId: number): boolean {
-    return state.cartItems.length > 0 && state.restaurantId !== incomingRestaurantId;
+    return state.cartItems.some(c => !c.pendingRemove) && state.restaurantId !== incomingRestaurantId;
   }
 
-  const totalPrice = state.cartItems.reduce(
-    (sum, c) => sum + c.dish.price * c.quantity,
-    0
-  );
-  const totalItems = state.cartItems.reduce((sum, c) => sum + c.quantity, 0);
+  const committedItems = state.cartItems.filter(c => !c.pendingRemove);
+  const totalPrice = committedItems.reduce((sum, c) => sum + c.dish.price * c.quantity, 0);
+  const totalItems = committedItems.reduce((sum, c) => sum + c.quantity, 0);
 
   return (
     <CartContext.Provider
