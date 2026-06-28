@@ -197,7 +197,9 @@ export function RestaurantsGrid() {
     },
     {
       id: 'cuisine',
-      label: TEXT.restaurantsGrid.cuisineFilter,
+      label: selectedCuisines.size > 0
+        ? `${TEXT.restaurantsGrid.cuisineFilter} · ${selectedCuisines.size}`
+        : TEXT.restaurantsGrid.cuisineFilter,
       isOpen: openFilterId === 'cuisine',
       onToggle: () => toggleFilter('cuisine'),
       onClose: () => setOpenFilterId(null),

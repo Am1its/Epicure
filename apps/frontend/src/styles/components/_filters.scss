@@ -137,8 +137,30 @@
     &:hover { background: $hover-overlay; }
 
     &--active {
-      font-weight: 700;
+      font-weight: 600;
+      border-left: 2px solid $gold-secondary;
+      background: rgba(225, 157, 26, 0.08);
+      padding-left: calc(0.5rem - 2px);
     }
+  }
+}
+
+.epicure-price-tier-wrap {
+  flex: 1;
+}
+
+.epicure-price-tier-labels {
+  display: flex;
+  justify-content: space-between;
+  padding: 0 2px;
+  margin-top: 5px;
+
+  span {
+    font-size: 0.625rem;
+    color: $gold-secondary;
+    font-weight: 500;
+    line-height: 1;
+    opacity: 0.8;
   }
 }
 
@@ -147,7 +169,7 @@
   align-items: center;
   gap: 0.625rem;
 
-  .rc-slider { flex: 1; }
+  .rc-slider { width: 100%; }
   .rc-slider-rail { background-color: $shadow-subtle; height: 3px; }
 
   .rc-slider-track,

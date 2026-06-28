@@ -152,6 +152,8 @@ export const TEXT = {
     distanceLocationDenied: 'Enable location access in browser settings to use this filter',
     ratingFilter: 'Rating',
     cuisineFilter: 'Cuisine',
+    cuisineSelectedPrefix: '✓',
+    priceTierLabels: ['₪', '₪₪', '₪₪₪'] as const,
     cuisineBannerPrefix: 'Showing:',
     noResults: 'No restaurants match your filters.',
     clearAllFilters: 'Clear all filters',

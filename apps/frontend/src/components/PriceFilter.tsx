@@ -1,5 +1,6 @@
 import Slider from 'rc-slider';
 import 'rc-slider/assets/index.css';
+import { TEXT } from '../lib/text';
 
 interface PriceFilterProps {
   globalPrices: { min: number; max: number };
@@ -25,13 +26,20 @@ export function PriceFilter({ globalPrices, value, onChange, onClear }: PriceFil
       <p className="epicure-filter-dropdown__sublabel">₪{value[0]} – ₪{value[1]}</p>
       <div className={wrapClass}>
         <span className="epicure-filter-slider-edge">₪{globalPrices.min}</span>
-        <Slider
-          range
-          min={globalPrices.min}
-          max={globalPrices.max}
-          value={value}
-          onChange={(v) => onChange(v as [number, number])}
-        />
+        <div className="epicure-price-tier-wrap">
+          <Slider
+            range
+            min={globalPrices.min}
+            max={globalPrices.max}
+            value={value}
+            onChange={(v) => onChange(v as [number, number])}
+          />
+          <div className="epicure-price-tier-labels">
+            {TEXT.restaurantsGrid.priceTierLabels.map(label => (
+              <span key={label}>{label}</span>
+            ))}
+          </div>
+        </div>
         <span className="epicure-filter-slider-edge">₪{globalPrices.max}</span>
       </div>
       {isDirty && (
