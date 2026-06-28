@@ -44,7 +44,7 @@ export class ChefsService {
       bio: item.bio,
       chefOfTheWeek: item.chefOfTheWeek,
       chefOfTheWeekOrder: item.chefOfTheWeekOrder,
-      restaurants: item.restaurants?.map((r): ChefRestaurant => ({
+      restaurants: (item.restaurants ?? []).map((r): ChefRestaurant => ({
         id: r.id,
         name: r.name,
         image: r.image,

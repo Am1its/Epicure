@@ -21,7 +21,7 @@ export default async function HomePage() {
   const popularRestaurants = restaurants.filter(r => r.isPopular);
   const weeklyChef = chefs.find(c => c.chefOfTheWeek);
   const chefRestaurantIds = new Set(weeklyChef?.restaurants?.map(r => r.id) ?? []);
-  const chefRestaurants = weeklyChef?.restaurants?.length
+  const chefRestaurants = weeklyChef?.restaurants != null
     ? restaurants.filter(r => chefRestaurantIds.has(r.id))
     : weeklyChef
       ? restaurants.filter(r => r.chef?.id === weeklyChef.id)
