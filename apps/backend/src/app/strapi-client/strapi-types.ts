@@ -7,6 +7,7 @@ export interface StrapiChef {
   bio?: string;
   chefOfTheWeek?: boolean;
   chefOfTheWeekOrder?: number;
+  restaurants?: Omit<StrapiRestaurant, 'chef' | 'dishes' | 'createdAt'>[];
 }
 
 export interface StrapiDish {

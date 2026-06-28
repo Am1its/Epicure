@@ -5,6 +5,18 @@ export interface StrapiImage {
   height?: number;
 }
 
+export interface ChefRestaurant {
+  id: number;
+  name: string;
+  image?: StrapiImage;
+  rating: number;
+  cuisine?: string;
+  isPopular?: boolean;
+  latitude?: number;
+  longitude?: number;
+  openingHours?: string;
+}
+
 export interface Chef {
   id: number;
   name: string;
@@ -12,6 +24,7 @@ export interface Chef {
   bio?: string;
   chefOfTheWeek?: boolean;
   chefOfTheWeekOrder?: number;
+  restaurants?: ChefRestaurant[];
 }
 
 export interface Dish {

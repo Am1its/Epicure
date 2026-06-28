@@ -20,55 +20,56 @@ export default async function HomePage() {
 
   const popularRestaurants = restaurants.filter(r => r.isPopular);
   const weeklyChef = chefs.find(c => c.chefOfTheWeek);
-  const chefRestaurants = weeklyChef
-    ? restaurants.filter(r => r.chef?.id === weeklyChef.id)
-    : [];
+  const chefRestaurantIds = new Set(weeklyChef?.restaurants?.map(r => r.id) ?? []);
+  const chefRestaurants = weeklyChef?.restaurants?.length
+    ? restaurants.filter(r => chefRestaurantIds.has(r.id))
+    : weeklyChef
+      ? restaurants.filter(r => r.chef?.id === weeklyChef.id)
+      : [];
 
-  const signatureDishes = restaurants.flatMap(r =>
-    (r.dishes ?? [])
-      .filter(d => d.isSignatureDish)
-      .map(d => ({ ...d, restaurantName: r.name }))
-  );
+  const signatureDishes = [...new Map(
+    restaurants.flatMap(r =>
+      (r.dishes ?? []).filter(d => d.isSignatureDish).map(d => [d.id, { ...d, restaurantName: r.name }])
+    )
+  ).values()];
 
   return (
-    <div>
-      <main>
-        <Hero />
+    <main>
+      <Hero />
 
+      <MobileSection
+        title={TEXT.home.popularTitle}
+        linkLabel={TEXT.home.allRestaurantsLink}
+        linkHref="/restaurants"
+      >
+        {popularRestaurants.map(restaurant => (
+          <RestaurantCard key={restaurant.id} restaurant={restaurant} imageUrl={strapiImageUrl(restaurant.image?.url)} />
+        ))}
+      </MobileSection>
+
+      <DesktopPopularRestaurants restaurants={popularRestaurants} />
+
+      {signatureDishes.length > 0 && (
         <MobileSection
-          title={TEXT.home.popularTitle}
+          title={TEXT.home.signatureDishTitle}
           linkLabel={TEXT.home.allRestaurantsLink}
           linkHref="/restaurants"
         >
-          {popularRestaurants.map(restaurant => (
-            <RestaurantCard key={restaurant.id} restaurant={restaurant} imageUrl={strapiImageUrl(restaurant.image?.url)} />
+          {signatureDishes.map(dish => (
+            <DishCard key={dish.id} dish={dish} imageUrl={strapiImageUrl(dish.image?.url)} />
           ))}
         </MobileSection>
+      )}
 
-        <DesktopPopularRestaurants restaurants={popularRestaurants} />
+      <DesktopSignatureDishes dishes={signatureDishes} />
 
-        {signatureDishes.length > 0 && (
-          <MobileSection
-            title={TEXT.home.signatureDishTitle}
-            linkLabel={TEXT.home.allRestaurantsLink}
-            linkHref="/restaurants"
-          >
-            {signatureDishes.map(dish => (
-              <DishCard key={dish.id} dish={dish} imageUrl={strapiImageUrl(dish.image?.url)} />
-            ))}
-          </MobileSection>
-        )}
+      <IconsLegend />
 
-        <DesktopSignatureDishes dishes={signatureDishes} />
+      {weeklyChef && <MobileChefSection chef={weeklyChef} restaurants={chefRestaurants} />}
+      {weeklyChef && <DesktopChefSection chef={weeklyChef} restaurants={chefRestaurants} />}
 
-        <IconsLegend />
-
-        {weeklyChef && <MobileChefSection chef={weeklyChef} restaurants={chefRestaurants} />}
-        {weeklyChef && <DesktopChefSection chef={weeklyChef} restaurants={chefRestaurants} />}
-
-        <MobileAppSection />
-        <DesktopAboutSection />
-      </main>
-    </div>
+      <MobileAppSection />
+      <DesktopAboutSection />
+    </main>
   );
 }
