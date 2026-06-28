@@ -47,3 +47,10 @@ $label-muted:     rgba(0, 0, 0, 0.4);
 
 // Semantic
 $error-color:    #c0392b;
+
+// Animation
+$duration-fast:   150ms;
+$duration-base:   220ms;
+$duration-slow:   350ms;
+$ease-out:        cubic-bezier(0.25, 0, 0, 1);
+$ease-in-out:     cubic-bezier(0.4, 0, 0.2, 1);

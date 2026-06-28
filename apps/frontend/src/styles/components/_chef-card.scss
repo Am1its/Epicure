@@ -12,6 +12,16 @@
     object-position: top center;
     display: block;
     filter: grayscale(100%);
+    transition: filter $duration-base $ease-out, transform $duration-base $ease-out;
+  }
+
+  &:hover &__image {
+    filter: grayscale(0%);
+    transform: scale(1.03);
+  }
+
+  @include reduced-motion {
+    &__image { transition: none; }
   }
 
   &__info {
@@ -46,11 +56,6 @@
   }
 }
 
-@keyframes epicure-chef-skeleton-pulse {
-  0%, 100% { opacity: 1; }
-  50%       { opacity: 0.5; }
-}
-
 .epicure-chef-card-skeleton {
   position: relative;
   overflow: hidden;
@@ -58,14 +63,16 @@
   &__image {
     width: 100%;
     aspect-ratio: 335 / 337;
-    background: $border-light;
-    animation: epicure-chef-skeleton-pulse 1.5s ease-in-out infinite;
+    background: linear-gradient(90deg, $border-light 25%, rgba(255, 255, 255, 0.6) 50%, $border-light 75%);
+    background-size: 200% 100%;
+    animation: epicure-shimmer 1.5s ease-in-out infinite;
   }
 
   &__info {
     height: 78px;
-    background: rgba(0, 0, 0, 0.05);
-    animation: epicure-chef-skeleton-pulse 1.5s ease-in-out infinite;
+    background: linear-gradient(90deg, $border-light 25%, rgba(255, 255, 255, 0.6) 50%, $border-light 75%);
+    background-size: 200% 100%;
+    animation: epicure-shimmer 1.5s ease-in-out infinite;
   }
 
   @include for-normal-layout {

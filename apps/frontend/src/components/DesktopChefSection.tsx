@@ -1,7 +1,11 @@
+'use client';
+
+import { useRef } from 'react';
 import { RestaurantCard } from '@org/ui-components';
 import type { Chef, Restaurant } from '@org/shared-types';
 import { strapiImageUrl } from '../lib/api';
 import { TEXT } from '../lib/text';
+import { useIntersectionObserver } from '../hooks/useIntersectionObserver';
 
 interface Props {
   chef: Chef;
@@ -9,8 +13,14 @@ interface Props {
 }
 
 export function DesktopChefSection({ chef, restaurants }: Props) {
+  const ref = useRef<HTMLElement>(null);
+  const isVisible = useIntersectionObserver(ref);
+
   return (
-    <section className="epicure-desktop-chef">
+    <section
+      ref={ref}
+      className={`epicure-desktop-chef${isVisible ? ' epicure-desktop-chef--visible' : ''}`}
+    >
       <h2 className="epicure-desktop-chef__title">{TEXT.chefOfTheWeek.sectionTitle}</h2>
       <div className="epicure-desktop-chef__row">
         <div className="epicure-desktop-chef__photo-col">

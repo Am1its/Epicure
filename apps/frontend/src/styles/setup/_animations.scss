@@ -1,0 +1,18 @@
+// Shared keyframes — used across components via main.scss cascade
+
+@keyframes epicure-fade-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+// Used by panels: fade in + rise from below
+@keyframes epicure-panel-fade-rise {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+// Used by skeleton loaders
+@keyframes epicure-shimmer {
+  0%   { background-position: -200% 0; }
+  100% { background-position:  200% 0; }
+}

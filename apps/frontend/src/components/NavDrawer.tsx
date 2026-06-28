@@ -2,12 +2,25 @@
 
 import Link from 'next/link';
 import { TEXT } from '../lib/text';
+import type { NavLink } from '@org/shared-types';
 
 interface NavDrawerProps {
   onClose: () => void;
+  navLinks?: NavLink[];
+  footerLinks?: NavLink[];
 }
 
-export function NavDrawer({ onClose }: NavDrawerProps) {
+export function NavDrawer({ onClose, navLinks, footerLinks }: NavDrawerProps) {
+  const resolvedNavLinks = navLinks ?? [
+    { label: TEXT.shared.restaurants, url: '/restaurants' },
+    { label: TEXT.shared.chefs, url: '/chefs' },
+  ];
+  const resolvedFooterLinks = footerLinks ?? [
+    { label: TEXT.shared.contactUs, url: '/contact' },
+    { label: TEXT.shared.termOfUse, url: '/terms' },
+    { label: TEXT.shared.privacyPolicy, url: '/privacy' },
+  ];
+
   return (
     <>
       <div
@@ -25,13 +38,18 @@ export function NavDrawer({ onClose }: NavDrawerProps) {
         </button>
         <nav>
           <ul className="epicure-nav-drawer__main-links">
-            <li><Link href="/restaurants" onClick={onClose}>{TEXT.shared.restaurants}</Link></li>
-            <li><Link href="/chefs" onClick={onClose}>{TEXT.shared.chefs}</Link></li>
+            {resolvedNavLinks.map(link => (
+              <li key={link.url}>
+                <Link href={link.url} onClick={onClose}>{link.label}</Link>
+              </li>
+            ))}
           </ul>
           <ul className="epicure-nav-drawer__footer-links">
-            <li><a href="#" aria-disabled="true" onClick={e => e.preventDefault()}>{TEXT.shared.contactUs}</a></li>
-            <li><a href="#" aria-disabled="true" onClick={e => e.preventDefault()}>{TEXT.shared.termOfUse}</a></li>
-            <li><a href="#" aria-disabled="true" onClick={e => e.preventDefault()}>{TEXT.shared.privacyPolicy}</a></li>
+            {resolvedFooterLinks.map(link => (
+              <li key={link.url}>
+                <a href={link.url} onClick={onClose}>{link.label}</a>
+              </li>
+            ))}
           </ul>
         </nav>
       </div>

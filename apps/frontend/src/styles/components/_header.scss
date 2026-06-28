@@ -73,7 +73,10 @@
   }
 }
 
-.epicure-nav__search-inline { display: none; }
+.epicure-nav__search-inline {
+  display: flex;
+  align-items: center;
+}
 
 // ─── Desktop overrides (≥768px) ───────────────────────────────────────────────
 
@@ -117,10 +120,32 @@
     position: relative;
     display: flex;
     align-items: center;
-    width: 410px;
+    justify-content: flex-end;
     height: 41px;
-    border: 1px solid $border-search;
-    padding: 0 0.75rem;
+    width: 38px;
+    overflow: hidden;
+    border: 1px solid transparent;
+    transition: width $duration-base $ease-out, border-color $duration-base $ease-out;
+
+    &--open {
+      width: 300px;
+      border-color: $border-search;
+      overflow: visible;
+      padding-right: 0.25rem;
+    }
+
+    @include reduced-motion { transition: none; }
+  }
+
+  .epicure-nav__search-icon-btn {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    padding: 0.25rem 0.25rem;
+    opacity: 0.7;
+    transition: opacity 150ms;
+
+    &:hover { opacity: 1; }
   }
 
   .epicure-nav__search-results {
@@ -136,6 +161,9 @@
     flex-direction: column;
     gap: 0.75rem;
     z-index: $z-dropdown;
+    animation: epicure-results-enter $duration-fast $ease-out;
+
+    @include reduced-motion { animation: none; }
   }
 
   .epicure-nav__search-group {
@@ -169,6 +197,7 @@
     font-family: inherit;
     color: $black-primary;
     background: transparent;
+    padding-left: 0.75rem;
 
     &::placeholder { color: $gray-primary; opacity: 0.7; }
   }

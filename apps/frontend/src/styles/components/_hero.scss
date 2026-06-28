@@ -1,6 +1,16 @@
 @use '../setup/variables' as *;
 @use '../setup/mixins' as *;
 
+@keyframes epicure-hero-panel-enter {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes epicure-results-enter {
+  from { opacity: 0; transform: translateY(-4px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
 .epicure-hero {
   width: 100%;
   height: 273px;
@@ -18,6 +28,9 @@
     align-items: center;
     justify-content: center;
     gap: 18px;
+    animation: epicure-hero-panel-enter $duration-slow $ease-out 100ms both;
+
+    @include reduced-motion { animation: none; }
   }
 
   &__headline {
@@ -88,6 +101,9 @@
     display: flex;
     flex-direction: column;
     gap: 0.75rem;
+    animation: epicure-results-enter $duration-fast $ease-out;
+
+    @include reduced-motion { animation: none; }
   }
 
   &__results-group {

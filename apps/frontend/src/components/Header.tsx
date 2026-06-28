@@ -24,9 +24,10 @@ interface HeaderProps {
   brandName?: string;
   logoUrl?: string | null;
   navLinks?: NavLink[];
+  footerLinks?: NavLink[];
 }
 
-export default function Header({ brandName, logoUrl, navLinks }: HeaderProps) {
+export default function Header({ brandName, logoUrl, navLinks, footerLinks }: HeaderProps) {
   const [activePanel, setActivePanel] = useState<ActivePanel>('none');
   const pathname = usePathname();
   const [searchQuery, setSearchQuery] = useState('');
@@ -45,7 +46,8 @@ export default function Header({ brandName, logoUrl, navLinks }: HeaderProps) {
   ];
 
   const handleSearchClickOutside = useCallback(() => {
-    if (!searchInlineRef.current?.offsetParent) return;
+    // On mobile the SearchOverlay manages its own close — only act on desktop
+    if (!window.matchMedia('(min-width: 768px)').matches) return;
     setSearchQuery('');
     setActivePanel('none');
   }, []);
@@ -114,81 +116,90 @@ export default function Header({ brandName, logoUrl, navLinks }: HeaderProps) {
 
           {/* Action icons */}
           <div className="epicure-nav__actions">
-            {/* Desktop inline search — appears to the left of the search icon */}
-            {activePanel === 'search' && (
-              <div className="epicure-nav__search-inline" ref={searchInlineRef}>
-                <input
-                  type="text"
-                  placeholder={TEXT.searchOverlay.placeholder}
-                  className="epicure-nav__search-input"
-                  value={searchQuery}
-                  onChange={e => setSearchQuery(e.target.value)}
-                  autoFocus
-                />
-                {searchQuery && (
-                  <button
-                    className="epicure-nav__search-clear"
-                    onClick={() => setSearchQuery('')}
-                    aria-label={TEXT.home.searchClearAriaLabel}
-                  >
-                    <img src="/icons/x.svg" alt="" aria-hidden="true" width={12} height={12} />
-                  </button>
-                )}
-                {searchQuery && hasSearchResults && (
-                  <div className="epicure-nav__search-results">
-                    {searchResults.restaurants.length > 0 && (
-                      <div className="epicure-nav__search-group">
-                        <span className="epicure-nav__search-label">{TEXT.home.searchResultsRestaurants}</span>
-                        {searchResults.restaurants.map(r => (
-                          <Link
-                            key={r.id}
-                            href={`/restaurants/${r.id}`}
-                            className="epicure-nav__search-item"
-                            onClick={() => { setSearchQuery(''); setActivePanel('none'); }}
-                          >
-                            {r.name}
-                          </Link>
-                        ))}
-                      </div>
-                    )}
-                    {searchResults.cuisines.length > 0 && (
-                      <div className="epicure-nav__search-group">
-                        <span className="epicure-nav__search-label">{TEXT.home.searchResultsCuisines}</span>
-                        {searchResults.cuisines.map(c => (
-                          <Link
-                            key={c.label}
-                            href="/restaurants"
-                            className="epicure-nav__search-item"
-                            onClick={() => { dispatchCuisineFilter([c.label]); setSearchQuery(''); setActivePanel('none'); }}
-                          >
-                            {c.label}
-                          </Link>
-                        ))}
-                      </div>
-                    )}
-                    {searchResults.chefs.length > 0 && (
-                      <div className="epicure-nav__search-group">
-                        <span className="epicure-nav__search-label">{TEXT.home.searchResultsChefs}</span>
-                        {searchResults.chefs.map(c => (
-                          <Link
-                            key={c.id}
-                            href="/chefs"
-                            className="epicure-nav__search-item"
-                            onClick={() => { dispatchChefHighlight(c.id); setSearchQuery(''); setActivePanel('none'); }}
-                          >
-                            {c.name}
-                          </Link>
-                        ))}
-                      </div>
-                    )}
-                  </div>
-                )}
-              </div>
-            )}
-
-            <button ref={searchButtonRef} aria-label={TEXT.nav.searchAriaLabel} onClick={() => toggle('search')}>
-              <img src="/icons/search.svg" alt="" aria-hidden="true" width={22} height={22} />
-            </button>
+            {/* Desktop inline search — icon always visible on right; box expands leftward */}
+            <div
+              className={`epicure-nav__search-inline${activePanel === 'search' ? ' epicure-nav__search-inline--open' : ''}`}
+              ref={searchInlineRef}
+            >
+              {activePanel === 'search' && (
+                <>
+                  <input
+                    type="text"
+                    placeholder={TEXT.searchOverlay.placeholder}
+                    className="epicure-nav__search-input"
+                    value={searchQuery}
+                    onChange={e => setSearchQuery(e.target.value)}
+                    autoFocus
+                  />
+                  {searchQuery && (
+                    <button
+                      className="epicure-nav__search-clear"
+                      onClick={() => setSearchQuery('')}
+                      aria-label={TEXT.home.searchClearAriaLabel}
+                    >
+                      <img src="/icons/x.svg" alt="" aria-hidden="true" width={12} height={12} />
+                    </button>
+                  )}
+                  {searchQuery && hasSearchResults && (
+                    <div className="epicure-nav__search-results">
+                      {searchResults.restaurants.length > 0 && (
+                        <div className="epicure-nav__search-group">
+                          <span className="epicure-nav__search-label">{TEXT.home.searchResultsRestaurants}</span>
+                          {searchResults.restaurants.map(r => (
+                            <Link
+                              key={r.id}
+                              href={`/restaurants/${r.id}`}
+                              className="epicure-nav__search-item"
+                              onClick={() => { setSearchQuery(''); setActivePanel('none'); }}
+                            >
+                              {r.name}
+                            </Link>
+                          ))}
+                        </div>
+                      )}
+                      {searchResults.cuisines.length > 0 && (
+                        <div className="epicure-nav__search-group">
+                          <span className="epicure-nav__search-label">{TEXT.home.searchResultsCuisines}</span>
+                          {searchResults.cuisines.map(c => (
+                            <Link
+                              key={c.label}
+                              href="/restaurants"
+                              className="epicure-nav__search-item"
+                              onClick={() => { dispatchCuisineFilter([c.label]); setSearchQuery(''); setActivePanel('none'); }}
+                            >
+                              {c.label}
+                            </Link>
+                          ))}
+                        </div>
+                      )}
+                      {searchResults.chefs.length > 0 && (
+                        <div className="epicure-nav__search-group">
+                          <span className="epicure-nav__search-label">{TEXT.home.searchResultsChefs}</span>
+                          {searchResults.chefs.map(c => (
+                            <Link
+                              key={c.id}
+                              href="/chefs"
+                              className="epicure-nav__search-item"
+                              onClick={() => { dispatchChefHighlight(c.id); setSearchQuery(''); setActivePanel('none'); }}
+                            >
+                              {c.name}
+                            </Link>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  )}
+                </>
+              )}
+              <button
+                ref={searchButtonRef}
+                className="epicure-nav__search-icon-btn"
+                aria-label={TEXT.nav.searchAriaLabel}
+                onClick={() => toggle('search')}
+              >
+                <img src="/icons/search.svg" alt="" aria-hidden="true" width={22} height={22} />
+              </button>
+            </div>
 
             <button ref={userButtonRef} aria-label={TEXT.nav.accountAriaLabel} onClick={handleUserIconClick}>
               <span className="epicure-nav__user-wrap">
@@ -211,7 +222,7 @@ export default function Header({ brandName, logoUrl, navLinks }: HeaderProps) {
         </nav>
       </header>
 
-      {activePanel === 'drawer' && <NavDrawer onClose={() => setActivePanel('none')} />}
+      {activePanel === 'drawer' && <NavDrawer onClose={() => setActivePanel('none')} navLinks={resolvedNavLinks} footerLinks={footerLinks} />}
       {activePanel === 'search' && <SearchOverlay onClose={() => setActivePanel('none')} />}
       {activePanel === 'cart' && <CartPanel onClose={() => setActivePanel('none')} />}
       {activePanel === 'signin' && (

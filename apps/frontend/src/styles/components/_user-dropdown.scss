@@ -1,6 +1,11 @@
 @use '../setup/variables' as *;
 @use '../setup/mixins' as *;
 
+@keyframes epicure-dropdown-enter {
+  from { opacity: 0; transform: translateY(-6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
 .epicure-user-dropdown {
   position: fixed;
   top: $nav-height-mobile;
@@ -13,6 +18,9 @@
   box-shadow: 0 4px 16px $shadow-subtle;
   border: 1px solid $border-subtle;
   text-align: center;
+  animation: epicure-dropdown-enter $duration-fast $ease-out;
+
+  @include reduced-motion { animation: none; }
 
   &__avatar {
     width: 40px;
