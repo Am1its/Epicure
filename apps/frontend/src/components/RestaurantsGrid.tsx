@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useRef, useMemo, type ReactNode } from 'react';
+import { useState, useEffect, useRef, useMemo, useCallback, type ReactNode } from 'react';
 import dynamic from 'next/dynamic';
 import type { Restaurant } from '@org/shared-types';
 import { RestaurantCard } from '@org/ui-components';
@@ -17,6 +17,8 @@ import { useTabIndicator } from '../hooks/useTabIndicator';
 import { isOpenNow } from '../lib/openingHours';
 
 const MapView = dynamic(() => import('./MapView').then(m => m.MapView), { ssr: false });
+
+const PAGE_SIZE = 6;
 
 type Tab = (typeof TEXT.restaurantsGrid.tabs)[number]['id'];
 
@@ -45,6 +47,8 @@ export function RestaurantsGrid() {
   const [distanceKm, setDistanceKm] = useState<number | null>(null);
   const [selectedCuisines, setSelectedCuisines] = useState<Set<string>>(new Set());
   const [openFilterId, setOpenFilterId] = useState<string | null>(null);
+  const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
+  const sentinelRef = useRef<HTMLDivElement>(null);
 
   // Fetch restaurants immediately — no location dependency.
   // Guard: skip setRestaurants if distances already arrived (prevents race overwrite).
@@ -152,6 +156,24 @@ export function RestaurantsGrid() {
         }),
     [restaurants, selectedRatings, priceRange, globalPrices, activeTab, distanceKm, selectedCuisines],
   );
+
+  // Reset to first page whenever the filtered set changes
+  useEffect(() => { setVisibleCount(PAGE_SIZE); }, [filtered]);
+
+  // Load next page when sentinel scrolls into view
+  const loadMore = useCallback(() => {
+    setVisibleCount(prev => prev + PAGE_SIZE);
+  }, []);
+
+  useEffect(() => {
+    const sentinel = sentinelRef.current;
+    if (!sentinel) return;
+    const observer = new IntersectionObserver(([entry]) => {
+      if (entry.isIntersecting) loadMore();
+    }, { threshold: 0.1 });
+    observer.observe(sentinel);
+    return () => observer.disconnect();
+  }, [filtered, loadMore]);
 
   function clearAllFilters() {
     setSelectedRatings(new Set());
@@ -310,11 +332,16 @@ export function RestaurantsGrid() {
               </button>
             </div>
           ) : (
-            <div className="epicure-restaurant-grid">
-              {filtered.map(restaurant => (
-                <RestaurantCard key={restaurant.id} restaurant={restaurant} imageUrl={strapiImageUrl(restaurant.image?.url)} />
-              ))}
-            </div>
+            <>
+              <div className="epicure-restaurant-grid">
+                {filtered.slice(0, visibleCount).map(restaurant => (
+                  <RestaurantCard key={restaurant.id} restaurant={restaurant} imageUrl={strapiImageUrl(restaurant.image?.url)} />
+                ))}
+              </div>
+              {visibleCount < filtered.length && (
+                <div ref={sentinelRef} className="epicure-scroll-sentinel" aria-hidden="true" />
+              )}
+            </>
           )}
         </>
       )}

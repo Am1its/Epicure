@@ -215,3 +215,8 @@
 
   @include reduced-motion { transition: none; }
 }
+
+.epicure-scroll-sentinel {
+  height: 1px;
+  width: 100%;
+}

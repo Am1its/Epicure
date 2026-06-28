@@ -13,15 +13,17 @@ export function CuisineFilter({ availableCuisines, selected, onToggle, onClear }
   return (
     <>
       <p className="epicure-filter-dropdown__title">{TEXT.restaurantsGrid.cuisineFilter}</p>
-      {availableCuisines.map(c => (
-        <button
-          key={c}
-          className={`epicure-filter-dropdown__option${selected.has(c) ? ' epicure-filter-dropdown__option--active' : ''}`}
-          onClick={() => onToggle(c)}
-        >
-          {c}
-        </button>
-      ))}
+      <div className="epicure-filter-dropdown__options">
+        {availableCuisines.map(c => (
+          <button
+            key={c}
+            className={`epicure-filter-dropdown__option${selected.has(c) ? ' epicure-filter-dropdown__option--active' : ''}`}
+            onClick={() => onToggle(c)}
+          >
+            {c}
+          </button>
+        ))}
+      </div>
       {selected.size > 0 && (
         <button className="epicure-filter-clear-btn" onClick={onClear}>{TEXT.restaurantsGrid.clearLabel}</button>
       )}
