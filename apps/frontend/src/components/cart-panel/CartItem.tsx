@@ -9,14 +9,30 @@ interface CartItemProps {
 }
 
 export function CartItem({ item }: CartItemProps) {
-  const { removeFromCart } = useCart();
+  const { updateQuantity, confirmRemove, cancelRemove } = useCart();
 
   return (
-    <div className="epicure-cart-item">
+    <div className={`epicure-cart-item${item.pendingRemove ? ' epicure-cart-item--confirm-remove' : ''}`}>
       <img src={item.imageUrl} alt={item.dish.name} className="epicure-cart-item__image" />
       <div className="epicure-cart-item__body">
         <div className="epicure-cart-item__top">
-          <span className="epicure-cart-item__qty">{item.quantity}</span>
+          {!item.pendingRemove && (
+            <div className="epicure-cart-item__qty-row">
+              <button
+                type="button"
+                className="epicure-cart-item__qty-btn"
+                onClick={() => updateQuantity(item, -1)}
+                aria-label={TEXT.cart.decreaseQtyAriaLabel}
+              >−</button>
+              <span className="epicure-cart-item__qty-count">{item.quantity}</span>
+              <button
+                type="button"
+                className="epicure-cart-item__qty-btn"
+                onClick={() => updateQuantity(item, 1)}
+                aria-label={TEXT.cart.increaseQtyAriaLabel}
+              >+</button>
+            </div>
+          )}
           <div className="epicure-cart-item__details">
             <p className="epicure-cart-item__name">
               <span className="epicure-cart-item__qty-inline">{item.quantity}x </span>
@@ -32,19 +48,26 @@ export function CartItem({ item }: CartItemProps) {
         )}
         <div className="epicure-cart-item__price-row">
           <span className="epicure-cart-item__price-val">
-            <img src="/icons/Shekel.svg" alt="₪" aria-hidden="true" className="epicure-cart-item__shekel" />
+            <img src="/icons/Shekel.svg" alt="&#8362;" aria-hidden="true" className="epicure-cart-item__shekel" />
             {(item.dish.price * item.quantity).toFixed(2)}
           </span>
         </div>
+        {item.pendingRemove && (
+          <div className="epicure-cart-item__confirm-remove">
+            <span className="epicure-cart-item__confirm-text">{TEXT.cart.removeConfirm}</span>
+            <button
+              type="button"
+              className="epicure-cart-item__confirm-yes"
+              onClick={() => confirmRemove(item)}
+            >{TEXT.cart.removeYes}</button>
+            <button
+              type="button"
+              className="epicure-cart-item__confirm-no"
+              onClick={() => cancelRemove(item)}
+            >{TEXT.cart.removeNo}</button>
+          </div>
+        )}
       </div>
-      <button
-        type="button"
-        className="epicure-cart-item__delete"
-        onClick={() => removeFromCart(item)}
-        aria-label={TEXT.cart.deleteItemAriaLabel}
-      >
-        <img src="/icons/trash.svg" alt="" aria-hidden="true" width={18} height={18} />
-      </button>
     </div>
   );
 }

@@ -14,6 +14,9 @@ interface CartState {
 interface CartContextValue extends CartState {
   addToCart: (item: CartItem) => void;
   removeFromCart: (item: CartItem) => void;
+  updateQuantity: (item: CartItem, delta: 1 | -1) => void;
+  confirmRemove: (item: CartItem) => void;
+  cancelRemove: (item: CartItem) => void;
   clearCart: () => void;
   setComment: (comment: string) => void;
   conflictsWithCart: (restaurantId: number) => boolean;
@@ -95,6 +98,38 @@ export function CartProvider({ children }: { children: ReactNode }) {
     setState(prev => ({ ...prev, comment }));
   }
 
+  function updateQuantity(item: CartItem, delta: 1 | -1) {
+    setState(prev => ({
+      ...prev,
+      cartItems: prev.cartItems.map(c => {
+        if (!itemsMatch(c, item)) return c;
+        if (delta === -1 && c.quantity === 1) return { ...c, pendingRemove: true };
+        return { ...c, quantity: c.quantity + delta };
+      }),
+    }));
+  }
+
+  function confirmRemove(item: CartItem) {
+    setState(prev => {
+      const updated = prev.cartItems.filter(c => !itemsMatch(c, item));
+      return {
+        ...prev,
+        cartItems: updated,
+        restaurantId: updated.length ? prev.restaurantId : null,
+        restaurantName: updated.length ? prev.restaurantName : null,
+      };
+    });
+  }
+
+  function cancelRemove(item: CartItem) {
+    setState(prev => ({
+      ...prev,
+      cartItems: prev.cartItems.map(c =>
+        itemsMatch(c, item) ? { ...c, pendingRemove: false } : c
+      ),
+    }));
+  }
+
   function conflictsWithCart(incomingRestaurantId: number): boolean {
     return state.cartItems.length > 0 && state.restaurantId !== incomingRestaurantId;
   }
@@ -111,6 +146,9 @@ export function CartProvider({ children }: { children: ReactNode }) {
         ...state,
         addToCart,
         removeFromCart,
+        updateQuantity,
+        confirmRemove,
+        cancelRemove,
         clearCart,
         setComment,
         conflictsWithCart,

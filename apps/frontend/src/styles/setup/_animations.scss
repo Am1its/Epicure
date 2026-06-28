@@ -16,3 +16,11 @@
   0%   { background-position: -200% 0; }
   100% { background-position:  200% 0; }
 }
+
+// Used by cart item when quantity hits 0 (triggers remove confirmation)
+@keyframes epicure-cart-shake {
+  0%   { transform: translateX(0); }
+  25%  { transform: translateX(-4px); }
+  75%  { transform: translateX(4px); }
+  100% { transform: translateX(0); }
+}
