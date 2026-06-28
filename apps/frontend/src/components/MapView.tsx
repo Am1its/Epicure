@@ -25,14 +25,12 @@ function makeLabelIcon(name: string) {
   });
 }
 
-function makeUserIcon() {
-  return L.divIcon({
-    className: '',
-    html: '<div class="epicure-map-user-marker"></div>',
-    iconAnchor: [12, 12],
-    iconSize: [24, 24],
-  });
-}
+const USER_ICON = L.divIcon({
+  className: '',
+  html: '<div class="epicure-map-user-marker"></div>',
+  iconAnchor: [12, 12],
+  iconSize: [24, 24],
+});
 
 function RecenterButton({ userCoords }: { userCoords: { lat: number; lng: number } }) {
   const map = useMap();
@@ -41,7 +39,9 @@ function RecenterButton({ userCoords }: { userCoords: { lat: number; lng: number
       className="epicure-map__recenter-btn"
       aria-label={TEXT.map.recenterAriaLabel}
       onClick={() => map.flyTo([userCoords.lat, userCoords.lng], map.getZoom())}
-    />
+    >
+      <img src="/icons/user-location.svg" alt="" aria-hidden="true" width={20} height={20} />
+    </button>
   );
 }
 
@@ -75,7 +75,7 @@ export function MapView({ restaurants, userCoords }: MapViewProps) {
         {userCoords && (
           <Marker
             position={[userCoords.lat, userCoords.lng]}
-            icon={makeUserIcon()}
+            icon={USER_ICON}
           />
         )}
         {userCoords && <RecenterButton userCoords={userCoords} />}
