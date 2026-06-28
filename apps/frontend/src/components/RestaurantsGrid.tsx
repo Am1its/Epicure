@@ -296,7 +296,7 @@ export function RestaurantsGrid() {
           )}
 
           {activeTab === 'map' ? (
-            <MapView restaurants={filtered} />
+            <MapView restaurants={filtered} userCoords={coords ?? undefined} />
           ) : filtered.length === 0 ? (
             <div className="epicure-restaurant-grid__empty">
               <p>{TEXT.restaurantsGrid.noResults}</p>

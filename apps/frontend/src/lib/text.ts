@@ -164,4 +164,7 @@ export const TEXT = {
       { id: 'most-viewed', label: 'Most Viewed' },
     ],
   },
+  map: {
+    recenterAriaLabel: 'Center map on my location',
+  },
 } as const;
