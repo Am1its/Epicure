@@ -145,31 +145,12 @@
   }
 }
 
-.epicure-price-tier-wrap {
-  flex: 1;
-}
-
-.epicure-price-tier-labels {
-  display: flex;
-  justify-content: space-between;
-  padding: 0 2px;
-  margin-top: 5px;
-
-  span {
-    font-size: 0.625rem;
-    color: $gold-secondary;
-    font-weight: 500;
-    line-height: 1;
-    opacity: 0.8;
-  }
-}
-
 .epicure-filter-slider-wrap {
   display: flex;
   align-items: center;
   gap: 0.625rem;
 
-  .rc-slider { width: 100%; }
+  .rc-slider { flex: 1; }
   .rc-slider-rail { background-color: $shadow-subtle; height: 3px; }
 
   .rc-slider-track,

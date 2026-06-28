@@ -19,7 +19,7 @@ export function CuisineFilter({ availableCuisines, selected, onToggle, onClear }
           className={`epicure-filter-dropdown__option${selected.has(c) ? ' epicure-filter-dropdown__option--active' : ''}`}
           onClick={() => onToggle(c)}
         >
-          {selected.has(c) ? `${TEXT.restaurantsGrid.cuisineSelectedPrefix} ` : ''}{c}
+          {c}
         </button>
       ))}
       {selected.size > 0 && (

@@ -99,12 +99,15 @@ export function RestaurantsGrid() {
   }, []);
 
   const globalPrices = useMemo(() => {
-    const all = restaurants.flatMap(r =>
-      (r.dishes ?? []).map(d => d.price).filter((p): p is number => p != null && isFinite(p))
-    );
+    const avgs = restaurants
+      .map(r => {
+        const prices = (r.dishes ?? []).map(d => d.price).filter((p): p is number => p != null && isFinite(p));
+        return prices.length ? prices.reduce((a, b) => a + b, 0) / prices.length : null;
+      })
+      .filter((a): a is number => a !== null);
     return {
-      min: all.length ? Math.min(...all) : 0,
-      max: all.length ? Math.max(...all) : 500,
+      min: avgs.length ? Math.floor(Math.min(...avgs)) : 0,
+      max: avgs.length ? Math.ceil(Math.max(...avgs)) : 500,
     };
   }, [restaurants]);
 
