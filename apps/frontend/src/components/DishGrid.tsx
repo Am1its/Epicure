@@ -54,7 +54,7 @@ export function DishGrid({ dishes, restaurantId, restaurantName }: DishGridProps
       }, 1200);
     }, 1000);
     return () => { clearTimeout(scrollTimer); clearTimeout(modalTimer); };
-  }, [highlightDishId, dishes]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [highlightDishId, dishes]);
 
   const filtered = dishes.filter(d => d.mealTime?.trim() === activeTab);
   const tabs = [...TEXT.dishGrid.tabs] as MealTime[];
