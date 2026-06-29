@@ -24,34 +24,37 @@ export function DishGrid({ dishes, restaurantId, restaurantName }: DishGridProps
   const [selectedDish, setSelectedDish] = useState<Dish | null>(null);
   const [selectedImageUrl, setSelectedImageUrl] = useState<string>('');
 
-  const pendingScrollRef = useRef<{ dishId: number; dish: Dish } | null>(null);
+  const [highlightDishId, setHighlightDishId] = useState<number | null>(null);
 
   useEffect(() => {
     const pending = sessionStorage.getItem(PENDING_DISH_KEY);
     if (!pending) return;
     const dishId = parseInt(pending, 10);
-    if (isNaN(dishId) || dishes.length === 0) return;
-    const dish = dishes.find(d => d.id === dishId);
-    if (!dish) return;
-    pendingScrollRef.current = { dishId, dish };
-    setActiveTab((dish.mealTime ?? TEXT.dishGrid.tabs[0]) as MealTime);
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+    if (isNaN(dishId)) return;
+    sessionStorage.removeItem(PENDING_DISH_KEY);
+    setHighlightDishId(dishId);
+  }, []);
 
   useEffect(() => {
-    if (!pendingScrollRef.current) return;
-    const { dishId, dish } = pendingScrollRef.current;
-    const el = document.getElementById(`dish-${dishId}`);
-    if (!el) return;
-    pendingScrollRef.current = null;
-    el.scrollIntoView({ behavior: 'smooth', block: 'center' });
-    const isMobile = window.matchMedia('(max-width: 767px)').matches;
-    const t = setTimeout(() => {
-      sessionStorage.removeItem(PENDING_DISH_KEY);
-      setSelectedDish(dish);
-      setSelectedImageUrl(strapiImageUrl(dish.image?.url));
-    }, isMobile ? 1200 : 500);
-    return () => clearTimeout(t);
-  }, [activeTab]); // eslint-disable-line react-hooks/exhaustive-deps
+    if (!highlightDishId || dishes.length === 0) return;
+    const dish = dishes.find(d => d.id === highlightDishId);
+    if (!dish) return;
+    setActiveTab((dish.mealTime ?? TEXT.dishGrid.tabs[0]) as MealTime);
+    let modalTimer: ReturnType<typeof setTimeout>;
+    const scrollTimer = setTimeout(() => {
+      const el = document.getElementById(`dish-${highlightDishId}`);
+      if (el) {
+        const target = (el.firstElementChild as HTMLElement) ?? el;
+        target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+      modalTimer = setTimeout(() => {
+        setSelectedDish(dish);
+        setSelectedImageUrl(strapiImageUrl(dish.image?.url));
+        setHighlightDishId(null);
+      }, 1200);
+    }, 1000);
+    return () => { clearTimeout(scrollTimer); clearTimeout(modalTimer); };
+  }, [highlightDishId, dishes]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const filtered = dishes.filter(d => d.mealTime?.trim() === activeTab);
   const tabs = [...TEXT.dishGrid.tabs] as MealTime[];
