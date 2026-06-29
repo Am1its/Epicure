@@ -3,11 +3,9 @@
 
 // ---- Scroll fade-in — desktop homepage sections ----
 @include for-normal-layout {
-  .epicure-desktop-popular,
-  .epicure-desktop-signature {
+  .epicure-desktop-popular {
     .epicure-restaurant-card,
-    .epicure-dish-card,
-    .epicure-dish-link {
+    .epicure-dish-card {
       opacity: 0;
       transform: translateY(16px);
       transition: opacity $duration-slow $ease-out, transform $duration-slow $ease-out;
@@ -15,7 +13,24 @@
 
     &--visible {
       .epicure-restaurant-card,
-      .epicure-dish-card,
+      .epicure-dish-card {
+        opacity: 1;
+        transform: none;
+
+        &:nth-child(2) { transition-delay: 60ms; }
+        &:nth-child(3) { transition-delay: 120ms; }
+      }
+    }
+  }
+
+  .epicure-desktop-signature {
+    .epicure-dish-link {
+      opacity: 0;
+      transform: translateY(16px);
+      transition: opacity $duration-slow $ease-out, transform $duration-slow $ease-out;
+    }
+
+    &--visible {
       .epicure-dish-link {
         opacity: 1;
         transform: none;
@@ -42,12 +57,17 @@
   }
 
   @include reduced-motion {
-    .epicure-desktop-popular,
-    .epicure-desktop-signature,
-    .epicure-desktop-chef {
+    .epicure-desktop-popular {
       .epicure-restaurant-card,
-      .epicure-dish-card,
+      .epicure-dish-card { transition: none; opacity: 1; transform: none; }
+    }
+
+    .epicure-desktop-signature {
       .epicure-dish-link { transition: none; opacity: 1; transform: none; }
+    }
+
+    .epicure-desktop-chef {
+      .epicure-restaurant-card { transition: none; opacity: 1; transform: none; }
     }
   }
 }

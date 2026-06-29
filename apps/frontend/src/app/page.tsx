@@ -59,14 +59,18 @@ export default async function HomePage() {
           linkHref="/restaurants"
         >
           {signatureDishes.map(dish => (
-            <Link
-              key={dish.id}
-              href={`/restaurants/${dish.restaurantId}?highlight=${dish.id}`}
-              className="epicure-dish-link"
-              aria-label={TEXT.home.dishLinkAriaLabel(dish.name)}
-            >
-              <DishCard dish={dish} imageUrl={strapiImageUrl(dish.image?.url)} />
-            </Link>
+            dish.restaurantId != null ? (
+              <Link
+                key={dish.id}
+                href={`/restaurants/${dish.restaurantId}?highlight=${dish.id}`}
+                className="epicure-dish-link"
+                aria-label={TEXT.home.dishLinkAriaLabel(dish.name)}
+              >
+                <DishCard dish={dish} imageUrl={strapiImageUrl(dish.image?.url)} />
+              </Link>
+            ) : (
+              <DishCard key={dish.id} dish={dish} imageUrl={strapiImageUrl(dish.image?.url)} />
+            )
           ))}
         </MobileSection>
       )}
