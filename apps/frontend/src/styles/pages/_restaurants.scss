@@ -62,6 +62,12 @@
   gap: 1rem;
   padding: 32px 20px 56px;
 
+  .epicure-restaurant-card {
+    animation: epicure-fade-in 250ms $ease-out both;
+
+    @include reduced-motion { animation: none; }
+  }
+
   .epicure-restaurant-card__image {
     aspect-ratio: 334 / 207;
     height: auto;

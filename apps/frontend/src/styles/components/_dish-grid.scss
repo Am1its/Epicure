@@ -23,6 +23,13 @@
   }
 }
 
+// ── Card entrance animation ───────────────────────────────────────
+.epicure-dish-grid .epicure-dish-card {
+  animation: epicure-fade-in 250ms $ease-out both;
+
+  @include reduced-motion { animation: none; }
+}
+
 // ── Dish card overrides (restaurant detail context only) ──────────
 // Scoped under .epicure-dish-grid so homepage DishCard is unaffected.
 // Resets desktop _dish-card.scss overrides (690px height, large text,

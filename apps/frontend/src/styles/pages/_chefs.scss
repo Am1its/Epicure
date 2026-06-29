@@ -67,6 +67,12 @@
   gap: 1rem;
   padding: 32px $layout-gutter-mobile 56px;
 
+  .epicure-chef-grid__item {
+    animation: epicure-fade-in 250ms $ease-out both;
+
+    @include reduced-motion { animation: none; }
+  }
+
   @include for-normal-layout {
     grid-template-columns: repeat(3, 379px);
     gap: 1.5rem;
