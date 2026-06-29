@@ -54,6 +54,21 @@
         opacity: 1;
       }
     }
+
+    .epicure-dish-link {
+      flex: 0 0 245px;
+      height: 388px;
+      display: block;
+      text-decoration: none;
+      color: inherit;
+      scroll-snap-align: start;
+
+      .epicure-dish-card {
+        height: 100%;
+        flex: none;
+        scroll-snap-align: none;
+      }
+    }
   }
 
   &__link {

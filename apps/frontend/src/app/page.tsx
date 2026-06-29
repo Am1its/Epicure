@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import { MobileSection } from '../components/MobileSection';
 import { MobileChefSection } from '../components/MobileChefSection';
 import { MobileAppSection } from '../components/MobileAppSection';
@@ -29,7 +30,9 @@ export default async function HomePage() {
 
   const signatureDishes = [...new Map(
     restaurants.flatMap(r =>
-      (r.dishes ?? []).filter(d => d.isSignatureDish).map(d => [d.id, { ...d, restaurantName: r.name }])
+      (r.dishes ?? [])
+        .filter(d => d.isSignatureDish)
+        .map(d => [d.id, { ...d, restaurantName: r.name, restaurantId: r.id }])
     )
   ).values()];
 
@@ -56,7 +59,14 @@ export default async function HomePage() {
           linkHref="/restaurants"
         >
           {signatureDishes.map(dish => (
-            <DishCard key={dish.id} dish={dish} imageUrl={strapiImageUrl(dish.image?.url)} />
+            <Link
+              key={dish.id}
+              href={`/restaurants/${dish.restaurantId}?highlight=${dish.id}`}
+              className="epicure-dish-link"
+              aria-label={TEXT.home.dishLinkAriaLabel(dish.name)}
+            >
+              <DishCard dish={dish} imageUrl={strapiImageUrl(dish.image?.url)} />
+            </Link>
           ))}
         </MobileSection>
       )}

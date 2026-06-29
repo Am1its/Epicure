@@ -83,6 +83,15 @@
   }
 }
 
+.epicure-dish-link {
+  display: block;
+  text-decoration: none;
+  color: inherit;
+  cursor: pointer;
+
+  &:hover { opacity: 0.92; }
+}
+
 @include for-normal-layout {
   .epicure-dish-card {
     display: flex;

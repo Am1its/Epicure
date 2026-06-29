@@ -6,7 +6,8 @@
   .epicure-desktop-popular,
   .epicure-desktop-signature {
     .epicure-restaurant-card,
-    .epicure-dish-card {
+    .epicure-dish-card,
+    .epicure-dish-link {
       opacity: 0;
       transform: translateY(16px);
       transition: opacity $duration-slow $ease-out, transform $duration-slow $ease-out;
@@ -14,7 +15,8 @@
 
     &--visible {
       .epicure-restaurant-card,
-      .epicure-dish-card {
+      .epicure-dish-card,
+      .epicure-dish-link {
         opacity: 1;
         transform: none;
 
@@ -44,7 +46,8 @@
     .epicure-desktop-signature,
     .epicure-desktop-chef {
       .epicure-restaurant-card,
-      .epicure-dish-card { transition: none; opacity: 1; transform: none; }
+      .epicure-dish-card,
+      .epicure-dish-link { transition: none; opacity: 1; transform: none; }
     }
   }
 }

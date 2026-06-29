@@ -1,6 +1,7 @@
 'use client';
 
 import { useRef } from 'react';
+import Link from 'next/link';
 import { DishCard } from '@org/ui-components';
 import type { Dish } from '@org/shared-types';
 import { strapiImageUrl } from '../lib/api';
@@ -25,7 +26,14 @@ export function DesktopSignatureDishes({ dishes }: Props) {
       <h2 className="epicure-desktop-signature__title">{TEXT.home.signatureDishTitle}</h2>
       <div className="epicure-desktop-signature__grid">
         {dishes.map(dish => (
-          <DishCard key={dish.id} dish={dish} imageUrl={strapiImageUrl(dish.image?.url)} />
+          <Link
+            key={dish.id}
+            href={`/restaurants/${dish.restaurantId}?highlight=${dish.id}`}
+            className="epicure-dish-link"
+            aria-label={TEXT.home.dishLinkAriaLabel(dish.name)}
+          >
+            <DishCard dish={dish} imageUrl={strapiImageUrl(dish.image?.url)} />
+          </Link>
         ))}
       </div>
     </section>
