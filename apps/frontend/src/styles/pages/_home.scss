@@ -192,7 +192,11 @@
       .epicure-dish-card__restaurant  { order: 2; }
       .epicure-dish-card__type-icon   { order: 3; }
       .epicure-dish-card__description { order: 4; }
-      .epicure-dish-card__price-row   { order: 5; }
+      .epicure-dish-card__price-row   { order: 5; margin-top: 0; }
+
+      .epicure-dish-card__info {
+        justify-content: space-between;
+      }
     }
   }
 
