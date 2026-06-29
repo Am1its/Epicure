@@ -29,9 +29,10 @@ export function DesktopSignatureDishes({ dishes }: Props) {
           dish.restaurantId != null ? (
             <Link
               key={dish.id}
-              href={`/restaurants/${dish.restaurantId}?highlight=${dish.id}`}
+              href={`/restaurants/${dish.restaurantId}`}
               className="epicure-dish-link"
               aria-label={TEXT.home.dishLinkAriaLabel(dish.name)}
+              onClick={() => sessionStorage.setItem('pending_dish_highlight', String(dish.id))}
             >
               <DishCard dish={dish} imageUrl={strapiImageUrl(dish.image?.url)} />
             </Link>

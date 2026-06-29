@@ -1,12 +1,13 @@
 'use client';
 
-import { useState, useRef } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import type { Dish } from '@org/shared-types';
 import { DishCard } from '@org/ui-components';
 import { strapiImageUrl } from '../lib/api';
 import { TEXT } from '../lib/text';
 import { useTabIndicator } from '../hooks/useTabIndicator';
 import { DishModal } from './DishModal';
+import { PENDING_DISH_KEY } from '../lib/events';
 
 type MealTime = (typeof TEXT.dishGrid.tabs)[number];
 
@@ -22,6 +23,29 @@ export function DishGrid({ dishes, restaurantId, restaurantName }: DishGridProps
   useTabIndicator(tabsRef, activeTab);
   const [selectedDish, setSelectedDish] = useState<Dish | null>(null);
   const [selectedImageUrl, setSelectedImageUrl] = useState<string>('');
+
+  useEffect(() => {
+    const pending = sessionStorage.getItem(PENDING_DISH_KEY);
+    if (!pending) return;
+    sessionStorage.removeItem(PENDING_DISH_KEY);
+    const dishId = parseInt(pending, 10);
+    if (isNaN(dishId) || dishes.length === 0) return;
+    const dish = dishes.find(d => d.id === dishId);
+    if (!dish) return;
+    // Switch to the dish's meal tab so the card is in the DOM
+    setActiveTab((dish.mealTime ?? TEXT.dishGrid.tabs[0]) as MealTime);
+    const isMobile = window.matchMedia('(max-width: 767px)').matches;
+    let modalTimer: ReturnType<typeof setTimeout>;
+    const scrollTimer = setTimeout(() => {
+      const el = document.getElementById(`dish-${dishId}`);
+      if (el) el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      modalTimer = setTimeout(() => {
+        setSelectedDish(dish);
+        setSelectedImageUrl(strapiImageUrl(dish.image?.url));
+      }, isMobile ? 1200 : 500);
+    }, 1000);
+    return () => { clearTimeout(scrollTimer); clearTimeout(modalTimer); };
+  }, [dishes]);
 
   const filtered = dishes.filter(d => d.mealTime?.trim() === activeTab);
   const tabs = [...TEXT.dishGrid.tabs] as MealTime[];
@@ -60,6 +84,7 @@ export function DishGrid({ dishes, restaurantId, restaurantName }: DishGridProps
           {filtered.map(dish => (
             <div
               key={dish.id}
+              id={`dish-${dish.id}`}
               className="epicure-dish-grid-item"
               role="button"
               tabIndex={0}
