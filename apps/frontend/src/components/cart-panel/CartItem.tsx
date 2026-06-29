@@ -16,6 +16,13 @@ export function CartItem({ item }: CartItemProps) {
       <img src={item.imageUrl} alt={item.dish.name} className="epicure-cart-item__image" />
       <div className="epicure-cart-item__body">
         <div className="epicure-cart-item__top">
+          <div className="epicure-cart-item__details">
+            <p className="epicure-cart-item__name">
+              <span className="epicure-cart-item__qty-inline">{item.quantity}x </span>
+              {item.dish.name}
+            </p>
+            <p className="epicure-cart-item__gold-price">&#8362;{item.dish.price.toFixed(2)}</p>
+          </div>
           {!item.pendingRemove && (
             <div className="epicure-cart-item__qty-row">
               <button
@@ -33,13 +40,6 @@ export function CartItem({ item }: CartItemProps) {
               >+</button>
             </div>
           )}
-          <div className="epicure-cart-item__details">
-            <p className="epicure-cart-item__name">
-              <span className="epicure-cart-item__qty-inline">{item.quantity}x </span>
-              {item.dish.name}
-            </p>
-            <p className="epicure-cart-item__gold-price">&#8362;{item.dish.price.toFixed(2)}</p>
-          </div>
         </div>
         {(item.selectedSide || item.selectedChanges.length > 0) && (
           <p className="epicure-cart-item__meta">
