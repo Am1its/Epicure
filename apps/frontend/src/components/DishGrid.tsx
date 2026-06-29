@@ -27,12 +27,10 @@ export function DishGrid({ dishes, restaurantId, restaurantName }: DishGridProps
   useEffect(() => {
     const pending = sessionStorage.getItem(PENDING_DISH_KEY);
     if (!pending) return;
-    sessionStorage.removeItem(PENDING_DISH_KEY);
     const dishId = parseInt(pending, 10);
     if (isNaN(dishId) || dishes.length === 0) return;
     const dish = dishes.find(d => d.id === dishId);
     if (!dish) return;
-    // Switch to the dish's meal tab so the card is in the DOM
     setActiveTab((dish.mealTime ?? TEXT.dishGrid.tabs[0]) as MealTime);
     const isMobile = window.matchMedia('(max-width: 767px)').matches;
     let modalTimer: ReturnType<typeof setTimeout>;
@@ -40,12 +38,13 @@ export function DishGrid({ dishes, restaurantId, restaurantName }: DishGridProps
       const el = document.getElementById(`dish-${dishId}`);
       if (el) el.scrollIntoView({ behavior: 'smooth', block: 'center' });
       modalTimer = setTimeout(() => {
+        sessionStorage.removeItem(PENDING_DISH_KEY);
         setSelectedDish(dish);
         setSelectedImageUrl(strapiImageUrl(dish.image?.url));
       }, isMobile ? 1200 : 500);
     }, 1000);
     return () => { clearTimeout(scrollTimer); clearTimeout(modalTimer); };
-  }, [dishes]);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const filtered = dishes.filter(d => d.mealTime?.trim() === activeTab);
   const tabs = [...TEXT.dishGrid.tabs] as MealTime[];

@@ -6,6 +6,7 @@ import type { Dish } from '@org/shared-types';
 import { strapiImageUrl } from '../lib/api';
 import { TEXT } from '../lib/text';
 import { MobileSection } from './MobileSection';
+import { PENDING_DISH_KEY } from '../lib/events';
 
 interface Props {
   dishes: Dish[];
@@ -27,7 +28,7 @@ export function MobileSignatureDishes({ dishes }: Props) {
             href={`/restaurants/${dish.restaurantId}`}
             className="epicure-dish-link"
             aria-label={TEXT.home.dishLinkAriaLabel(dish.name)}
-            onClick={() => sessionStorage.setItem('pending_dish_highlight', String(dish.id))}
+            onClick={() => sessionStorage.setItem(PENDING_DISH_KEY, String(dish.id))}
           >
             <DishCard dish={dish} imageUrl={strapiImageUrl(dish.image?.url)} />
           </Link>

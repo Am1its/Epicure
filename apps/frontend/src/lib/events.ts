@@ -2,7 +2,7 @@ export const CUISINE_FILTER_EVENT = 'epicure:cuisine-filter';
 export const CHEF_HIGHLIGHT_EVENT = 'epicure:chef-highlight';
 export const PENDING_CUISINE_KEY = 'epicure_pending_cuisine_filter';
 export const PENDING_CHEF_KEY = 'epicure_pending_chef_highlight';
-export const PENDING_DISH_KEY = 'pending_dish_highlight';
+export const PENDING_DISH_KEY = 'epicure_pending_dish_highlight';
 
 export function dispatchCuisineFilter(labels: string[]): void {
   sessionStorage.setItem(PENDING_CUISINE_KEY, JSON.stringify(labels));
