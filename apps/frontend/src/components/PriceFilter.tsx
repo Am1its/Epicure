@@ -21,8 +21,8 @@ export function PriceFilter({ globalPrices, value, onChange, onClear }: PriceFil
 
   return (
     <>
-      <p className="epicure-filter-dropdown__title">Price Range Selected</p>
-      <p className="epicure-filter-dropdown__sublabel">₪{value[0]} – ₪{value[1]}</p>
+      <p className="epicure-filter-dropdown__title">Price Range</p>
+      <p className="epicure-filter-dropdown__sublabel">Avg. dish price · ₪{value[0]} – ₪{value[1]}</p>
       <div className={wrapClass}>
         <span className="epicure-filter-slider-edge">₪{globalPrices.min}</span>
         <Slider

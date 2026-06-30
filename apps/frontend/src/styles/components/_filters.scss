@@ -137,7 +137,10 @@
     &:hover { background: $hover-overlay; }
 
     &--active {
-      font-weight: 700;
+      font-weight: 600;
+      border-left: 2px solid $gold-secondary;
+      background: rgba(225, 157, 26, 0.08);
+      padding-left: calc(0.5rem - 2px);
     }
   }
 }

@@ -204,7 +204,11 @@ export default function Header({ brandName, logoUrl, navLinks, footerLinks }: He
             <button ref={userButtonRef} aria-label={TEXT.nav.accountAriaLabel} onClick={handleUserIconClick}>
               <span className="epicure-nav__user-wrap">
                 <img src="/icons/user.svg" alt="" aria-hidden="true" width={22} height={22} />
-                {mounted && user && <span className="epicure-nav__user-dot" aria-hidden="true" />}
+                {mounted && user && (
+                  <span className="epicure-nav__user-avatar" aria-hidden="true">
+                    {user.name[0]?.toUpperCase() ?? '?'}
+                  </span>
+                )}
               </span>
             </button>
 
