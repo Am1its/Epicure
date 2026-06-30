@@ -9,23 +9,19 @@
   flex-direction: row;
   flex-shrink: 0;
   background: $cream-secondary;
-  height: auto;
-  min-height: 96px;
+  height: 130px;
 
   &__image {
-    width: 96px;
-    min-height: 96px;
-    height: 100%;
+    width: 130px;
+    height: 130px;
     object-fit: cover;
     flex-shrink: 0;
-    align-self: stretch;
   }
 
   &__body {
     flex: 1;
     min-width: 0;
-    height: auto;
-    min-height: 96px;
+    height: 130px;
     padding: 0.625rem 0.75rem;
     display: flex;
     flex-direction: column;
@@ -34,7 +30,8 @@
 
   &__top {
     display: flex;
-    align-items: flex-start;
+    align-items: center;
+    justify-content: space-between;
     gap: 0.375rem;
     margin-bottom: 0.125rem;
   }
@@ -47,23 +44,23 @@
 
   &__qty-row {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     align-items: center;
-    gap: 2px;
+    gap: 4px;
     flex-shrink: 0;
     user-select: none;
   }
 
   &__qty-btn {
-    width: 24px;
-    height: 24px;
+    width: 16px;
+    height: 16px;
     border: 1px solid $black-primary;
     background: transparent;
     color: $black-primary;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 1rem;
+    font-size: 0.75rem;
     cursor: pointer;
     border-radius: 2px;
     padding: 0;
@@ -74,11 +71,11 @@
   }
 
   &__qty-count {
-    font-size: 0.875rem;
+    font-size: 0.8125rem;
     color: $gold-secondary;
     font-weight: 400;
     text-align: center;
-    min-width: 20px;
+    min-width: 16px;
   }
 
   &--confirm-remove {
@@ -89,13 +86,13 @@
   &__confirm-remove {
     display: flex;
     align-items: center;
-    gap: 0.375rem;
-    margin-top: 0.375rem;
-    flex-wrap: wrap;
+    gap: 0.25rem;
+    margin-top: 0.25rem;
+    flex-wrap: nowrap;
   }
 
   &__confirm-text {
-    font-size: 0.75rem;
+    font-size: 0.6875rem;
     color: $black-primary;
     white-space: nowrap;
     flex-shrink: 0;
@@ -103,8 +100,8 @@
 
   &__confirm-yes,
   &__confirm-no {
-    font-size: 0.6875rem;
-    padding: 0.2rem 0.4rem;
+    font-size: 0.625rem;
+    padding: 0.15rem 0.3rem;
     border: 1px solid $black-primary;
     background: transparent;
     color: $black-primary;
@@ -113,7 +110,8 @@
     text-transform: uppercase;
     letter-spacing: 0.03em;
     font-family: inherit;
-    line-height: 1.4;
+    line-height: 1.3;
+    white-space: nowrap;
 
     &:hover { background: rgba(0, 0, 0, 0.06); }
   }
@@ -183,29 +181,26 @@
 
 @include for-normal-layout {
   .epicure-cart-item {
-    height: auto;
-    min-height: 96px;
+    height: 130px;
   }
 
   .epicure-cart-item__image {
-    height: 100%;
-    min-height: 96px;
-    align-self: stretch;
+    width: 130px;
+    height: 130px;
   }
 
   .epicure-cart-item__body {
-    height: auto;
-    min-height: 96px;
+    height: 130px;
     padding: 15px 0.5rem 0.5rem 24px;
   }
 
   .epicure-cart-item__qty-row {
-    gap: 3px;
+    gap: 5px;
   }
 
   .epicure-cart-item__qty-btn {
-    width: 31px;
-    height: 31px;
+    width: 18px;
+    height: 18px;
     border-color: $gold-secondary;
     color: $gold-secondary;
 

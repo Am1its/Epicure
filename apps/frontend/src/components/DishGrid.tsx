@@ -1,12 +1,13 @@
 'use client';
 
-import { useState, useRef } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import type { Dish } from '@org/shared-types';
 import { DishCard } from '@org/ui-components';
 import { strapiImageUrl } from '../lib/api';
 import { TEXT } from '../lib/text';
 import { useTabIndicator } from '../hooks/useTabIndicator';
 import { DishModal } from './DishModal';
+import { PENDING_DISH_KEY } from '../lib/events';
 
 type MealTime = (typeof TEXT.dishGrid.tabs)[number];
 
@@ -22,6 +23,38 @@ export function DishGrid({ dishes, restaurantId, restaurantName }: DishGridProps
   useTabIndicator(tabsRef, activeTab);
   const [selectedDish, setSelectedDish] = useState<Dish | null>(null);
   const [selectedImageUrl, setSelectedImageUrl] = useState<string>('');
+
+  const [highlightDishId, setHighlightDishId] = useState<number | null>(null);
+
+  useEffect(() => {
+    const pending = sessionStorage.getItem(PENDING_DISH_KEY);
+    if (!pending) return;
+    const dishId = parseInt(pending, 10);
+    if (isNaN(dishId)) return;
+    sessionStorage.removeItem(PENDING_DISH_KEY);
+    setHighlightDishId(dishId);
+  }, []);
+
+  useEffect(() => {
+    if (!highlightDishId || dishes.length === 0) return;
+    const dish = dishes.find(d => d.id === highlightDishId);
+    if (!dish) return;
+    setActiveTab((dish.mealTime ?? TEXT.dishGrid.tabs[0]) as MealTime);
+    let modalTimer: ReturnType<typeof setTimeout>;
+    const scrollTimer = setTimeout(() => {
+      const el = document.getElementById(`dish-${highlightDishId}`);
+      if (el) {
+        const target = (el.firstElementChild as HTMLElement) ?? el;
+        target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+      modalTimer = setTimeout(() => {
+        setSelectedDish(dish);
+        setSelectedImageUrl(strapiImageUrl(dish.image?.url));
+        setHighlightDishId(null);
+      }, 1200);
+    }, 1000);
+    return () => { clearTimeout(scrollTimer); clearTimeout(modalTimer); };
+  }, [highlightDishId, dishes]);
 
   const filtered = dishes.filter(d => d.mealTime?.trim() === activeTab);
   const tabs = [...TEXT.dishGrid.tabs] as MealTime[];
@@ -60,6 +93,7 @@ export function DishGrid({ dishes, restaurantId, restaurantName }: DishGridProps
           {filtered.map(dish => (
             <div
               key={dish.id}
+              id={`dish-${dish.id}`}
               className="epicure-dish-grid-item"
               role="button"
               tabIndex={0}

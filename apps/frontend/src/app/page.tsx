@@ -1,6 +1,7 @@
 import { MobileSection } from '../components/MobileSection';
 import { MobileChefSection } from '../components/MobileChefSection';
 import { MobileAppSection } from '../components/MobileAppSection';
+import { MobileSignatureDishes } from '../components/MobileSignatureDishes';
 import { IconsLegend } from '../components/IconsLegend';
 import { Hero } from '../components/Hero';
 import { DesktopPopularRestaurants } from '../components/DesktopPopularRestaurants';
@@ -9,7 +10,7 @@ import { DesktopChefSection } from '../components/DesktopChefSection';
 import { DesktopAboutSection } from '../components/DesktopAboutSection';
 import { fetchApi, strapiImageUrl } from '../lib/api';
 import type { Restaurant, Chef } from '@org/shared-types';
-import { RestaurantCard, DishCard } from '@org/ui-components';
+import { RestaurantCard } from '@org/ui-components';
 import { TEXT } from '../lib/text';
 
 export default async function HomePage() {
@@ -29,7 +30,9 @@ export default async function HomePage() {
 
   const signatureDishes = [...new Map(
     restaurants.flatMap(r =>
-      (r.dishes ?? []).filter(d => d.isSignatureDish).map(d => [d.id, { ...d, restaurantName: r.name }])
+      (r.dishes ?? [])
+        .filter(d => d.isSignatureDish)
+        .map(d => [d.id, { ...d, restaurantName: r.name, restaurantId: r.id }])
     )
   ).values()];
 
@@ -49,17 +52,7 @@ export default async function HomePage() {
 
       <DesktopPopularRestaurants restaurants={popularRestaurants} />
 
-      {signatureDishes.length > 0 && (
-        <MobileSection
-          title={TEXT.home.signatureDishTitle}
-          linkLabel={TEXT.home.allRestaurantsLink}
-          linkHref="/restaurants"
-        >
-          {signatureDishes.map(dish => (
-            <DishCard key={dish.id} dish={dish} imageUrl={strapiImageUrl(dish.image?.url)} />
-          ))}
-        </MobileSection>
-      )}
+      <MobileSignatureDishes dishes={signatureDishes} />
 
       <DesktopSignatureDishes dishes={signatureDishes} />
 

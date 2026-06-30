@@ -86,6 +86,7 @@ export const TEXT = {
     signatureDishTitle: 'SIGNATURE DISH OF:',
     iconsTitle: 'THE MEANING OF OUR ICONS:',
     allRestaurantsLink: 'All Restaurants',
+    dishLinkAriaLabel: (name: string) => `View ${name}'s restaurant`,
   },
   icons: [
     { src: '/icons/spicy.svg', label: 'Spicy' },

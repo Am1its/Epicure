@@ -36,6 +36,7 @@ export interface Dish {
   image?: StrapiImage;
   mealTime?: 'Breakfast' | 'Lunch' | 'Dinner';
   isSignatureDish?: boolean;
+  restaurantId?: number;
   restaurantName?: string;
   sides?: string[];
   changes?: string[];
