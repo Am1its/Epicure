@@ -25,34 +25,28 @@ export class StrapiClientService {
     }
   }
 
+  private async parseJson<T>(res: Response): Promise<T> {
+    try {
+      return (await res.json()) as T;
+    } catch {
+      throw new ServiceUnavailableException('Strapi returned invalid JSON');
+    }
+  }
+
   async get<T>(path: string): Promise<T[]> {
     const res = await this.request(path);
     if (!res.ok) {
       throw new ServiceUnavailableException(`Strapi returned ${res.status}`);
     }
-    let body: StrapiListResponse<T>;
-    try {
-      body = (await res.json()) as StrapiListResponse<T>;
-    } catch {
-      throw new ServiceUnavailableException('Strapi returned invalid JSON');
-    }
+    const body = await this.parseJson<StrapiListResponse<T>>(res);
     return body.data ?? [];
   }
 
   async getById<T>(path: string): Promise<T> {
     const res = await this.request(path);
-    if (res.status === 404) {
-      throw new NotFoundException('Resource not found');
-    }
-    if (!res.ok) {
-      throw new ServiceUnavailableException(`Strapi returned ${res.status}`);
-    }
-    let body: StrapiSingleResponse<T>;
-    try {
-      body = (await res.json()) as StrapiSingleResponse<T>;
-    } catch {
-      throw new ServiceUnavailableException('Strapi returned invalid JSON');
-    }
+    if (res.status === 404) throw new NotFoundException('Resource not found');
+    if (!res.ok) throw new ServiceUnavailableException(`Strapi returned ${res.status}`);
+    const body = await this.parseJson<StrapiSingleResponse<T>>(res);
     return body.data;
   }
 
@@ -70,12 +64,6 @@ export class StrapiClientService {
       } catch { /* ignore */ }
       throw new HttpException({ message }, res.status);
     }
-    let result: T;
-    try {
-      result = (await res.json()) as T;
-    } catch {
-      throw new ServiceUnavailableException('Strapi returned invalid JSON');
-    }
-    return result;
+    return this.parseJson<T>(res);
   }
 }
