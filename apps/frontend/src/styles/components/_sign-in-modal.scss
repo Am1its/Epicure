@@ -140,7 +140,7 @@
   }
 
   .epicure-signin-modal {
-    top: 173px;
+    top: 110px;
     left: 50%;
     right: auto;
     transform: translateX(-50%);
@@ -158,7 +158,7 @@
     &__close-desktop {
       display: block;
       position: fixed;
-      top: 144px;
+      top: 81px;
       left: calc(50% - 286px);
       z-index: $z-panel-top;
       background: none;
