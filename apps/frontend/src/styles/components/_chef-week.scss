@@ -20,6 +20,7 @@
     position: relative;
     width: 100%;
     margin-bottom: 1.25rem;
+    overflow: hidden;
   }
 
   &__photo {
@@ -28,6 +29,16 @@
     object-fit: cover;
     display: block;
     filter: grayscale(100%);
+    transition: filter $duration-base $ease-out, transform $duration-base $ease-out;
+  }
+
+  &__photo-wrap:hover &__photo {
+    filter: grayscale(0%);
+    transform: scale(1.03);
+  }
+
+  @include reduced-motion {
+    &__photo { transition: none; }
   }
 
   &__name-bar {
