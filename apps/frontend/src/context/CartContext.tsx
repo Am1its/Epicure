@@ -38,11 +38,13 @@ function isValidCartState(val: unknown): val is CartState {
 }
 
 function itemsMatch(a: CartItem, b: CartItem): boolean {
+  const changesA = [...a.selectedChanges].sort();
+  const changesB = [...b.selectedChanges].sort();
   return (
     a.dish.id === b.dish.id &&
     a.selectedSide === b.selectedSide &&
-    a.selectedChanges.length === b.selectedChanges.length &&
-    a.selectedChanges.every((c, i) => c === b.selectedChanges[i])
+    changesA.length === changesB.length &&
+    changesA.every((c, i) => c === changesB[i])
   );
 }
 

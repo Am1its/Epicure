@@ -81,6 +81,15 @@
   &--confirm-remove {
     animation: epicure-cart-shake 0.35s ease-out;
     @include reduced-motion { animation: none; }
+    height: auto;
+    align-items: flex-start;
+
+    .epicure-cart-item__body {
+      height: auto;
+      overflow: visible;
+    }
+
+    .epicure-cart-item__price-row { display: none; }
   }
 
   &__confirm-remove {
@@ -222,4 +231,16 @@
   .epicure-cart-item__name       { font-size: 1rem; }
   .epicure-cart-item__meta       { font-size: 0.8125rem; white-space: normal; }
   .epicure-cart-item__price-val  { font-size: 0.9375rem; }
+
+  .epicure-cart-item--confirm-remove {
+    height: auto;
+    align-items: flex-start;
+  }
+
+  .epicure-cart-item--confirm-remove .epicure-cart-item__body {
+    height: auto;
+    overflow: visible;
+  }
+
+  .epicure-cart-item--confirm-remove .epicure-cart-item__price-row { display: none; }
 }
