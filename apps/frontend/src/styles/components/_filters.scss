@@ -121,6 +121,11 @@
     opacity: 0.5;
   }
 
+  &__options {
+    max-height: 220px;
+    overflow-y: auto;
+  }
+
   &__option {
     display: block;
     width: 100%;
