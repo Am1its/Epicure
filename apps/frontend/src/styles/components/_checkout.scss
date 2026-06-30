@@ -1,0 +1,110 @@
+@use '../setup/variables' as *;
+@use '../setup/mixins' as *;
+
+.epicure-checkout {
+  background: $bg-light;
+  min-height: 60vh;
+
+  &__inner {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 2rem 1.25rem 3rem;
+  }
+
+  &__right { display: flex; flex-direction: column; gap: 1rem; }
+
+  &__error { color: #b00020; font-size: 0.875rem; margin: 0; }
+
+  &__pay {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    height: 56px;
+    width: 100%;
+    border: none;
+    background: $black-primary;
+    color: $white;
+    font-size: 1rem;
+    letter-spacing: 0.08em;
+    cursor: pointer;
+    transition: opacity $duration-base $ease-out;
+
+    &:disabled { background: $gray-primary; cursor: not-allowed; }
+
+    @include reduced-motion { transition: none; }
+  }
+
+  &__pay-total { display: inline-flex; align-items: center; gap: 0.25rem; }
+  &__pay-shekel { width: 9px; height: 12px; filter: brightness(0) invert(1); }
+
+  @include for-normal-layout {
+    &__inner {
+      flex-direction: row;
+      align-items: flex-start;
+      gap: 3rem;
+      padding: 3rem 2rem 4rem;
+    }
+    .epicure-checkout-form { flex: 1; }
+    &__right { flex: 1; }
+  }
+}
+
+.epicure-checkout-form {
+  &__section { margin-bottom: 2rem; }
+  &__heading {
+    text-align: center;
+    font-size: 1rem;
+    font-weight: 300;
+    letter-spacing: 0.08em;
+    color: $black-primary;
+    margin-bottom: 1.5rem;
+  }
+  &__field { display: block; margin-bottom: 1.5rem; }
+  &__label { display: block; font-size: 0.75rem; color: $gray-primary; margin-bottom: 0.25rem; }
+  &__input {
+    width: 100%;
+    border: none;
+    border-bottom: 1px solid $border-light;
+    background: transparent;
+    padding: 0.375rem 0;
+    font-size: 1rem;
+    font-family: inherit;
+    font-weight: 300;
+    color: $black-primary;
+    &:focus { outline: none; border-bottom-color: $gold-secondary; }
+  }
+}
+
+.epicure-checkout-summary {
+  background: $white;
+  padding: 1.5rem;
+
+  &__title { text-align: center; font-size: 1.5rem; font-weight: 400; margin-bottom: 0.25rem; }
+  &__restaurant { text-align: center; color: $gray-primary; margin-bottom: 1.5rem; }
+  &__items { display: flex; flex-direction: column; gap: 0.75rem; max-height: 320px; overflow-y: auto; }
+  &__item { display: flex; }
+  &__img { width: 72px; height: 72px; object-fit: cover; flex-shrink: 0; }
+  &__item-body { display: flex; align-items: center; gap: 0.75rem; flex: 1; background: $cream-secondary; padding: 0.5rem 0.75rem; min-width: 0; }
+  &__qty { border: 1px solid $gold-secondary; color: $gold-secondary; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 0.875rem; }
+  &__item-text { flex: 1; min-width: 0; }
+  &__name { font-weight: 500; margin: 0; }
+  &__price { color: $gold-secondary; font-size: 0.875rem; margin: 0; }
+  &__meta { font-size: 0.8125rem; color: $gray-primary; margin: 0; }
+  &__line-total { white-space: nowrap; align-self: flex-end; font-size: 0.875rem; }
+  &__divider { border: none; border-top: 1px solid $border-light; margin: 1rem 0; }
+  &__comment-label { text-align: center; margin-bottom: 0.75rem; }
+  &__comment {
+    width: 100%;
+    min-height: 90px;
+    border: 1px solid $border-light;
+    padding: 0.75rem;
+    font-family: inherit;
+    font-weight: 300;
+    resize: vertical;
+    &:focus { outline: none; border-color: $gold-secondary; }
+  }
+}
