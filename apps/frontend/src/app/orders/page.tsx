@@ -7,6 +7,7 @@ import { useAuth } from '../../context/AuthContext';
 import { fetchOrders } from '../../lib/api';
 import { TEXT } from '../../lib/text';
 import { OrderRow } from '../../components/orders/OrderRow';
+import { OrderSummaryModal } from '../../components/orders/OrderSummaryModal';
 
 export default function OrdersPage() {
   const router = useRouter();
@@ -45,7 +46,7 @@ export default function OrdersPage() {
             ))}
           </div>
         )}
-        {selected && null /* Task 9: replace with <OrderSummaryModal order={selected} onClose={() => setSelected(null)} /> */}
+        {selected && <OrderSummaryModal order={selected} onClose={() => setSelected(null)} />}
       </div>
     </main>
   );
