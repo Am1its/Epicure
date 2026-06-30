@@ -25,6 +25,7 @@ export function MobileAppSection() {
       <div className="epicure-app-section__about">
         <h2 className="epicure-app-section__about-title">{TEXT.appSection.aboutTitle}</h2>
         <p className="epicure-app-section__about-text">{TEXT.appSection.aboutText}</p>
+        <p className="epicure-app-section__about-text">{TEXT.appSection.aboutText2}</p>
       </div>
     </div>
   );

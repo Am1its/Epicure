@@ -30,6 +30,11 @@
     },
     "chefOfTheWeekOrder": {
       "type": "integer"
+    },
+    "restaurants": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::restaurant.restaurant"
     }
   }
 }

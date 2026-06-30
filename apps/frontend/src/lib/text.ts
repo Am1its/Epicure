@@ -99,8 +99,8 @@ export const TEXT = {
     googlePlay: { line1: 'Get it on', line2: 'Google Play' },
     appStore: { line1: 'Download on the', line2: 'App Store' },
     aboutTitle: 'ABOUT US:',
-    aboutText: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. In a lacus vel justo fermentum bibendum non eu ipsum. Cras porta malesuada eros, eget blandit turpis suscipit at. Vestibulum sed massa in magna sodales porta. Vivamus elit urna, dignissim a vestibulum.',
-    aboutText2: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. In a lacus vel justo fermentum bibendum no eu ipsum. Cras porta malesuada eros.',
+    aboutText: 'At Epicure, we believe that exceptional dining should be both accessible and inspiring. We’ve created a curated marketplace where you can discover new flavors and connect directly with the finest local restaurants, visionary chefs, and their signature dishes. Let us guide you on a journey to find your next culinary obsession, all from the palm of your hand.',
+    aboutText2: 'Our intuitive platform and mobile app are designed to make finding the perfect meal effortless. Ready to embark on your next culinary adventure? Download the Epicure app today and let your taste buds lead the way.',
   },
   restaurantDetail: {
     notFound: 'Restaurant not found.',

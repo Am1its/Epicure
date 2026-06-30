@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
-import type { Chef, Restaurant } from '@org/shared-types';
+import type { Chef, ChefRestaurant, Restaurant } from '@org/shared-types';
 import { fetchApi, strapiImageUrl } from '../lib/api';
 import { TEXT } from '../lib/text';
 import { Modal } from './Modal';
@@ -14,7 +14,8 @@ interface ChefModalProps {
 }
 
 export function ChefModal({ chef, onClose }: ChefModalProps) {
-  const [restaurants, setRestaurants] = useState<Restaurant[]>([]);
+  const hasPopulated = chef.restaurants !== undefined;
+  const [restaurants, setRestaurants] = useState<ChefRestaurant[]>(chef.restaurants ?? []);
 
   useEffect(() => {
     document.body.style.overflow = 'hidden';
@@ -22,10 +23,11 @@ export function ChefModal({ chef, onClose }: ChefModalProps) {
   }, []);
 
   useEffect(() => {
+    if (hasPopulated) return;
     fetchApi<Restaurant[]>('/api/restaurants')
       .then(all => setRestaurants(all.filter(r => r.chef?.id === chef.id)))
       .catch(() => setRestaurants([]));
-  }, [chef.id]);
+  }, [chef.id, hasPopulated]);
 
   return (
     <>
