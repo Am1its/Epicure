@@ -66,6 +66,7 @@ export interface CartItem {
   selectedChanges: string[];
   restaurantId: number;
   restaurantName: string;
+  pendingRemove?: boolean;
 }
 
 export interface SearchResults {

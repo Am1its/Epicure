@@ -39,13 +39,83 @@
     margin-bottom: 0.125rem;
   }
 
-  // mobile: hidden in favour of __qty-inline
-  &__qty { display: none; }
-
-  // mobile: "1x" prefix inside name
+  // mobile: "1x" prefix inside name (hidden when qty-row visible on desktop)
   &__qty-inline {
     font-weight: 400;
     color: $black-primary;
+  }
+
+  &__qty-row {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+    flex-shrink: 0;
+    user-select: none;
+  }
+
+  &__qty-btn {
+    width: 24px;
+    height: 24px;
+    border: 1px solid $black-primary;
+    background: transparent;
+    color: $black-primary;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1rem;
+    cursor: pointer;
+    border-radius: 2px;
+    padding: 0;
+    line-height: 1;
+    font-family: inherit;
+
+    &:hover { background: rgba(0, 0, 0, 0.06); }
+  }
+
+  &__qty-count {
+    font-size: 0.875rem;
+    color: $gold-secondary;
+    font-weight: 400;
+    text-align: center;
+    min-width: 20px;
+  }
+
+  &--confirm-remove {
+    animation: epicure-cart-shake 0.35s ease-out;
+    @include reduced-motion { animation: none; }
+  }
+
+  &__confirm-remove {
+    display: flex;
+    align-items: center;
+    gap: 0.375rem;
+    margin-top: 0.375rem;
+    flex-wrap: wrap;
+  }
+
+  &__confirm-text {
+    font-size: 0.75rem;
+    color: $black-primary;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  &__confirm-yes,
+  &__confirm-no {
+    font-size: 0.6875rem;
+    padding: 0.2rem 0.4rem;
+    border: 1px solid $black-primary;
+    background: transparent;
+    color: $black-primary;
+    cursor: pointer;
+    border-radius: 2px;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    font-family: inherit;
+    line-height: 1.4;
+
+    &:hover { background: rgba(0, 0, 0, 0.06); }
   }
 
   &__details {
@@ -129,17 +199,21 @@
     padding: 15px 0.5rem 0.5rem 24px;
   }
 
-  .epicure-cart-item__qty {
-    display: flex;
-    color: $gold-secondary;
-    font-weight: 400;
-    border: 1px solid $gold-secondary;
+  .epicure-cart-item__qty-row {
+    gap: 3px;
+  }
+
+  .epicure-cart-item__qty-btn {
     width: 31px;
     height: 31px;
-    align-items: center;
-    justify-content: center;
+    border-color: $gold-secondary;
+    color: $gold-secondary;
+
+    &:hover { background: rgba(0, 0, 0, 0.04); }
+  }
+
+  .epicure-cart-item__qty-count {
     font-size: 0.875rem;
-    flex-shrink: 0;
   }
 
   .epicure-cart-item__qty-inline  { display: none; }

@@ -14,6 +14,9 @@ interface CartState {
 interface CartContextValue extends CartState {
   addToCart: (item: CartItem) => void;
   removeFromCart: (item: CartItem) => void;
+  updateQuantity: (item: CartItem, delta: 1 | -1) => void;
+  confirmRemove: (item: CartItem) => void;
+  cancelRemove: (item: CartItem) => void;
   clearCart: () => void;
   setComment: (comment: string) => void;
   conflictsWithCart: (restaurantId: number) => boolean;
@@ -52,7 +55,11 @@ export function CartProvider({ children }: { children: ReactNode }) {
   }, []);
 
   useEffect(() => {
-    saveCart(state);
+    const stateToSave = {
+      ...state,
+      cartItems: state.cartItems.map(({ pendingRemove: _pr, ...item }) => item),
+    };
+    saveCart(stateToSave);
   }, [state]);
 
   function addToCart(item: CartItem) {
@@ -62,7 +69,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
         return {
           ...prev,
           cartItems: prev.cartItems.map(c =>
-            itemsMatch(c, item) ? { ...c, quantity: c.quantity + item.quantity } : c
+            itemsMatch(c, item) ? { ...c, quantity: c.quantity + item.quantity, pendingRemove: false } : c
           ),
         };
       }
@@ -95,15 +102,45 @@ export function CartProvider({ children }: { children: ReactNode }) {
     setState(prev => ({ ...prev, comment }));
   }
 
-  function conflictsWithCart(incomingRestaurantId: number): boolean {
-    return state.cartItems.length > 0 && state.restaurantId !== incomingRestaurantId;
+  function updateQuantity(item: CartItem, delta: 1 | -1) {
+    setState(prev => ({
+      ...prev,
+      cartItems: prev.cartItems.map(c => {
+        if (!itemsMatch(c, item)) return c;
+        if (delta === -1 && c.quantity === 1) return { ...c, pendingRemove: true };
+        return { ...c, quantity: c.quantity + delta };
+      }),
+    }));
   }
 
-  const totalPrice = state.cartItems.reduce(
-    (sum, c) => sum + c.dish.price * c.quantity,
-    0
-  );
-  const totalItems = state.cartItems.reduce((sum, c) => sum + c.quantity, 0);
+  function confirmRemove(item: CartItem) {
+    setState(prev => {
+      const updated = prev.cartItems.filter(c => !itemsMatch(c, item));
+      return {
+        ...prev,
+        cartItems: updated,
+        restaurantId: updated.length ? prev.restaurantId : null,
+        restaurantName: updated.length ? prev.restaurantName : null,
+      };
+    });
+  }
+
+  function cancelRemove(item: CartItem) {
+    setState(prev => ({
+      ...prev,
+      cartItems: prev.cartItems.map(c =>
+        itemsMatch(c, item) ? { ...c, pendingRemove: false } : c
+      ),
+    }));
+  }
+
+  function conflictsWithCart(incomingRestaurantId: number): boolean {
+    return state.cartItems.some(c => !c.pendingRemove) && state.restaurantId !== incomingRestaurantId;
+  }
+
+  const committedItems = state.cartItems.filter(c => !c.pendingRemove);
+  const totalPrice = committedItems.reduce((sum, c) => sum + c.dish.price * c.quantity, 0);
+  const totalItems = committedItems.reduce((sum, c) => sum + c.quantity, 0);
 
   return (
     <CartContext.Provider
@@ -111,6 +148,9 @@ export function CartProvider({ children }: { children: ReactNode }) {
         ...state,
         addToCart,
         removeFromCart,
+        updateQuantity,
+        confirmRemove,
+        cancelRemove,
         clearCart,
         setComment,
         conflictsWithCart,
