@@ -134,11 +134,25 @@
     flex-direction: column;
     align-items: center;
     gap: 2rem;
+    opacity: 0;
+    transform: translateY(12px);
+    transition: opacity $duration-slow $ease-out, transform $duration-slow $ease-out;
+
+    &:nth-child(2) { transition-delay: 80ms; }
+    &:nth-child(3) { transition-delay: 160ms; }
+
+    &:hover .epicure-icons-legend__icon { transform: scale(1.18); }
+  }
+
+  &--visible &__item {
+    opacity: 1;
+    transform: none;
   }
 
   &__icon {
     width: 56px;
     height: 56px;
+    transition: transform 200ms $ease-out;
   }
 
   &__label {
@@ -146,6 +160,11 @@
     font-weight: 300;
     color: $black-primary;
     letter-spacing: 1.97px;
+  }
+
+  @include reduced-motion {
+    &__item { opacity: 1; transform: none; transition: none; }
+    &__icon { transition: none; }
   }
 
   @include for-normal-layout { display: none; }
