@@ -1,7 +1,8 @@
 'use client';
 
 import { createContext, useContext, useState, useEffect, type ReactNode } from 'react';
-import type { CartItem } from '@org/shared-types';
+import type { CartItem, Order } from '@org/shared-types';
+import { orderToCartItems } from '../lib/orderMapping';
 import { loadCart, saveCart } from '../lib/cartStorage';
 
 interface CartState {
@@ -19,6 +20,7 @@ interface CartContextValue extends CartState {
   cancelRemove: (item: CartItem) => void;
   clearCart: () => void;
   setComment: (comment: string) => void;
+  replaceCart: (order: Order) => void;
   conflictsWithCart: (restaurantId: number) => boolean;
   totalPrice: number;
   totalItems: number;
@@ -100,6 +102,15 @@ export function CartProvider({ children }: { children: ReactNode }) {
     setState(EMPTY_STATE);
   }
 
+  function replaceCart(order: Order) {
+    setState({
+      cartItems: orderToCartItems(order),
+      restaurantId: order.restaurantId,
+      restaurantName: order.restaurantName,
+      comment: order.comment ?? '',
+    });
+  }
+
   function setComment(comment: string) {
     setState(prev => ({ ...prev, comment }));
   }
@@ -147,6 +158,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
         cancelRemove,
         clearCart,
         setComment,
+        replaceCart,
         conflictsWithCart,
         totalPrice,
         totalItems,
