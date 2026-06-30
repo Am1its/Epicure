@@ -1,13 +1,15 @@
 'use client';
 
 import 'leaflet/dist/leaflet.css';
-import { MapContainer, TileLayer, Marker } from 'react-leaflet';
+import { MapContainer, TileLayer, Marker, useMap } from 'react-leaflet';
 import L from 'leaflet';
 import { useRouter } from 'next/navigation';
 import type { Restaurant } from '@org/shared-types';
+import { TEXT } from '../lib/text';
 
 interface MapViewProps {
   restaurants: Restaurant[];
+  userCoords?: { lat: number; lng: number };
 }
 
 const DEFAULT_CENTER: [number, number] = [32.0853, 34.7818]; // Tel Aviv
@@ -23,14 +25,36 @@ function makeLabelIcon(name: string) {
   });
 }
 
-export function MapView({ restaurants }: MapViewProps) {
+const USER_ICON = L.divIcon({
+  className: '',
+  html: '<div class="epicure-map-user-marker"></div>',
+  iconAnchor: [12, 12],
+  iconSize: [24, 24],
+});
+
+function RecenterButton({ userCoords }: { userCoords: { lat: number; lng: number } }) {
+  const map = useMap();
+  return (
+    <button
+      className="epicure-map__recenter-btn"
+      aria-label={TEXT.map.recenterAriaLabel}
+      onClick={() => map.flyTo([userCoords.lat, userCoords.lng], map.getZoom())}
+    >
+      <img src="/icons/user-location.svg" alt="" aria-hidden="true" width={20} height={20} />
+    </button>
+  );
+}
+
+export function MapView({ restaurants, userCoords }: MapViewProps) {
   const router = useRouter();
   const mapped = restaurants.filter(r => r.latitude != null && r.longitude != null);
 
   const center: [number, number] =
-    mapped.length > 0
-      ? [mapped[0].latitude!, mapped[0].longitude!]
-      : DEFAULT_CENTER;
+    userCoords
+      ? [userCoords.lat, userCoords.lng]
+      : mapped.length > 0
+        ? [mapped[0].latitude!, mapped[0].longitude!]
+        : DEFAULT_CENTER;
 
   return (
     <div className="epicure-map-container">
@@ -48,6 +72,13 @@ export function MapView({ restaurants }: MapViewProps) {
             eventHandlers={{ click: () => router.push(`/restaurants/${r.id}`) }}
           />
         ))}
+        {userCoords && (
+          <Marker
+            position={[userCoords.lat, userCoords.lng]}
+            icon={USER_ICON}
+          />
+        )}
+        {userCoords && <RecenterButton userCoords={userCoords} />}
       </MapContainer>
     </div>
   );

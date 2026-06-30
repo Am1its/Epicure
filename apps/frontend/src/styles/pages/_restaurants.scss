@@ -185,3 +185,33 @@
   color: $black-primary;
   opacity: 0.45;
 }
+
+.epicure-map-user-marker {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: #4285f4;
+  border: 3px solid $white;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
+}
+
+.epicure-map__recenter-btn {
+  position: absolute;
+  bottom: 1.5rem;
+  right: 0.625rem;
+  z-index: 1000;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 4px;
+  background: $white;
+  border: 2px solid rgba(0, 0, 0, 0.15);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  &:hover { background-color: $cream-secondary; }
+
+  @include reduced-motion { transition: none; }
+}
