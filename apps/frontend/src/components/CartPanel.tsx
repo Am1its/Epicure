@@ -61,7 +61,7 @@ export function CartPanel({ onClose }: CartPanelProps) {
             </div>
           </div>
         )}
-        <CartFooter totalPrice={totalPrice} hasItems={cartItems.length > 0} />
+        <CartFooter totalPrice={totalPrice} hasItems={totalItems > 0} />
       </div>
     </>
   );

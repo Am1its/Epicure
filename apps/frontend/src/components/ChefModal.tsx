@@ -14,7 +14,7 @@ interface ChefModalProps {
 }
 
 export function ChefModal({ chef, onClose }: ChefModalProps) {
-  const hasPopulated = chef.restaurants !== undefined;
+  const hasPopulated = chef.restaurants !== undefined && chef.restaurants.length > 0;
   const [restaurants, setRestaurants] = useState<ChefRestaurant[]>(chef.restaurants ?? []);
 
   useEffect(() => {

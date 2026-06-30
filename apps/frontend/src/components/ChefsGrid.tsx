@@ -25,6 +25,7 @@ export function ChefsGrid() {
   const gridVisible = useIntersectionObserver(gridRef);
   const tabsRef = useRef<HTMLDivElement>(null);
   const sentinelRef = useRef<HTMLDivElement>(null);
+  const highlightPendingRef = useRef(false);
   useTabIndicator(tabsRef, activeTab);
 
   useEffect(() => {
@@ -56,7 +57,10 @@ export function ChefsGrid() {
     return chefs;
   }, [chefs, activeTab]);
 
-  useEffect(() => { setVisibleCount(PAGE_SIZE); }, [filtered]);
+  useEffect(() => {
+    if (highlightPendingRef.current) return;
+    setVisibleCount(PAGE_SIZE);
+  }, [filtered]);
 
   const loadMore = useCallback(() => setVisibleCount(prev => prev + PAGE_SIZE), []);
 
@@ -68,11 +72,13 @@ export function ChefsGrid() {
     }, { threshold: 0 });
     observer.observe(sentinel);
     return () => observer.disconnect();
-  }, [loadMore, filtered]);
+  }, [loadMore]);
 
   useEffect(() => {
     if (!highlightId || chefs.length === 0) return;
-    // Switch to 'all' and show all chefs so the target card is in the DOM
+    // Switch to 'all' and show all chefs so the target card is in the DOM.
+    // Set the pending flag first so the [filtered] reset effect skips the PAGE_SIZE reset.
+    highlightPendingRef.current = true;
     setActiveTab('all');
     setVisibleCount(chefs.length);
     const isMobile = window.matchMedia('(max-width: 767px)').matches;
@@ -85,6 +91,7 @@ export function ChefsGrid() {
       modalTimer = setTimeout(() => {
         if (chef) setSelectedChef(chef);
         setHighlightId(null);
+        highlightPendingRef.current = false;
       }, isMobile ? 1200 : 500);
     }, 1000);
     return () => { clearTimeout(scrollTimer); clearTimeout(modalTimer); };

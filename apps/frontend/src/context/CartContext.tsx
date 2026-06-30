@@ -116,15 +116,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
   }
 
   function confirmRemove(item: CartItem) {
-    setState(prev => {
-      const updated = prev.cartItems.filter(c => !itemsMatch(c, item));
-      return {
-        ...prev,
-        cartItems: updated,
-        restaurantId: updated.length ? prev.restaurantId : null,
-        restaurantName: updated.length ? prev.restaurantName : null,
-      };
-    });
+    removeFromCart(item);
   }
 
   function cancelRemove(item: CartItem) {
@@ -137,7 +129,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
   }
 
   function conflictsWithCart(incomingRestaurantId: number): boolean {
-    return state.cartItems.some(c => !c.pendingRemove) && state.restaurantId !== incomingRestaurantId;
+    return state.cartItems.length > 0 && state.restaurantId !== incomingRestaurantId;
   }
 
   const committedItems = state.cartItems.filter(c => !c.pendingRemove);
