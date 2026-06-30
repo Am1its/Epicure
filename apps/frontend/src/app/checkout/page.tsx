@@ -9,6 +9,7 @@ import { TEXT } from '../../lib/text';
 import { isCheckoutValid, type CheckoutFormState } from '../../lib/checkoutValidation';
 import { CheckoutForm } from '../../components/checkout/CheckoutForm';
 import { CheckoutOrderSummary } from '../../components/checkout/CheckoutOrderSummary';
+import { CheckoutSuccessModal } from '../../components/checkout/CheckoutSuccessModal';
 import type { CreateOrderRequest, OrderItem, CartItem } from '@org/shared-types';
 
 const EMPTY_FORM: CheckoutFormState = {
@@ -18,7 +19,7 @@ const EMPTY_FORM: CheckoutFormState = {
 export default function CheckoutPage() {
   const router = useRouter();
   const { user } = useAuth();
-  const { cartItems, restaurantId, restaurantName, totalPrice, comment, setComment } = useCart();
+  const { cartItems, restaurantId, restaurantName, totalPrice, comment, setComment, clearCart } = useCart();
   const [form, setForm] = useState<CheckoutFormState>(EMPTY_FORM);
   const [submitting, setSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
@@ -62,8 +63,13 @@ export default function CheckoutPage() {
   }
 
   if (submitted) {
-    // CheckoutSuccessModal added in Task 7
-    return <div className="epicure-checkout__submitted" data-items={confirmedItems.length} data-total={confirmedTotal} />;
+    return (
+      <CheckoutSuccessModal
+        items={confirmedItems}
+        total={confirmedTotal}
+        onClose={() => { clearCart(); router.push('/'); }}
+      />
+    );
   }
 
   return (
