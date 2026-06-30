@@ -255,3 +255,20 @@
   justify-content: center;
   line-height: 1;
 }
+
+.epicure-header--checkout {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: relative;
+
+  .epicure-header__checkout-title {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 1.25rem;
+    font-weight: 300;
+    letter-spacing: 0.08em;
+    color: $black-primary;
+  }
+}

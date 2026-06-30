@@ -2,7 +2,7 @@
 
 import { useState, useRef, useCallback, useEffect } from 'react';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { NavDrawer } from './NavDrawer';
 import { SearchOverlay } from './SearchOverlay';
 import { CartPanel } from './CartPanel';
@@ -16,7 +16,7 @@ import { useSearch } from '../hooks/useSearch';
 import { useClickOutside } from '../hooks/useClickOutside';
 import type { NavLink } from '@org/shared-types';
 import { strapiImageUrl } from '../lib/api';
-import { dispatchCuisineFilter, dispatchChefHighlight } from '../lib/events';
+import { dispatchCuisineFilter, dispatchChefHighlight, PENDING_NAV_KEY, OPEN_CART_EVENT } from '../lib/events';
 
 type ActivePanel = 'none' | 'drawer' | 'search' | 'cart' | 'signin' | 'signup' | 'userdropdown';
 
@@ -30,6 +30,7 @@ interface HeaderProps {
 export default function Header({ brandName, logoUrl, navLinks, footerLinks }: HeaderProps) {
   const [activePanel, setActivePanel] = useState<ActivePanel>('none');
   const pathname = usePathname();
+  const router = useRouter();
   const [searchQuery, setSearchQuery] = useState('');
   const { totalItems } = useCart();
   const { user } = useAuth();
@@ -61,6 +62,34 @@ export default function Header({ brandName, logoUrl, navLinks, footerLinks }: He
 
   function handleUserIconClick() {
     toggle(user ? 'userdropdown' : 'signin');
+  }
+
+  function gatedNav(dest: string) {
+    setActivePanel('none');
+    if (user) {
+      router.push(dest);
+      return;
+    }
+    sessionStorage.setItem(PENDING_NAV_KEY, dest);
+    setActivePanel('signin');
+  }
+
+  useEffect(() => {
+    const handler = () => setActivePanel('cart');
+    window.addEventListener(OPEN_CART_EVENT, handler);
+    return () => window.removeEventListener(OPEN_CART_EVENT, handler);
+  }, []);
+
+  if (pathname === '/checkout') {
+    return (
+      <header className="epicure-header epicure-header--checkout">
+        <Link href="/" className="epicure-nav__logo" aria-label={TEXT.nav.logoAriaLabel}>
+          <img src="/icons/logo.svg" alt="" aria-hidden="true" width={34} height={34} className="epicure-nav__logo-icon" />
+          <span>{brandName ?? TEXT.nav.brandName}</span>
+        </Link>
+        <span className="epicure-header__checkout-title">{TEXT.checkout.pageTitle}</span>
+      </header>
+    );
   }
 
   return (
@@ -228,7 +257,13 @@ export default function Header({ brandName, logoUrl, navLinks, footerLinks }: He
 
       {activePanel === 'drawer' && <NavDrawer onClose={() => setActivePanel('none')} navLinks={resolvedNavLinks} footerLinks={footerLinks} />}
       {activePanel === 'search' && <SearchOverlay onClose={() => setActivePanel('none')} />}
-      {activePanel === 'cart' && <CartPanel onClose={() => setActivePanel('none')} />}
+      {activePanel === 'cart' && (
+        <CartPanel
+          onClose={() => setActivePanel('none')}
+          onCheckout={() => gatedNav('/checkout')}
+          onOrderHistory={() => gatedNav('/orders')}
+        />
+      )}
       {activePanel === 'signin' && (
         <SignInModal
           onClose={() => setActivePanel('none')}
