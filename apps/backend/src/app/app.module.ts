@@ -7,9 +7,10 @@ import { DishesModule } from './dishes/dishes.module';
 import { SearchModule } from './search/search.module';
 import { AuthModule } from './auth/auth.module';
 import { NavigationModule } from './navigation/navigation.module';
+import { OrdersModule } from './orders/orders.module';
 
 @Module({
-  imports: [RestaurantsModule, ChefsModule, DishesModule, SearchModule, AuthModule, NavigationModule],
+  imports: [RestaurantsModule, ChefsModule, DishesModule, SearchModule, AuthModule, NavigationModule, OrdersModule],
   controllers: [AppController],
   providers: [AppService],
 })

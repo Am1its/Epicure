@@ -1,4 +1,18 @@
-import type { StrapiImage } from '@org/shared-types';
+import type { StrapiImage, OrderItem } from '@org/shared-types';
+
+export interface StrapiOrder {
+  id: number;
+  restaurantId: number;
+  restaurantName: string;
+  items: OrderItem[];
+  comment?: string;
+  total: number;
+  createdAt: string;
+}
+
+export interface StrapiSingleResponse<T> {
+  data: T;
+}
 
 export interface StrapiChef {
   id: number;

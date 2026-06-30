@@ -33,8 +33,8 @@ export class StrapiClientService {
     }
   }
 
-  async get<T>(path: string): Promise<T[]> {
-    const res = await this.request(path);
+  async get<T>(path: string, token?: string): Promise<T[]> {
+    const res = await this.request(path, token ? { headers: { Authorization: `Bearer ${token}` } } : undefined);
     if (!res.ok) {
       throw new ServiceUnavailableException(`Strapi returned ${res.status}`);
     }
@@ -50,10 +50,13 @@ export class StrapiClientService {
     return body.data;
   }
 
-  async post<T>(path: string, body: Record<string, unknown>): Promise<T> {
+  async post<T>(path: string, body: Record<string, unknown>, token?: string): Promise<T> {
     const res = await this.request(path, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: {
+        'Content-Type': 'application/json',
+        ...(token ? { Authorization: `Bearer ${token}` } : {}),
+      },
       body: JSON.stringify(body),
     });
     if (!res.ok) {
