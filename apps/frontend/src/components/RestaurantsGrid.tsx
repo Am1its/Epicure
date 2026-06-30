@@ -173,7 +173,7 @@ export function RestaurantsGrid() {
     }, { threshold: 0.1 });
     observer.observe(sentinel);
     return () => observer.disconnect();
-  }, [filtered, loadMore]);
+  }, [loadMore]);
 
   function clearAllFilters() {
     setSelectedRatings(new Set());

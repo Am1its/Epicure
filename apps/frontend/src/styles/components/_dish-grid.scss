@@ -13,7 +13,7 @@
 
   @include for-normal-layout {
     grid-template-columns: repeat(4, 272px);
-    grid-auto-rows: 413px;
+    grid-auto-rows: 460px;
     justify-content: center;
     gap: 2rem;
     width: 1184px;
@@ -21,6 +21,13 @@
     padding: 2rem 0;
     background: transparent;
   }
+}
+
+// ── Card entrance animation ───────────────────────────────────────
+.epicure-dish-grid .epicure-dish-card {
+  animation: epicure-fade-in 250ms $ease-out both;
+
+  @include reduced-motion { animation: none; }
 }
 
 // ── Dish card overrides (restaurant detail context only) ──────────
@@ -100,7 +107,7 @@
 
   // ── Desktop overrides ────────────────────────────────────────────
   @include for-normal-layout {
-    height: auto;
+    height: 100%;
     border-radius: 4px;
 
     &__image {
@@ -114,12 +121,13 @@
       padding: 0.875rem 1rem 1rem;
       display: flex;
       flex-direction: column;
+      flex: 1;
     }
 
     &__name {
       font-size: 2rem;
       font-weight: 400;
-      min-height: auto;
+      min-height: 4.8rem;
       order: unset;
     }
 

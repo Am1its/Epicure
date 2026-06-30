@@ -192,10 +192,10 @@
       .epicure-dish-card__restaurant  { order: 2; }
       .epicure-dish-card__type-icon   { order: 3; }
       .epicure-dish-card__description { order: 4; }
-      .epicure-dish-card__price-row   { order: 5; margin-top: 0; }
+      .epicure-dish-card__price-row   { order: 5; margin-top: auto; }
 
       .epicure-dish-card__info {
-        justify-content: space-between;
+        justify-content: flex-start;
       }
     }
   }
@@ -224,7 +224,10 @@
       align-items: start;
     }
 
-    &__photo-col { position: relative; }
+    &__photo-col {
+      position: relative;
+      overflow: hidden;
+    }
 
     &__photo {
       width: 100%;
@@ -232,6 +235,16 @@
       object-fit: cover;
       display: block;
       filter: grayscale(100%);
+      transition: filter $duration-base $ease-out, transform $duration-base $ease-out;
+    }
+
+    &__photo-col:hover &__photo {
+      filter: grayscale(0%);
+      transform: scale(1.03);
+    }
+
+    @include reduced-motion {
+      &__photo { transition: none; }
     }
 
     &__name-bar {

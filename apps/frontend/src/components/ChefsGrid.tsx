@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useMemo, useRef } from 'react';
+import { useState, useEffect, useMemo, useRef, useCallback } from 'react';
 import type { Chef } from '@org/shared-types';
 import { ChefCard } from '@org/ui-components';
 import { TEXT } from '../lib/text';
@@ -10,6 +10,8 @@ import { ChefModal } from './ChefModal';
 import { useIntersectionObserver } from '../hooks/useIntersectionObserver';
 import { useTabIndicator } from '../hooks/useTabIndicator';
 
+const PAGE_SIZE = 6;
+
 type ChefTab = (typeof TEXT.chefsGrid.tabs)[number]['id'];
 
 export function ChefsGrid() {
@@ -18,9 +20,12 @@ export function ChefsGrid() {
   const [activeTab, setActiveTab] = useState<ChefTab>('all');
   const [highlightId, setHighlightId] = useState<number | null>(null);
   const [selectedChef, setSelectedChef] = useState<Chef | null>(null);
+  const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
   const gridRef = useRef<HTMLDivElement>(null);
   const gridVisible = useIntersectionObserver(gridRef);
   const tabsRef = useRef<HTMLDivElement>(null);
+  const sentinelRef = useRef<HTMLDivElement>(null);
+  const highlightPendingRef = useRef(false);
   useTabIndicator(tabsRef, activeTab);
 
   useEffect(() => {
@@ -45,10 +50,37 @@ export function ChefsGrid() {
       .finally(() => setLoading(false));
   }, []);
 
+  const filtered = useMemo(() => {
+    if (activeTab === 'new') return [...chefs].sort((a, b) => b.id - a.id);
+    if (activeTab === 'most-viewed')
+      return chefs.filter(c => c.chefOfTheWeek);
+    return chefs;
+  }, [chefs, activeTab]);
+
+  useEffect(() => {
+    if (highlightPendingRef.current) return;
+    setVisibleCount(PAGE_SIZE);
+  }, [filtered]);
+
+  const loadMore = useCallback(() => setVisibleCount(prev => prev + PAGE_SIZE), []);
+
+  useEffect(() => {
+    const sentinel = sentinelRef.current;
+    if (!sentinel) return;
+    const observer = new IntersectionObserver(entries => {
+      if (entries[0].isIntersecting) loadMore();
+    }, { threshold: 0 });
+    observer.observe(sentinel);
+    return () => observer.disconnect();
+  }, [loadMore]);
+
   useEffect(() => {
     if (!highlightId || chefs.length === 0) return;
-    // Switch to 'all' so the chef card is guaranteed to be in the DOM
+    // Switch to 'all' and show all chefs so the target card is in the DOM.
+    // Set the pending flag first so the [filtered] reset effect skips the PAGE_SIZE reset.
+    highlightPendingRef.current = true;
     setActiveTab('all');
+    setVisibleCount(chefs.length);
     const isMobile = window.matchMedia('(max-width: 767px)').matches;
     let modalTimer: ReturnType<typeof setTimeout>;
     const scrollTimer = setTimeout(() => {
@@ -59,17 +91,11 @@ export function ChefsGrid() {
       modalTimer = setTimeout(() => {
         if (chef) setSelectedChef(chef);
         setHighlightId(null);
+        highlightPendingRef.current = false;
       }, isMobile ? 1200 : 500);
     }, 1000);
     return () => { clearTimeout(scrollTimer); clearTimeout(modalTimer); };
   }, [highlightId, chefs]);
-
-  const filtered = useMemo(() => {
-    if (activeTab === 'new') return [...chefs].sort((a, b) => b.id - a.id);
-    if (activeTab === 'most-viewed')
-      return chefs.filter(c => c.chefOfTheWeek);
-    return chefs;
-  }, [chefs, activeTab]);
 
   return (
     <>
@@ -107,7 +133,7 @@ export function ChefsGrid() {
           ref={gridRef}
           className={`epicure-chef-grid${gridVisible ? ' epicure-chef-grid--visible' : ''}`}
         >
-          {filtered.map(chef => (
+          {filtered.slice(0, visibleCount).map(chef => (
             <button
               key={chef.id}
               id={`chef-${chef.id}`}
@@ -119,6 +145,9 @@ export function ChefsGrid() {
               <ChefCard chef={chef} imageUrl={strapiImageUrl(chef.image?.url)} />
             </button>
           ))}
+          {visibleCount < filtered.length && (
+            <div ref={sentinelRef} className="epicure-scroll-sentinel" aria-hidden="true" />
+          )}
         </div>
       )}
     </>

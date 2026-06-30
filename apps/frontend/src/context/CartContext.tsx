@@ -38,11 +38,13 @@ function isValidCartState(val: unknown): val is CartState {
 }
 
 function itemsMatch(a: CartItem, b: CartItem): boolean {
+  const changesA = [...a.selectedChanges].sort();
+  const changesB = [...b.selectedChanges].sort();
   return (
     a.dish.id === b.dish.id &&
     a.selectedSide === b.selectedSide &&
-    a.selectedChanges.length === b.selectedChanges.length &&
-    a.selectedChanges.every((c, i) => c === b.selectedChanges[i])
+    changesA.length === changesB.length &&
+    changesA.every((c, i) => c === changesB[i])
   );
 }
 
@@ -114,15 +116,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
   }
 
   function confirmRemove(item: CartItem) {
-    setState(prev => {
-      const updated = prev.cartItems.filter(c => !itemsMatch(c, item));
-      return {
-        ...prev,
-        cartItems: updated,
-        restaurantId: updated.length ? prev.restaurantId : null,
-        restaurantName: updated.length ? prev.restaurantName : null,
-      };
-    });
+    removeFromCart(item);
   }
 
   function cancelRemove(item: CartItem) {
@@ -135,7 +129,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
   }
 
   function conflictsWithCart(incomingRestaurantId: number): boolean {
-    return state.cartItems.some(c => !c.pendingRemove) && state.restaurantId !== incomingRestaurantId;
+    return state.cartItems.length > 0 && state.restaurantId !== incomingRestaurantId;
   }
 
   const committedItems = state.cartItems.filter(c => !c.pendingRemove);

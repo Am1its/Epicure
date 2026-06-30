@@ -1,6 +1,9 @@
+'use client';
+
 import Link from 'next/link';
-import { type ReactNode } from 'react';
+import { useRef, type ReactNode } from 'react';
 import { Carousel } from './Carousel';
+import { useIntersectionObserver } from '../hooks/useIntersectionObserver';
 
 interface MobileSectionProps {
   title: string;
@@ -10,8 +13,14 @@ interface MobileSectionProps {
 }
 
 export function MobileSection({ title, linkLabel, linkHref, children }: MobileSectionProps) {
+  const ref = useRef<HTMLElement>(null);
+  const isVisible = useIntersectionObserver(ref);
+
   return (
-    <section className="epicure-mobile-section">
+    <section
+      ref={ref}
+      className={`epicure-mobile-section${isVisible ? ' epicure-mobile-section--visible' : ''}`}
+    >
       <h2 className="epicure-mobile-section__title">{title}</h2>
       <Carousel className="epicure-mobile-section__row">{children}</Carousel>
       {linkLabel && linkHref && (

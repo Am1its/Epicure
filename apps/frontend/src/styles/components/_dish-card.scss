@@ -5,6 +5,12 @@
   background: $white;
   border-radius: 4px;
   overflow: hidden;
+  transition: box-shadow 200ms;
+
+  @include reduced-motion {
+    transition: none;
+    &__image { transition: none; }
+  }
 
   &__image-wrap { position: relative; }
 
@@ -13,6 +19,7 @@
     aspect-ratio: 1;
     object-fit: cover;
     display: block;
+    transition: transform $duration-base $ease-out;
   }
 
   &__type-icon {
@@ -89,14 +96,20 @@
   color: inherit;
   cursor: pointer;
 
-  &:hover { opacity: 0.92; }
+  &:hover .epicure-dish-card { box-shadow: 0 6px 20px $shadow-subtle; }
+  &:hover .epicure-dish-card__image { transform: scale(1.04); }
+
+  @include reduced-motion {
+    .epicure-dish-card { transition: none; }
+    .epicure-dish-card__image { transition: none; }
+  }
 }
 
 @include for-normal-layout {
   .epicure-dish-card {
     display: flex;
     flex-direction: column;
-    height: 690px;
+    height: 650px;
 
     &__image-wrap {
       flex-shrink: 0;

@@ -12,7 +12,7 @@ interface CartPanelProps {
 }
 
 export function CartPanel({ onClose }: CartPanelProps) {
-  const { cartItems, restaurantName, totalPrice, comment, setComment } = useCart();
+  const { cartItems, restaurantName, totalPrice, totalItems, comment, setComment } = useCart();
 
   useEffect(() => {
     document.body.style.overflow = 'hidden';
@@ -61,7 +61,7 @@ export function CartPanel({ onClose }: CartPanelProps) {
             </div>
           </div>
         )}
-        <CartFooter totalPrice={totalPrice} hasItems={cartItems.length > 0} />
+        <CartFooter totalPrice={totalPrice} hasItems={totalItems > 0} />
       </div>
     </>
   );
