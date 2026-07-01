@@ -40,19 +40,28 @@ export function OrderSummaryModal({ order, onClose }: Props) {
                 <span className="epicure-order-summary__qty">{item.quantity}</span>
                 <div className="epicure-order-summary__item-text">
                   <p className="epicure-order-summary__name">{item.name}</p>
-                  <p className="epicure-order-summary__price">&#8362;{item.price.toFixed(2)}</p>
+                  <p className="epicure-order-summary__price">
+                    <img src="/icons/Shekel.svg" alt="₪" aria-hidden="true" className="epicure-order-summary__shekel" />
+                    {item.price.toFixed(2)}
+                  </p>
                   {(item.selectedSide || item.selectedChanges.length > 0) && (
                     <p className="epicure-order-summary__meta">
                       {[item.selectedSide, ...item.selectedChanges].filter(Boolean).join(' | ')}
                     </p>
                   )}
                 </div>
-                <span className="epicure-order-summary__line-total">&#8362;{(item.price * item.quantity).toFixed(0)}</span>
+                <span className="epicure-order-summary__line-total">
+                  <img src="/icons/Shekel.svg" alt="₪" aria-hidden="true" className="epicure-order-summary__shekel" />
+                  {(item.price * item.quantity).toFixed(0)}
+                </span>
               </div>
             </div>
           ))}
         </div>
-        <p className="epicure-order-summary__total">&#8362;{order.total}</p>
+        <p className="epicure-order-summary__total">
+          <img src="/icons/Shekel.svg" alt="₪" aria-hidden="true" className="epicure-order-summary__shekel" />
+          {order.total}
+        </p>
         {order.comment && (
           <>
             <p className="epicure-order-summary__comment-label">{TEXT.checkout.addComment}</p>

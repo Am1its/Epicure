@@ -22,18 +22,16 @@ export default function CheckoutPage() {
   const { cartItems, restaurantId, restaurantName, totalPrice, comment, setComment, clearCart } = useCart();
   const [form, setForm] = useState<CheckoutFormState>(EMPTY_FORM);
   const [submitting, setSubmitting] = useState(false);
-  const [submitted, setSubmitted] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [confirmedItems, setConfirmedItems] = useState<CartItem[]>([]);
-  const [confirmedTotal, setConfirmedTotal] = useState(0);
+  const [confirmed, setConfirmed] = useState<{ items: CartItem[]; total: number } | null>(null);
 
   const committed = cartItems.filter(c => !c.pendingRemove);
 
   useEffect(() => {
-    if (!submitted && (!user || committed.length === 0)) router.replace('/');
-  }, [user, committed.length, router, submitted]);
+    if (!confirmed && (!user || committed.length === 0)) router.replace('/');
+  }, [user, committed.length, router, confirmed]);
 
-  if (!submitted && (!user || committed.length === 0)) return null;
+  if (!confirmed && (!user || committed.length === 0)) return null;
 
   const canPay = isCheckoutValid(form) && !submitting;
 
@@ -52,9 +50,7 @@ export default function CheckoutPage() {
     };
     try {
       await createOrder(body);
-      setConfirmedItems(committed);
-      setConfirmedTotal(totalPrice);
-      setSubmitted(true);
+      setConfirmed({ items: committed, total: totalPrice });
     } catch {
       setError(TEXT.checkout.submitError);
     } finally {
@@ -62,11 +58,11 @@ export default function CheckoutPage() {
     }
   }
 
-  if (submitted) {
+  if (confirmed) {
     return (
       <CheckoutSuccessModal
-        items={confirmedItems}
-        total={confirmedTotal}
+        items={confirmed.items}
+        total={confirmed.total}
         onClose={() => { clearCart(); router.push('/'); }}
       />
     );

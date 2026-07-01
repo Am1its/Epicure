@@ -1,5 +1,6 @@
 import { Controller, Get, Post, Body, Headers, UnauthorizedException } from '@nestjs/common';
-import type { Order, CreateOrderRequest } from '@org/shared-types';
+import type { Order } from '@org/shared-types';
+import { CreateOrderDto } from './create-order.dto';
 import { OrdersService } from './orders.service';
 
 @Controller('orders')
@@ -7,7 +8,7 @@ export class OrdersController {
   constructor(private readonly ordersService: OrdersService) {}
 
   @Post()
-  create(@Headers('authorization') auth: string | undefined, @Body() body: CreateOrderRequest): Promise<Order> {
+  create(@Headers('authorization') auth: string | undefined, @Body() body: CreateOrderDto): Promise<Order> {
     return this.ordersService.create(this.extractToken(auth), body);
   }
 

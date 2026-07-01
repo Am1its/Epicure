@@ -40,4 +40,5 @@
   &__countdown { font-size: 2.5rem; font-weight: 300; color: $gold-secondary; margin-bottom: 1.5rem; }
   &__items { list-style: none; padding: 0; margin: 0 0 1rem; display: flex; flex-direction: column; gap: 0.25rem; font-size: 0.9375rem; }
   &__total { font-weight: 500; letter-spacing: 0.04em; }
+  &__shekel { width: 8px; height: 10px; vertical-align: middle; margin: 0 0.1rem; }
 }

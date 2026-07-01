@@ -3,16 +3,14 @@ import {
   HttpException,
   NotFoundException,
   ServiceUnavailableException,
+  UnauthorizedException,
 } from '@nestjs/common';
+import type { StrapiSingleResponse } from './strapi-types';
 
 const STRAPI_URL = process.env['STRAPI_URL'] ?? 'http://localhost:1337';
 
 interface StrapiListResponse<T> {
   data: T[];
-}
-
-interface StrapiSingleResponse<T> {
-  data: T;
 }
 
 @Injectable()
@@ -35,9 +33,8 @@ export class StrapiClientService {
 
   async get<T>(path: string, token?: string): Promise<T[]> {
     const res = await this.request(path, token ? { headers: { Authorization: `Bearer ${token}` } } : undefined);
-    if (!res.ok) {
-      throw new ServiceUnavailableException(`Strapi returned ${res.status}`);
-    }
+    if (res.status === 401) throw new UnauthorizedException('Strapi token rejected');
+    if (!res.ok) throw new ServiceUnavailableException(`Strapi returned ${res.status}`);
     const body = await this.parseJson<StrapiListResponse<T>>(res);
     return body.data ?? [];
   }

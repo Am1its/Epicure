@@ -43,7 +43,7 @@ export function CheckoutForm({ form, onChange }: Props) {
         </label>
         <label className="epicure-checkout-form__field">
           <span className="epicure-checkout-form__label">{TEXT.checkout.expiry}</span>
-          <input className="epicure-checkout-form__input" placeholder="MM/YY" value={form.expiry} onChange={e => onChange({ expiry: e.target.value })} />
+          <input className="epicure-checkout-form__input" placeholder={TEXT.checkout.expiryPlaceholder} value={form.expiry} onChange={e => onChange({ expiry: e.target.value })} />
         </label>
       </section>
     </div>

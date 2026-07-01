@@ -16,7 +16,7 @@
 
   &__right { display: flex; flex-direction: column; gap: 1rem; }
 
-  &__error { color: #b00020; font-size: 0.875rem; margin: 0; }
+  &__error { color: $error-color; font-size: 0.875rem; margin: 0; }
 
   &__pay {
     display: flex;

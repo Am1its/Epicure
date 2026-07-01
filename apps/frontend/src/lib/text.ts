@@ -185,6 +185,7 @@ export const TEXT = {
     nameOnCard: 'Name On Card',
     cvv: 'CVV',
     expiry: 'Expiry Date',
+    expiryPlaceholder: 'MM/YY',
     yourOrder: 'YOUR ORDER',
     addComment: 'Add A Comment',
     commentPlaceholder: 'Special requests, allergies, dietary restrictions, etc.',

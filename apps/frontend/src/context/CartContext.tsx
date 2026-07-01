@@ -51,12 +51,11 @@ function itemsMatch(a: CartItem, b: CartItem): boolean {
 }
 
 export function CartProvider({ children }: { children: ReactNode }) {
-  const [state, setState] = useState<CartState>(EMPTY_STATE);
-
-  useEffect(() => {
+  const [state, setState] = useState<CartState>(() => {
+    if (typeof window === 'undefined') return EMPTY_STATE;
     const saved = loadCart<CartState>();
-    if (saved && isValidCartState(saved)) setState(saved);
-  }, []);
+    return saved && isValidCartState(saved) ? saved : EMPTY_STATE;
+  });
 
   useEffect(() => {
     const stateToSave = {

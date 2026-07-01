@@ -51,6 +51,7 @@
   &__name { font-size: 1.125rem; color: $black-primary; }
   &__date { color: $gray-primary; font-size: 0.875rem; }
   &__total { white-space: nowrap; font-size: 1rem; }
+  &__shekel { width: 8px; height: 10px; vertical-align: middle; margin-right: 0.1rem; }
   &__chevron { width: 16px; height: 16px; justify-self: end; }
 
   @include for-normal-layout {

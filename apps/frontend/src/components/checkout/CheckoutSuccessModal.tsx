@@ -14,7 +14,10 @@ export function CheckoutSuccessModal({ items, total, onClose }: Props) {
   const [seconds, setSeconds] = useState(90 * 60);
 
   useEffect(() => {
-    const id = setInterval(() => setSeconds(s => (s <= 0 ? 0 : s - 1)), 1000);
+    const id = setInterval(() => setSeconds(s => {
+      if (s <= 1) { clearInterval(id); return 0; }
+      return s - 1;
+    }), 1000);
     return () => clearInterval(id);
   }, []);
 
@@ -40,7 +43,9 @@ export function CheckoutSuccessModal({ items, total, onClose }: Props) {
           ))}
         </ul>
         <p className="epicure-checkout-success__total">
-          {TEXT.checkout.total} &mdash; &#8362;{total}
+          {TEXT.checkout.total} &mdash;{' '}
+          <img src="/icons/Shekel.svg" alt="₪" aria-hidden="true" className="epicure-checkout-success__shekel" />
+          {total}
         </p>
       </div>
     </>

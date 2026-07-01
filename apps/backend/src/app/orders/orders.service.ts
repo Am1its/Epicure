@@ -25,7 +25,7 @@ export class OrdersService {
   }
 
   async findForUser(token: string): Promise<Order[]> {
-    const items = await this.strapiClient.get<StrapiOrder>('/api/orders?sort=createdAt:desc', token);
+    const items = await this.strapiClient.get<StrapiOrder>('/api/orders?sort=createdAt:desc&pagination[pageSize]=100', token);
     return items.map(o => this.transform(o));
   }
 

@@ -19,7 +19,10 @@ export function OrderRow({ order, onSelect }: Props) {
     >
       <span className="epicure-order-row__name">{order.restaurantName}</span>
       <span className="epicure-order-row__date">{formatOrderDate(order.createdAt)}</span>
-      <span className="epicure-order-row__total">&#8362;{order.total}</span>
+      <span className="epicure-order-row__total">
+        <img src="/icons/Shekel.svg" alt="₪" aria-hidden="true" className="epicure-order-row__shekel" />
+        {order.total}
+      </span>
       <img src="/icons/Arrow.svg" alt="" aria-hidden="true" className="epicure-order-row__chevron" />
     </button>
   );
