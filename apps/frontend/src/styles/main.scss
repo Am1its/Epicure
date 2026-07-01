@@ -32,6 +32,7 @@
 @use 'components/checkout';
 @use 'components/checkout-success';
 @use 'components/order-summary-modal';
+@use 'components/cart-conflict-modal';
 
 // Pages
 @use 'pages/home';

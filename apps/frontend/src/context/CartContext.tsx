@@ -1,9 +1,11 @@
 'use client';
 
-import { createContext, useContext, useState, useEffect, type ReactNode } from 'react';
+import { createContext, useContext, useState, useEffect, useRef, type ReactNode } from 'react';
 import type { CartItem, Order } from '@org/shared-types';
+import { useAuth } from './AuthContext';
 import { orderToCartItems } from '../lib/orderMapping';
-import { loadCart, saveCart } from '../lib/cartStorage';
+import { loadCartForUser, saveCartForUser } from '../lib/cartStorage';
+import { CartConflictModal } from '../components/CartConflictModal';
 
 interface CartState {
   cartItems: CartItem[];
@@ -50,20 +52,92 @@ function itemsMatch(a: CartItem, b: CartItem): boolean {
   );
 }
 
+// Reads the saved user ID from auth localStorage so cart can be initialised
+// synchronously on the client without waiting for a useEffect.
+function readAuthUserId(): number | null {
+  if (typeof window === 'undefined') return null;
+  try {
+    const raw = localStorage.getItem('epicure_auth');
+    if (!raw) return null;
+    const parsed = JSON.parse(raw) as { user?: { id?: number } };
+    return parsed?.user?.id ?? null;
+  } catch { return null; }
+}
+
 export function CartProvider({ children }: { children: ReactNode }) {
+  const { user } = useAuth();
+
+  const initialUserId = readAuthUserId();
+
   const [state, setState] = useState<CartState>(() => {
     if (typeof window === 'undefined') return EMPTY_STATE;
-    const saved = loadCart<CartState>();
+    const saved = loadCartForUser<CartState>(initialUserId ?? undefined);
     return saved && isValidCartState(saved) ? saved : EMPTY_STATE;
   });
 
+  const [cartConflict, setCartConflict] = useState<CartState | null>(null);
+
+  // Always-current ref so the login effect never captures stale cart state.
+  const stateRef = useRef(state);
+  useEffect(() => { stateRef.current = state; });
+
+  // Tracks previous user ID to detect login / logout transitions.
+  const prevUserIdRef = useRef<number | null>(initialUserId);
+
+  // Tracks the user ID used for the last localStorage save.
+  // When this differs from the current user ID, the save effect skips —
+  // the login/logout effect is responsible for that transition's save.
+  const lastSavedUserIdRef = useRef<number | null>(initialUserId);
+
+  // Login / logout handler
   useEffect(() => {
+    const currId = user?.id ?? null;
+    const prevId = prevUserIdRef.current;
+    prevUserIdRef.current = currId;
+
+    if (prevId === currId) return;
+
+    if (prevId === null && currId !== null) {
+      // LOGIN — decide what to do with the anonymous cart vs the user's saved cart
+      const userCart = loadCartForUser<CartState>(currId);
+      const committed = stateRef.current.cartItems.filter(c => !c.pendingRemove);
+      const hasAnon = committed.length > 0;
+      const hasSaved =
+        userCart != null &&
+        isValidCartState(userCart) &&
+        userCart.cartItems.filter(c => !c.pendingRemove).length > 0;
+
+      if (hasAnon && hasSaved) {
+        // Both carts have items — let the user decide
+        setCartConflict(userCart);
+      } else if (hasSaved) {
+        // No anonymous cart: load user's saved cart
+        setState(userCart!);
+      } else {
+        // No saved cart: adopt the anonymous cart under the user's key
+        saveCartForUser(stateRef.current, currId);
+      }
+    } else if (prevId !== null && currId === null) {
+      // LOGOUT — clear in-memory cart; user's cart stays on disk for their next login
+      setState(EMPTY_STATE);
+    }
+  }, [user?.id]);
+
+  // Persist cart to localStorage on every state change.
+  // Skips during login/logout transitions (when lastSavedUserIdRef differs from
+  // current user ID) and while a conflict dialog is waiting to be resolved.
+  useEffect(() => {
+    const currId = user?.id ?? null;
+    if (lastSavedUserIdRef.current !== currId || cartConflict !== null) {
+      lastSavedUserIdRef.current = currId;
+      return;
+    }
     const stateToSave = {
       ...state,
       cartItems: state.cartItems.map(({ pendingRemove: _pr, ...item }) => item),
     };
-    saveCart(stateToSave);
-  }, [state]);
+    saveCartForUser(stateToSave, currId ?? undefined);
+  }, [state, user?.id, cartConflict]);
 
   function addToCart(item: CartItem) {
     setState(prev => {
@@ -142,6 +216,12 @@ export function CartProvider({ children }: { children: ReactNode }) {
     return state.cartItems.length > 0 && state.restaurantId !== incomingRestaurantId;
   }
 
+  function resolveConflict(keep: 'saved' | 'current') {
+    if (!cartConflict || !user) return;
+    if (keep === 'saved') setState(cartConflict);
+    setCartConflict(null);
+  }
+
   const committedItems = state.cartItems.filter(c => !c.pendingRemove);
   const totalPrice = committedItems.reduce((sum, c) => sum + c.dish.price * c.quantity, 0);
   const totalItems = committedItems.reduce((sum, c) => sum + c.quantity, 0);
@@ -164,6 +244,12 @@ export function CartProvider({ children }: { children: ReactNode }) {
       }}
     >
       {children}
+      {cartConflict && (
+        <CartConflictModal
+          onLoadSaved={() => resolveConflict('saved')}
+          onKeepCurrent={() => resolveConflict('current')}
+        />
+      )}
     </CartContext.Provider>
   );
 }

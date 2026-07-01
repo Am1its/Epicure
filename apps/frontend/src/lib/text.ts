@@ -197,6 +197,12 @@ export const TEXT = {
     total: 'TOTAL',
     closeAriaLabel: 'Close',
   },
+  cartConflict: {
+    title: 'Saved Cart Found',
+    message: 'You have items saved from a previous session. What would you like to do?',
+    loadSaved: 'LOAD SAVED CART',
+    keepCurrent: 'KEEP CURRENT ITEMS',
+  },
   orders: {
     pageTitle: 'YOUR ORDER HISTORY',
     empty: "You haven't placed any orders yet.",
