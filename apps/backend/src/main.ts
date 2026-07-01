@@ -2,9 +2,14 @@ import { config } from 'dotenv';
 import { existsSync } from 'fs';
 import { resolve } from 'path';
 
-// process.cwd() is the workspace root when running via nx serve
-const envFile = resolve(process.cwd(), 'apps/backend', '.env');
-if (existsSync(envFile)) config({ path: envFile });
+const envCandidates = [
+  resolve(process.cwd(), 'apps/backend', '.env'),
+  resolve(process.cwd(), '.env'),
+  resolve(__dirname, '..', '.env'),
+];
+const envFile = envCandidates.find(p => existsSync(p));
+if (envFile) config({ path: envFile });
+
 import { Logger, ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app/app.module';

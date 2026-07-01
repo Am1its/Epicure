@@ -85,9 +85,21 @@ export function strapiImageUrl(url?: string): string {
 }
 
 export async function createOrder(body: CreateOrderRequest): Promise<Order> {
-  return postApi<Order>('/api/orders', body as unknown as Record<string, unknown>);
+  const res = await fetch(`${BACKEND_URL}/api/orders`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...authHeaders() },
+    body: JSON.stringify(body),
+    cache: 'no-store',
+  });
+  if (!res.ok) throw new Error(await extractErrorMessage(res, '/api/orders'));
+  return res.json() as Promise<Order>;
 }
 
 export async function fetchOrders(): Promise<Order[]> {
-  return fetchApi<Order[]>('/api/orders');
+  const res = await fetch(`${BACKEND_URL}/api/orders`, {
+    cache: 'no-store',
+    headers: authHeaders(),
+  });
+  if (!res.ok) return [];
+  return res.json() as Promise<Order[]>;
 }
