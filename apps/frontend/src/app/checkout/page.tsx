@@ -24,13 +24,18 @@ export default function CheckoutPage() {
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [confirmed, setConfirmed] = useState<{ items: CartItem[]; total: number } | null>(null);
+  const [mounted, setMounted] = useState(false);
 
   const committed = cartItems.filter(c => !c.pendingRemove);
 
-  useEffect(() => {
-    if (!confirmed && (!user || committed.length === 0)) router.replace('/');
-  }, [user, committed.length, router, confirmed]);
+  useEffect(() => setMounted(true), []);
 
+  useEffect(() => {
+    if (mounted && !confirmed && (!user || committed.length === 0)) router.replace('/');
+  }, [mounted, user, committed.length, router, confirmed]);
+
+  // Return null until mounted so server and client first-render both produce null.
+  if (!mounted) return null;
   if (!confirmed && (!user || committed.length === 0)) return null;
 
   const canPay = isCheckoutValid(form) && !submitting;
@@ -51,8 +56,8 @@ export default function CheckoutPage() {
     try {
       await createOrder(body);
       setConfirmed({ items: committed, total: totalPrice });
-    } catch {
-      setError(TEXT.checkout.submitError);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : TEXT.checkout.submitError);
     } finally {
       setSubmitting(false);
     }
@@ -70,6 +75,12 @@ export default function CheckoutPage() {
 
   return (
     <main className="epicure-checkout">
+      <div className="epicure-checkout__back">
+        <button type="button" className="epicure-checkout__back-btn" onClick={() => router.back()}>
+          ← {TEXT.checkout.goBack}
+        </button>
+        <span className="epicure-checkout__back-note">{TEXT.checkout.orderSaved}</span>
+      </div>
       <div className="epicure-checkout__inner">
         <CheckoutForm form={form} onChange={patch => setForm(prev => ({ ...prev, ...patch }))} />
         <div className="epicure-checkout__right">
@@ -79,8 +90,14 @@ export default function CheckoutPage() {
             comment={comment}
             onCommentChange={setComment}
           />
-          {error && <p className="epicure-checkout__error">{error}</p>}
+          <p className="epicure-checkout__error">{error ?? ''}</p>
           <button type="button" className="epicure-checkout__pay" disabled={!canPay} onClick={handlePay}>
+            <img
+              src={canPay ? '/icons/lock-open.svg' : '/icons/lock-close.svg'}
+              alt=""
+              aria-hidden="true"
+              className="epicure-checkout__pay-lock"
+            />
             {TEXT.checkout.pay}
             <span className="epicure-checkout__pay-total">
               <img src="/icons/Shekel.svg" alt="₪" aria-hidden="true" className="epicure-checkout__pay-shekel" />

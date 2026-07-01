@@ -19,6 +19,7 @@ export function CartConflictModal({ onLoadSaved, onKeepCurrent }: Props) {
       >
         <h2 className="epicure-cart-conflict__title">{TEXT.cartConflict.title}</h2>
         <p className="epicure-cart-conflict__message">{TEXT.cartConflict.message}</p>
+        <p className="epicure-cart-conflict__question">{TEXT.cartConflict.question}</p>
         <button type="button" className="epicure-cart-conflict__load" onClick={onLoadSaved}>
           {TEXT.cartConflict.loadSaved}
         </button>

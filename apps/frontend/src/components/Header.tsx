@@ -244,7 +244,7 @@ export default function Header({ brandName, logoUrl, navLinks, footerLinks }: He
             <button aria-label={TEXT.nav.cartAriaLabel} onClick={() => toggle('cart')}>
               <span className="epicure-nav__cart-wrap">
                 <img src="/icons/cart.svg" alt="" aria-hidden="true" width={22} height={22} />
-                {totalItems > 0 && (
+                {mounted && totalItems > 0 && (
                   <span className="epicure-nav__cart-badge" aria-label={`${totalItems} items in cart`}>
                     {totalItems}
                   </span>

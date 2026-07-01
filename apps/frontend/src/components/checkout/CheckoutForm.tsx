@@ -9,6 +9,16 @@ interface Props {
 }
 
 export function CheckoutForm({ form, onChange }: Props) {
+  function handleExpiryChange(raw: string) {
+    const digits = raw.replace(/\D/g, '').slice(0, 4);
+    const deleting = raw.length < form.expiry.length;
+    if (deleting) {
+      onChange({ expiry: digits.length > 2 ? `${digits.slice(0, 2)}/${digits.slice(2)}` : digits });
+    } else {
+      onChange({ expiry: digits.length >= 2 ? `${digits.slice(0, 2)}/${digits.slice(2)}` : digits });
+    }
+  }
+
   return (
     <div className="epicure-checkout-form">
       <section className="epicure-checkout-form__section">
@@ -43,7 +53,7 @@ export function CheckoutForm({ form, onChange }: Props) {
         </label>
         <label className="epicure-checkout-form__field">
           <span className="epicure-checkout-form__label">{TEXT.checkout.expiry}</span>
-          <input className="epicure-checkout-form__input" placeholder={TEXT.checkout.expiryPlaceholder} value={form.expiry} onChange={e => onChange({ expiry: e.target.value })} />
+          <input className="epicure-checkout-form__input" inputMode="numeric" placeholder={TEXT.checkout.expiryPlaceholder} value={form.expiry} onChange={e => handleExpiryChange(e.target.value)} />
         </label>
       </section>
     </div>

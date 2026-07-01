@@ -186,6 +186,8 @@ export const TEXT = {
     cvv: 'CVV',
     expiry: 'Expiry Date',
     expiryPlaceholder: 'MM/YY',
+    goBack: 'Go back',
+    orderSaved: 'Your order will be saved',
     yourOrder: 'YOUR ORDER',
     addComment: 'Add A Comment',
     commentPlaceholder: 'Special requests, allergies, dietary restrictions, etc.',
@@ -199,7 +201,8 @@ export const TEXT = {
   },
   cartConflict: {
     title: 'Saved Cart Found',
-    message: 'You have items saved from a previous session. What would you like to do?',
+    message: 'You have items saved from a previous session.',
+    question: 'What would you like to do?',
     loadSaved: 'LOAD SAVED CART',
     keepCurrent: 'KEEP CURRENT ITEMS',
   },

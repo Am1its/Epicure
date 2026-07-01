@@ -24,7 +24,8 @@
   }
 
   &__title { font-size: 1.25rem; font-weight: 400; margin-bottom: 0.75rem; }
-  &__message { color: $gray-primary; font-size: 0.9375rem; margin-bottom: 1.5rem; }
+  &__message { color: $gray-primary; font-size: 0.9375rem; margin-bottom: 0.25rem; }
+  &__question { color: $gray-primary; font-size: 0.9375rem; margin-bottom: 1.5rem; }
 
   &__load {
     display: block;

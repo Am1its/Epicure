@@ -1,69 +1,232 @@
 @use '../setup/variables' as *;
 @use '../setup/mixins' as *;
 
+// Hide root header on checkout; keep footer visible (Figma shows footer)
+body:has(.epicure-checkout-layout) {
+  padding-top: 0;
+  .epicure-header { display: none; }
+
+  .epicure-footer {
+    height: $nav-height;
+    padding: 0 2rem;
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+
+    &__links {
+      flex-direction: row;
+      justify-content: center;
+      align-items: center;
+      gap: 2.5rem;
+      width: 100%;
+    }
+  }
+
+  // Desktop: flex column so footer pins to bottom and page never scrolls
+  @include for-normal-layout {
+    display: flex;
+    flex-direction: column;
+    height: 100dvh;
+    overflow: hidden;
+  }
+}
+
+.epicure-checkout-layout {
+  display: flex;
+  flex-direction: column;
+
+  @include for-normal-layout {
+    flex: 1;
+    min-height: 0;
+    overflow: hidden;
+  }
+}
+
+// ─── Checkout header ────────────────────────────────────────────────────────
+
+.epicure-checkout-header {
+  display: flex;
+  align-items: center;
+  height: $nav-height-mobile;
+  max-height: $nav-height-mobile;
+  overflow: hidden;
+  padding: 0 1rem;
+  background: $white;
+  border-bottom: 1px solid $divider;
+  position: relative;
+  flex-shrink: 0;
+  box-sizing: border-box;
+
+  &__logo-link {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    text-decoration: none;
+    color: $black-primary;
+    flex-shrink: 0;
+  }
+  &__logo { display: block; width: 34px; height: 34px; }
+  &__brand { display: none; font-size: 1.1rem; font-weight: 300; letter-spacing: 0.15em; }
+
+  &__title {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 0.9375rem;
+    letter-spacing: 0.1em;
+    white-space: nowrap;
+    pointer-events: none;
+    font-weight: 300;
+  }
+
+  @include for-normal-layout {
+    height: $nav-height;
+    max-height: $nav-height;
+    padding: 0 4.5rem;
+    &__brand { display: inline; }
+  }
+}
+
+// ─── Checkout page ──────────────────────────────────────────────────────────
+
 .epicure-checkout {
   background: $bg-light;
-  min-height: 60vh;
+  display: flex;
+  flex-direction: column;
 
+  // Back navigation
+  &__back {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.35rem;
+    padding: 1rem $layout-gutter-mobile 0.25rem;
+    flex-shrink: 0;
+  }
+
+  &__back-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-family: inherit;
+    font-size: 0.875rem;
+    color: $black-primary;
+    padding: 0;
+    letter-spacing: 0.02em;
+
+    &:hover { opacity: 0.7; }
+    @include reduced-motion { &:hover { opacity: 1; } }
+  }
+
+  &__back-note { font-size: 0.75rem; color: $gray-primary; }
+
+  @include for-normal-layout {
+    &__back-btn { font-size: 1.0625rem; }
+    &__back-note { font-size: 0.9375rem; color: $gray-primary; }
+  }
+
+  // Two-card layout container
   &__inner {
     display: flex;
     flex-direction: column;
     gap: 1.5rem;
-    max-width: 1100px;
-    margin: 0 auto;
-    padding: 2rem 1.25rem 3rem;
+    padding: 1rem $layout-gutter-mobile 2rem;
   }
 
-  &__right { display: flex; flex-direction: column; gap: 1rem; }
+  // Right card (order summary + pay)
+  &__right {
+    display: flex;
+    flex-direction: column;
+    background: $white;
+    border: 1px solid $border-subtle;
+    box-shadow: 0 4px 16px $shadow-panel;
+    padding: 1.5rem;
+    gap: 0.75rem;
+  }
 
-  &__error { color: $error-color; font-size: 0.875rem; margin: 0; }
+  &__error { color: $error-color; font-size: 0.875rem; margin: 0; text-align: center; align-self: center; min-height: 1.25rem; flex-shrink: 0; }
 
   &__pay {
-    display: flex;
+    display: inline-flex;
     align-items: center;
     justify-content: center;
     gap: 0.75rem;
-    height: 56px;
-    width: 100%;
+    width: 215px;
+    height: 48px;
     border: none;
     background: $black-primary;
     color: $white;
-    font-size: 1rem;
+    font-size: 0.9375rem;
     letter-spacing: 0.08em;
     cursor: pointer;
     transition: opacity $duration-base $ease-out;
+    flex-shrink: 0;
+    align-self: center;
 
     &:disabled { background: $gray-primary; cursor: not-allowed; }
 
     @include reduced-motion { transition: none; }
   }
 
+  &__pay-lock { width: 14px; height: 14px; filter: brightness(0) invert(1); flex-shrink: 0; }
   &__pay-total { display: inline-flex; align-items: center; gap: 0.25rem; }
-  &__pay-shekel { width: 9px; height: 12px; filter: brightness(0) invert(1); }
+  &__pay-shekel { width: 8px; height: 11px; filter: brightness(0) invert(1); }
 
+  // Desktop: two cards side by side, page doesn't scroll
   @include for-normal-layout {
-    &__inner {
-      flex-direction: row;
-      align-items: flex-start;
-      gap: 3rem;
-      padding: 3rem 2rem 4rem;
+    flex: 1;
+    min-height: 0;
+    overflow: hidden;
+    position: relative;
+
+    // Float back nav to the left, at card level — no longer takes up vertical space
+    &__back {
+      position: absolute;
+      left: 4rem;
+      top: 48px;
+      padding: 0;
+      z-index: 1;
+      align-items: center;
     }
-    .epicure-checkout-form { flex: 1; }
-    &__right { flex: 1; }
+
+    &__inner {
+      flex: 1;
+      min-height: 0;
+      height: 100%;
+      flex-direction: row;
+      justify-content: center;
+      align-items: stretch;
+      gap: 2rem;
+      padding: 48px 2rem;
+      overflow: hidden;
+    }
+
+    &__right {
+      width: 497px;
+      flex: none;
+      overflow-y: auto;
+    }
   }
 }
 
+// ─── Left card: form ────────────────────────────────────────────────────────
+
 .epicure-checkout-form {
-  &__section { margin-bottom: 2rem; }
+  background: $white;
+  border: 1px solid $border-subtle;
+  box-shadow: 0 4px 16px $shadow-panel;
+  padding: 1.5rem;
+
+  &__section { margin-bottom: 1.75rem; }
   &__heading {
     text-align: center;
     font-size: 1rem;
     font-weight: 300;
     letter-spacing: 0.08em;
     color: $black-primary;
-    margin-bottom: 1.5rem;
+    margin-bottom: 1.25rem;
   }
-  &__field { display: block; margin-bottom: 1.5rem; }
+  &__field { display: block; margin-bottom: 1.25rem; }
   &__label { display: block; font-size: 0.75rem; color: $gray-primary; margin-bottom: 0.25rem; }
   &__input {
     width: 100%;
@@ -77,15 +240,31 @@
     color: $black-primary;
     &:focus { outline: none; border-bottom-color: $gold-secondary; }
   }
+
+  @include for-normal-layout {
+    width: 497px;
+    flex: none;
+    overflow: hidden;
+    padding: 2rem 68px;
+
+    &__section { margin-bottom: 0.875rem; }
+    &__heading { margin-bottom: 0.75rem; }
+    &__field { margin-bottom: 0.875rem; }
+  }
 }
 
+// ─── Right card: order summary ──────────────────────────────────────────────
+
 .epicure-checkout-summary {
-  background: $white;
-  padding: 1.5rem;
+  // Background + padding on mobile (standalone card look)
+  // On desktop the parent card provides background/padding
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
 
   &__title { text-align: center; font-size: 1.5rem; font-weight: 400; margin-bottom: 0.25rem; }
-  &__restaurant { text-align: center; color: $gray-primary; margin-bottom: 1.5rem; }
-  &__items { display: flex; flex-direction: column; gap: 0.75rem; max-height: 320px; overflow-y: auto; }
+  &__restaurant { text-align: center; color: $gray-primary; margin-bottom: 1rem; }
+  &__items { display: flex; flex-direction: column; gap: 0.75rem; max-height: 300px; overflow-y: auto; }
   &__item { display: flex; }
   &__img { width: 72px; height: 72px; object-fit: cover; flex-shrink: 0; }
   &__item-body { display: flex; align-items: center; gap: 0.75rem; flex: 1; background: $cream-secondary; padding: 0.5rem 0.75rem; min-width: 0; }
@@ -95,16 +274,52 @@
   &__price { color: $gold-secondary; font-size: 0.875rem; margin: 0; }
   &__meta { font-size: 0.8125rem; color: $gray-primary; margin: 0; }
   &__line-total { white-space: nowrap; align-self: flex-end; font-size: 0.875rem; }
-  &__divider { border: none; border-top: 1px solid $border-light; margin: 1rem 0; }
-  &__comment-label { text-align: center; margin-bottom: 0.75rem; }
+  &__divider { border: none; border-top: 1px solid $border-light; margin: 0.75rem 0; }
+  &__comment-label { text-align: center; margin-bottom: 0.5rem; font-size: 0.9375rem; }
   &__comment {
     width: 100%;
-    min-height: 90px;
+    min-height: 80px;
     border: 1px solid $border-light;
     padding: 0.75rem;
     font-family: inherit;
     font-weight: 300;
-    resize: vertical;
+    resize: none;
     &:focus { outline: none; border-color: $gold-secondary; }
+  }
+
+  @include for-normal-layout {
+    flex: 1;
+    min-height: 0;
+    overflow: visible;
+
+    &__items {
+      flex: 1;
+      min-height: 0;
+      max-height: 312px;
+      width: 342px;
+      overflow-y: auto;
+      align-self: center;
+      direction: rtl; // scrollbar on left side
+    }
+
+    &__item { direction: ltr; }
+
+    &__divider {
+      width: 136px;
+      align-self: center;
+      flex-shrink: 0;
+    }
+
+    &__comment-label { width: 358px; align-self: center; flex-shrink: 0; }
+
+    &__comment {
+      width: 358px;
+      height: 122px;
+      min-height: 122px;
+      max-height: 122px;
+      resize: none;
+      align-self: center;
+      flex-shrink: 0;
+    }
   }
 }

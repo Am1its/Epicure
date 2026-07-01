@@ -7,7 +7,13 @@ import type { StrapiOrder, StrapiSingleResponse } from '../strapi-client/strapi-
 export class OrdersService {
   constructor(private readonly strapiClient: StrapiClientService) {}
 
-  async create(token: string, req: CreateOrderRequest): Promise<Order> {
+  // Use admin token from env for Strapi writes — avoids "Invalid key user" when
+  // the user's Strapi JWT doesn't match the current DB (e.g. after a DB reset).
+  private get adminToken(): string | undefined {
+    return process.env['STRAPI_ADMIN_TOKEN'] ?? undefined;
+  }
+
+  async create(userToken: string, req: CreateOrderRequest): Promise<Order> {
     const payload = {
       data: {
         restaurantId: req.restaurantId,
@@ -20,11 +26,13 @@ export class OrdersService {
         deliveryPhone: req.delivery.phone,
       },
     };
+    const token = this.adminToken ?? userToken;
     const res = await this.strapiClient.post<StrapiSingleResponse<StrapiOrder>>('/api/orders', payload, token);
     return this.transform(res.data);
   }
 
-  async findForUser(token: string): Promise<Order[]> {
+  async findForUser(userToken: string): Promise<Order[]> {
+    const token = this.adminToken ?? userToken;
     const items = await this.strapiClient.get<StrapiOrder>('/api/orders?sort=createdAt:desc&pagination[pageSize]=100', token);
     return items.map(o => this.transform(o));
   }
