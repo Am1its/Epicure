@@ -23,14 +23,20 @@ export function CheckoutOrderSummary({ restaurantName, items, comment, onComment
               <span className="epicure-checkout-summary__qty">{item.quantity}</span>
               <div className="epicure-checkout-summary__item-text">
                 <p className="epicure-checkout-summary__name">{item.dish.name}</p>
-                <p className="epicure-checkout-summary__price">&#8362;{item.dish.price.toFixed(2)}</p>
-                {(item.selectedSide || item.selectedChanges.length > 0) && (
+                <p className="epicure-checkout-summary__price">
+                  <img src="/icons/Shekel.svg" alt="₪" aria-hidden="true" className="epicure-checkout-summary__shekel" />
+                  {item.dish.price.toFixed(2)}
+                </p>
+                {(item.selectedSide || (item.selectedChanges ?? []).length > 0) && (
                   <p className="epicure-checkout-summary__meta">
-                    {[item.selectedSide, ...item.selectedChanges].filter(Boolean).join(' | ')}
+                    {[item.selectedSide, ...(item.selectedChanges ?? [])].filter(Boolean).join(' | ')}
                   </p>
                 )}
               </div>
-              <span className="epicure-checkout-summary__line-total">&#8362;{(item.dish.price * item.quantity).toFixed(0)}</span>
+              <span className="epicure-checkout-summary__line-total">
+                <img src="/icons/Shekel.svg" alt="₪" aria-hidden="true" className="epicure-checkout-summary__shekel" />
+                {(item.dish.price * item.quantity).toFixed(0)}
+              </span>
             </div>
           </div>
         ))}

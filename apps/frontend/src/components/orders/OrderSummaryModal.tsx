@@ -67,9 +67,9 @@ export function OrderSummaryModal({ order, onClose }: Props) {
                           <img src="/icons/Shekel.svg" alt="₪" aria-hidden="true" className="epicure-order-summary__shekel" />
                           {item.price.toFixed(2)}
                         </p>
-                        {(item.selectedSide || item.selectedChanges.length > 0) && (
+                        {(item.selectedSide || (item.selectedChanges ?? []).length > 0) && (
                           <p className="epicure-order-summary__meta">
-                            {[item.selectedSide, ...item.selectedChanges].filter(Boolean).join(' | ')}
+                            {[item.selectedSide, ...(item.selectedChanges ?? [])].filter(Boolean).join(' | ')}
                           </p>
                         )}
                       </div>

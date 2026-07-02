@@ -80,18 +80,6 @@ export default function Header({ brandName, logoUrl, navLinks, footerLinks }: He
     return () => window.removeEventListener(OPEN_CART_EVENT, handler);
   }, []);
 
-  if (pathname === '/checkout') {
-    return (
-      <header className="epicure-header epicure-header--checkout">
-        <Link href="/" className="epicure-nav__logo" aria-label={TEXT.nav.logoAriaLabel}>
-          <img src="/icons/logo.svg" alt="" aria-hidden="true" width={34} height={34} className="epicure-nav__logo-icon" />
-          <span>{brandName ?? TEXT.nav.brandName}</span>
-        </Link>
-        <span className="epicure-header__checkout-title">{TEXT.checkout.pageTitle}</span>
-      </header>
-    );
-  }
-
   return (
     <>
       <header className="epicure-header">

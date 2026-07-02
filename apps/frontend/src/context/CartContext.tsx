@@ -132,8 +132,11 @@ export function CartProvider({ children }: { children: ReactNode }) {
         redirectPending();
       }
     } else if (prevId !== null && currId === null) {
-      // LOGOUT — clear in-memory cart; user's cart stays on disk for their next login
+      // LOGOUT — clear in-memory cart; user's cart stays on disk for their next login.
+      // Also dismiss any pending conflict prompt — resolveConflict requires a user and
+      // would otherwise leave the modal stuck on screen with no way to dismiss it.
       setState(EMPTY_STATE);
+      setCartConflict(null);
     }
   }, [user?.id]);
 
@@ -231,7 +234,8 @@ export function CartProvider({ children }: { children: ReactNode }) {
   }
 
   function conflictsWithCart(incomingRestaurantId: number): boolean {
-    return state.cartItems.length > 0 && state.restaurantId !== incomingRestaurantId;
+    const hasCommittedItems = state.cartItems.some(c => !c.pendingRemove);
+    return hasCommittedItems && state.restaurantId !== incomingRestaurantId;
   }
 
   function resolveConflict(keep: 'saved' | 'current') {

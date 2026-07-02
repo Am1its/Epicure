@@ -7,10 +7,14 @@ import type { StrapiOrder, StrapiSingleResponse } from '../strapi-client/strapi-
 export class OrdersService {
   constructor(private readonly strapiClient: StrapiClientService) {}
 
-  // Use admin token from env for the actual Strapi read/write — avoids "Invalid key user"
-  // when the user's Strapi JWT doesn't match the current DB (e.g. after a DB reset).
-  // The admin token authenticates as no particular Strapi user though, so we still resolve
-  // the caller's real user id via getUserId() and pass it explicitly for ownership/filtering.
+  // Use admin token from env for the actual Strapi read/write — the admin token authenticates
+  // as no particular Strapi user, so we still resolve the caller's real user id via
+  // getUserId() and pass it explicitly for ownership/filtering.
+  // Note: getUserId() itself still requires the caller's JWT to resolve against a live user
+  // record in Strapi. It does NOT survive a Strapi DB reset — a JWT for a user id that no
+  // longer exists fails here before the admin token is ever used. That's intentional: the
+  // admin token protects the write/read from becoming misauthenticated, not from serving a
+  // stale session. After a DB reset, users must log out and back in to get a fresh JWT.
   private get adminToken(): string | undefined {
     return process.env['STRAPI_ADMIN_TOKEN'] ?? undefined;
   }

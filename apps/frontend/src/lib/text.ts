@@ -193,7 +193,7 @@ export const TEXT = {
     cvv: 'CVV',
     expiry: 'Expiry Date',
     expiryPlaceholder: 'MM/YY',
-    goBack: 'Go back',
+    goBack: '← Go back',
     orderSaved: 'Your order will be saved',
     yourOrder: 'YOUR ORDER',
     addComment: 'Add A Comment',

@@ -17,7 +17,9 @@ export function SignUpModal({ onClose, onSwitchToSignIn }: SignUpModalProps) {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
-  const isActive = name.length > 0 && email.length > 0 && password.length > 0;
+  // Matches RegisterDto's @MinLength(6) on the backend — without this, the button
+  // enables for short passwords that the backend then rejects with an opaque 400.
+  const isActive = name.length > 0 && email.length > 0 && password.length >= 6;
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();

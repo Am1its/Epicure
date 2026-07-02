@@ -344,6 +344,7 @@ body:has(.epicure-checkout-layout) {
   &__price { color: $gold-secondary; font-size: 0.875rem; margin: 0; }
   &__meta { font-size: 0.8125rem; color: $gray-primary; margin: 0; }
   &__line-total { white-space: nowrap; align-self: flex-end; font-size: 0.875rem; }
+  &__shekel { width: 8px; height: 10px; vertical-align: middle; margin-right: 0.1rem; }
   &__divider { border: none; border-top: 1px solid $border-light; margin: 0.75rem 0; }
   &__comment-label { text-align: center; margin-bottom: 0.5rem; font-size: 0.9375rem; }
   &__comment {

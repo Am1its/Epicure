@@ -54,8 +54,10 @@ export default function CheckoutPage() {
     try {
       await createOrder(body);
       showOrderSuccess({ items: committed, total: totalPrice });
+      // Not calling router.push here — clearCart() below empties `committed`,
+      // which the redirect-guard effect above already reacts to by navigating home.
+      // Pushing here too would race with that effect's router.replace('/').
       clearCart();
-      router.push('/');
     } catch (err) {
       setError(err instanceof Error ? err.message : TEXT.checkout.submitError);
       setSubmitting(false);
@@ -66,7 +68,7 @@ export default function CheckoutPage() {
     <main className="epicure-checkout">
       <div className="epicure-checkout__back">
         <button type="button" className="epicure-checkout__back-btn" onClick={() => router.back()}>
-          ← {TEXT.checkout.goBack}
+          {TEXT.checkout.goBack}
         </button>
         <span className="epicure-checkout__back-note">{TEXT.checkout.orderSaved}</span>
       </div>

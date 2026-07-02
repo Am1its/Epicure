@@ -10,13 +10,17 @@ interface Props {
 
 export function CheckoutForm({ form, onChange }: Props) {
   function handleExpiryChange(raw: string) {
-    const digits = raw.replace(/\D/g, '').slice(0, 4);
     const deleting = raw.length < form.expiry.length;
     if (deleting) {
-      onChange({ expiry: digits.length > 2 ? `${digits.slice(0, 2)}/${digits.slice(2)}` : digits });
-    } else {
-      onChange({ expiry: digits.length >= 2 ? `${digits.slice(0, 2)}/${digits.slice(2)}` : digits });
+      // Respect exactly what's left after the user's edit — don't recompute the
+      // slash position from a flattened digit string. Reformatting from scratch
+      // reshuffles digits across the MM/YY boundary and corrupts edits made
+      // anywhere but the very end of the field.
+      onChange({ expiry: raw.replace(/[^\d/]/g, '').slice(0, 5) });
+      return;
     }
+    const digits = raw.replace(/\D/g, '').slice(0, 4);
+    onChange({ expiry: digits.length >= 2 ? `${digits.slice(0, 2)}/${digits.slice(2)}` : digits });
   }
 
   return (
