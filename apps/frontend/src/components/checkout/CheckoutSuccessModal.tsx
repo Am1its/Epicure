@@ -35,28 +35,33 @@ export function CheckoutSuccessModal({ items, total, onClose }: Props) {
         <button type="button" className="epicure-checkout-success__close" onClick={onClose} aria-label={TEXT.checkout.closeAriaLabel}>
           <img src="/icons/x.svg" alt="" aria-hidden="true" />
         </button>
-        <img src="/icons/Vector.svg" alt="" aria-hidden="true" className="epicure-checkout-success__check" />
-        <h2 className="epicure-checkout-success__title">{TEXT.checkout.successTitle}</h2>
-        <p className="epicure-checkout-success__subtitle">{TEXT.checkout.successSubtitle}</p>
-        <p className="epicure-checkout-success__eta-label">{TEXT.checkout.arrivingIn}</p>
-        <p className="epicure-checkout-success__countdown">{mm}:{ss}</p>
-        <ul className="epicure-checkout-success__items">
-          {items.map((item, i) => (
-            <li className="epicure-checkout-success__item" key={`${item.dish.id}-${i}`}>
-              <span className="epicure-checkout-success__item-qty">{item.quantity}x</span>
-              <span className="epicure-checkout-success__item-name">{item.dish.name}</span>
-              <span className="epicure-checkout-success__item-total">
-                <img src="/icons/Shekel.svg" alt="₪" aria-hidden="true" className="epicure-checkout-success__shekel" />
-                {(item.dish.price * item.quantity).toFixed(0)}
-              </span>
-            </li>
-          ))}
-        </ul>
-        <p className="epicure-checkout-success__total">
-          {TEXT.checkout.total} &mdash;{' '}
-          <img src="/icons/Shekel.svg" alt="₪" aria-hidden="true" className="epicure-checkout-success__shekel" />
-          {total}
-        </p>
+        <div className="epicure-checkout-success__scroll">
+          <img src="/icons/Vector.svg" alt="" aria-hidden="true" className="epicure-checkout-success__check" />
+          <h2 className="epicure-checkout-success__title">{TEXT.checkout.successTitle}</h2>
+          <p className="epicure-checkout-success__subtitle">{TEXT.checkout.successSubtitle}</p>
+          <div className="epicure-checkout-success__eta">
+            <span className="epicure-checkout-success__eta-label">{TEXT.checkout.arrivingIn}</span>
+            <span className="epicure-checkout-success__countdown">{mm}:{ss}</span>
+            <span className="epicure-checkout-success__eta-unit">{TEXT.checkout.minutesSuffix}</span>
+          </div>
+          <ul className="epicure-checkout-success__items">
+            {items.map((item, i) => (
+              <li className="epicure-checkout-success__item" key={`${item.dish.id}-${i}`}>
+                <span className="epicure-checkout-success__item-qty">{item.quantity}x</span>
+                <span className="epicure-checkout-success__item-name">{item.dish.name}</span>
+                <span className="epicure-checkout-success__item-total">
+                  <img src="/icons/Shekel.svg" alt="₪" aria-hidden="true" className="epicure-checkout-success__shekel" />
+                  {(item.dish.price * item.quantity).toFixed(0)}
+                </span>
+              </li>
+            ))}
+          </ul>
+          <p className="epicure-checkout-success__total">
+            {TEXT.checkout.total} &mdash;{' '}
+            <img src="/icons/Shekel.svg" alt="₪" aria-hidden="true" className="epicure-checkout-success__shekel" />
+            {total}
+          </p>
+        </div>
       </div>
     </>
   );

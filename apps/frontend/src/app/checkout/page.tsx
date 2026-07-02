@@ -18,7 +18,7 @@ const EMPTY_FORM: CheckoutFormState = {
 export default function CheckoutPage() {
   const router = useRouter();
   const { user } = useAuth();
-  const { cartItems, restaurantId, restaurantName, totalPrice, comment, setComment, showOrderSuccess } = useCart();
+  const { cartItems, restaurantId, restaurantName, totalPrice, comment, setComment, showOrderSuccess, clearCart } = useCart();
   const [form, setForm] = useState<CheckoutFormState>(EMPTY_FORM);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -54,6 +54,7 @@ export default function CheckoutPage() {
     try {
       await createOrder(body);
       showOrderSuccess({ items: committed, total: totalPrice });
+      clearCart();
       router.push('/');
     } catch (err) {
       setError(err instanceof Error ? err.message : TEXT.checkout.submitError);
@@ -78,6 +79,12 @@ export default function CheckoutPage() {
             comment={comment}
             onCommentChange={setComment}
           />
+          {/* Mobile only — desktop keeps the price inside the button */}
+          <p className="epicure-checkout__total">
+            {TEXT.checkout.total} &mdash;{' '}
+            <img src="/icons/Shekel.svg" alt="₪" aria-hidden="true" className="epicure-checkout__pay-shekel" />
+            {totalPrice}
+          </p>
           <p className="epicure-checkout__error">{error ?? ''}</p>
           <button type="button" className="epicure-checkout__pay" disabled={!canPay} onClick={handlePay}>
             <img
@@ -86,7 +93,8 @@ export default function CheckoutPage() {
               aria-hidden="true"
               className="epicure-checkout__pay-lock"
             />
-            {TEXT.checkout.pay}
+            <span className="epicure-checkout__pay-label--mobile">{TEXT.checkout.completePayment}</span>
+            <span className="epicure-checkout__pay-label--desktop">{TEXT.checkout.pay}</span>
             <span className="epicure-checkout__pay-total">
               <img src="/icons/Shekel.svg" alt="₪" aria-hidden="true" className="epicure-checkout__pay-shekel" />
               {totalPrice}

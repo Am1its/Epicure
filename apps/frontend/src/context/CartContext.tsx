@@ -286,7 +286,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
         <CheckoutSuccessModal
           items={successOrder.items}
           total={successOrder.total}
-          onClose={() => { clearCart(); setSuccessOrder(null); }}
+          onClose={() => setSuccessOrder(null)}
         />
       )}
     </CartContext.Provider>

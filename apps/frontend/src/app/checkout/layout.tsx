@@ -6,6 +6,10 @@ export default function CheckoutLayout({ children }: { children: ReactNode }) {
   return (
     <div className="epicure-checkout-layout">
       <header className="epicure-checkout-header">
+        {/* Mobile only — desktop keeps the logo+title layout unchanged */}
+        <Link href="/" className="epicure-checkout-header__close" aria-label={TEXT.checkout.leaveAriaLabel}>
+          <img src="/icons/x.svg" alt="" aria-hidden="true" width={16} height={16} />
+        </Link>
         <Link href="/" className="epicure-checkout-header__logo-link">
           <img src="/icons/logo.svg" alt="" aria-hidden="true" width={34} height={34} className="epicure-checkout-header__logo" />
           <span className="epicure-checkout-header__brand">{TEXT.nav.brandName}</span>

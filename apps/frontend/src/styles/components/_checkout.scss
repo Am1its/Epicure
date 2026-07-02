@@ -57,6 +57,18 @@ body:has(.epicure-checkout-layout) {
   flex-shrink: 0;
   box-sizing: border-box;
 
+  // Mobile only (Figma): close X on the left, logo centered, no title text.
+  &__close {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.5rem;
+    flex-shrink: 0;
+    z-index: 1;
+
+    @include for-normal-layout { display: none; }
+  }
+
   &__logo-link {
     display: flex;
     align-items: center;
@@ -64,11 +76,21 @@ body:has(.epicure-checkout-layout) {
     text-decoration: none;
     color: $black-primary;
     flex-shrink: 0;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+
+    @include for-normal-layout {
+      position: static;
+      left: auto;
+      transform: none;
+    }
   }
   &__logo { display: block; width: 34px; height: 34px; }
   &__brand { display: none; font-size: 1.1rem; font-weight: 300; letter-spacing: 0.15em; }
 
   &__title {
+    display: none;
     position: absolute;
     left: 50%;
     transform: translateX(-50%);
@@ -84,6 +106,7 @@ body:has(.epicure-checkout-layout) {
     max-height: $nav-height;
     padding: 0 4.5rem;
     &__brand { display: inline; }
+    &__title { display: block; }
   }
 }
 
@@ -94,17 +117,20 @@ body:has(.epicure-checkout-layout) {
   display: flex;
   flex-direction: column;
 
-  // Back navigation
+  // Back navigation — mobile: empty/no padding, the header's X already
+  // covers "leave checkout" and there's nothing left to show here.
+  // (Desktop already overrides padding to 0 below via absolute positioning.)
   &__back {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
     gap: 0.35rem;
-    padding: 1rem $layout-gutter-mobile 0.25rem;
+    padding: 0;
     flex-shrink: 0;
   }
 
   &__back-btn {
+    display: none;
     background: none;
     border: none;
     cursor: pointer;
@@ -118,11 +144,11 @@ body:has(.epicure-checkout-layout) {
     @include reduced-motion { &:hover { opacity: 1; } }
   }
 
-  &__back-note { font-size: 0.75rem; color: $gray-primary; }
+  &__back-note { display: none; font-size: 0.75rem; color: $gray-primary; }
 
   @include for-normal-layout {
-    &__back-btn { font-size: 1.0625rem; }
-    &__back-note { font-size: 0.9375rem; color: $gray-primary; }
+    &__back-btn { display: inline-block; font-size: 1.0625rem; }
+    &__back-note { display: block; font-size: 0.9375rem; color: $gray-primary; }
   }
 
   // Two-card layout container
@@ -144,14 +170,44 @@ body:has(.epicure-checkout-layout) {
     gap: 0.75rem;
   }
 
-  &__error { color: $error-color; font-size: 0.875rem; margin: 0; text-align: center; align-self: center; min-height: 1.25rem; flex-shrink: 0; }
+  // Mobile only (Figma): total sits above the button; desktop keeps the
+  // price inside the button instead and never renders this line.
+  &__total {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.25rem;
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    gap: 0.2rem;
+    margin: 0;
+    flex-shrink: 0;
+
+    @include for-normal-layout { display: none; }
+  }
+
+  // Mobile: no reserved space when there's no error — keeps __total flush
+  // against the button. Desktop restores the reserved height below.
+  // Mobile: negative margin cancels the parent's flex gap on both sides so
+  // an empty error leaves no visible space between __total and __pay.
+  &__error {
+    color: $error-color;
+    font-size: 0.875rem;
+    margin: -0.75rem 0 0;
+    text-align: center;
+    align-self: center;
+    min-height: 0;
+    flex-shrink: 0;
+
+    @include for-normal-layout { margin-top: 0; min-height: 1.25rem; }
+  }
 
   &__pay {
     display: inline-flex;
     align-items: center;
     justify-content: center;
     gap: 0.75rem;
-    width: 215px;
+    width: 100%;
     height: 48px;
     border: none;
     background: $black-primary;
@@ -162,15 +218,29 @@ body:has(.epicure-checkout-layout) {
     transition: opacity $duration-base $ease-out;
     flex-shrink: 0;
     align-self: center;
+    margin-top: -0.75rem;
 
     &:disabled { background: $gray-primary; cursor: not-allowed; }
 
     @include reduced-motion { transition: none; }
+
+    @include for-normal-layout { width: 215px; margin-top: 0; }
   }
 
   &__pay-lock { width: 14px; height: 14px; filter: brightness(0) invert(1); flex-shrink: 0; }
-  &__pay-total { display: inline-flex; align-items: center; gap: 0.25rem; }
+
+  // Mobile: "COMPLETE PAYMENT", no price in the button (it's in __total above).
+  // Desktop: "PAY" with the price inline — swap which label/price show.
+  &__pay-label--mobile { display: inline; }
+  &__pay-label--desktop { display: none; }
+  &__pay-total { display: none; align-items: center; gap: 0.25rem; }
   &__pay-shekel { width: 8px; height: 11px; filter: brightness(0) invert(1); }
+
+  @include for-normal-layout {
+    &__pay-label--mobile { display: none; }
+    &__pay-label--desktop { display: inline; }
+    &__pay-total { display: inline-flex; }
+  }
 
   // Desktop: two cards side by side, page doesn't scroll
   @include for-normal-layout {
