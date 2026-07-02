@@ -9,8 +9,7 @@ import { TEXT } from '../../lib/text';
 import { isCheckoutValid, type CheckoutFormState } from '../../lib/checkoutValidation';
 import { CheckoutForm } from '../../components/checkout/CheckoutForm';
 import { CheckoutOrderSummary } from '../../components/checkout/CheckoutOrderSummary';
-import { CheckoutSuccessModal } from '../../components/checkout/CheckoutSuccessModal';
-import type { CreateOrderRequest, OrderItem, CartItem } from '@org/shared-types';
+import type { CreateOrderRequest, OrderItem } from '@org/shared-types';
 
 const EMPTY_FORM: CheckoutFormState = {
   fullName: '', address: '', phone: '', cardNumber: '', nameOnCard: '', cvv: '', expiry: '',
@@ -19,11 +18,10 @@ const EMPTY_FORM: CheckoutFormState = {
 export default function CheckoutPage() {
   const router = useRouter();
   const { user } = useAuth();
-  const { cartItems, restaurantId, restaurantName, totalPrice, comment, setComment, clearCart } = useCart();
+  const { cartItems, restaurantId, restaurantName, totalPrice, comment, setComment, showOrderSuccess } = useCart();
   const [form, setForm] = useState<CheckoutFormState>(EMPTY_FORM);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [confirmed, setConfirmed] = useState<{ items: CartItem[]; total: number } | null>(null);
   const [mounted, setMounted] = useState(false);
 
   const committed = cartItems.filter(c => !c.pendingRemove);
@@ -31,12 +29,12 @@ export default function CheckoutPage() {
   useEffect(() => setMounted(true), []);
 
   useEffect(() => {
-    if (mounted && !confirmed && (!user || committed.length === 0)) router.replace('/');
-  }, [mounted, user, committed.length, router, confirmed]);
+    if (mounted && (!user || committed.length === 0)) router.replace('/');
+  }, [mounted, user, committed.length, router]);
 
   // Return null until mounted so server and client first-render both produce null.
   if (!mounted) return null;
-  if (!confirmed && (!user || committed.length === 0)) return null;
+  if (!user || committed.length === 0) return null;
 
   const canPay = isCheckoutValid(form) && !submitting;
 
@@ -55,22 +53,12 @@ export default function CheckoutPage() {
     };
     try {
       await createOrder(body);
-      setConfirmed({ items: committed, total: totalPrice });
+      showOrderSuccess({ items: committed, total: totalPrice });
+      router.push('/');
     } catch (err) {
       setError(err instanceof Error ? err.message : TEXT.checkout.submitError);
-    } finally {
       setSubmitting(false);
     }
-  }
-
-  if (confirmed) {
-    return (
-      <CheckoutSuccessModal
-        items={confirmed.items}
-        total={confirmed.total}
-        onClose={() => { clearCart(); router.push('/'); }}
-      />
-    );
   }
 
   return (

@@ -6,6 +6,12 @@ import { useAuth } from './AuthContext';
 import { orderToCartItems } from '../lib/orderMapping';
 import { loadCartForUser, saveCartForUser } from '../lib/cartStorage';
 import { CartConflictModal } from '../components/CartConflictModal';
+import { CheckoutSuccessModal } from '../components/checkout/CheckoutSuccessModal';
+
+interface OrderSuccessData {
+  items: CartItem[];
+  total: number;
+}
 
 interface CartState {
   cartItems: CartItem[];
@@ -24,6 +30,7 @@ interface CartContextValue extends CartState {
   setComment: (comment: string) => void;
   replaceCart: (order: Order) => void;
   conflictsWithCart: (restaurantId: number) => boolean;
+  showOrderSuccess: (data: OrderSuccessData) => void;
   totalPrice: number;
   totalItems: number;
 }
@@ -76,6 +83,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
   });
 
   const [cartConflict, setCartConflict] = useState<CartState | null>(null);
+  const [successOrder, setSuccessOrder] = useState<OrderSuccessData | null>(null);
 
   // Always-current ref so the login effect never captures stale cart state.
   const stateRef = useRef(state);
@@ -175,6 +183,10 @@ export function CartProvider({ children }: { children: ReactNode }) {
     setState(EMPTY_STATE);
   }
 
+  function showOrderSuccess(data: OrderSuccessData) {
+    setSuccessOrder(data);
+  }
+
   function replaceCart(order: Order) {
     setState({
       cartItems: orderToCartItems(order),
@@ -239,6 +251,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
         setComment,
         replaceCart,
         conflictsWithCart,
+        showOrderSuccess,
         totalPrice,
         totalItems,
       }}
@@ -248,6 +261,13 @@ export function CartProvider({ children }: { children: ReactNode }) {
         <CartConflictModal
           onLoadSaved={() => resolveConflict('saved')}
           onKeepCurrent={() => resolveConflict('current')}
+        />
+      )}
+      {successOrder && (
+        <CheckoutSuccessModal
+          items={successOrder.items}
+          total={successOrder.total}
+          onClose={() => { clearCart(); setSuccessOrder(null); }}
         />
       )}
     </CartContext.Provider>

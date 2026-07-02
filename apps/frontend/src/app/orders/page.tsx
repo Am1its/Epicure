@@ -15,6 +15,9 @@ export default function OrdersPage() {
   const [orders, setOrders] = useState<Order[]>([]);
   const [loading, setLoading] = useState(true);
   const [selected, setSelected] = useState<Order | null>(null);
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => setMounted(true), []);
 
   useEffect(() => {
     if (!user) {
@@ -29,6 +32,8 @@ export default function OrdersPage() {
     return () => { active = false; };
   }, [user, router]);
 
+  // Return null until mounted so server and client first-render both produce null.
+  if (!mounted) return null;
   if (!user) return null;
 
   return (
