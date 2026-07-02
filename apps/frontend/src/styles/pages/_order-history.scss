@@ -1,8 +1,22 @@
 @use '../setup/variables' as *;
 @use '../setup/mixins' as *;
 
+// Scoped to this page so the shared Header/Footer only get the shadow here.
+// Header is position:fixed (out of flow), so this flex column only governs
+// the footer + page content, pinning the footer to the viewport bottom
+// when the order list is shorter than the page.
+body:has(.epicure-order-history) {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+
+  .epicure-header { box-shadow: 0 4px 12px $shadow-subtle; }
+  .epicure-footer { box-shadow: 0 -4px 12px $shadow-subtle; flex-shrink: 0; }
+}
+
 .epicure-order-history {
-  background: $bg-light;
+  flex: 1;
+  background: $white;
   min-height: 60vh;
 
   &__inner {
@@ -46,8 +60,8 @@
 
   @include reduced-motion { transition: none; &:hover { background: none; } }
 
-  &__name { font-size: 1.125rem; color: $black-primary; }
-  &__date { color: $gray-primary; font-size: 0.875rem; }
+  &__name { font-size: 1.125rem; font-weight: 700; color: $black-primary; }
+  &__date { color: $gray-primary; font-size: 1rem; }
   &__total { white-space: nowrap; font-size: 1rem; }
   &__shekel { width: 8px; height: 10px; vertical-align: middle; margin-right: 0.1rem; }
   &__chevron { width: 16px; height: 16px; justify-self: end; }

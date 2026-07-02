@@ -1,8 +1,9 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import type { CartItem } from '@org/shared-types';
 import { TEXT } from '../../lib/text';
+import { useClickOutside } from '../../hooks/useClickOutside';
 
 interface Props {
   items: CartItem[];
@@ -12,6 +13,9 @@ interface Props {
 
 export function CheckoutSuccessModal({ items, total, onClose }: Props) {
   const [seconds, setSeconds] = useState(90 * 60);
+  const modalRef = useRef<HTMLDivElement>(null);
+
+  useClickOutside(modalRef, onClose);
 
   useEffect(() => {
     const id = setInterval(() => setSeconds(s => {
@@ -27,7 +31,7 @@ export function CheckoutSuccessModal({ items, total, onClose }: Props) {
   return (
     <>
       <div className="epicure-checkout-success__backdrop" />
-      <div className="epicure-checkout-success" role="dialog" aria-modal="true" aria-label={TEXT.checkout.successTitle}>
+      <div ref={modalRef} className="epicure-checkout-success" role="dialog" aria-modal="true" aria-label={TEXT.checkout.successTitle}>
         <button type="button" className="epicure-checkout-success__close" onClick={onClose} aria-label={TEXT.checkout.closeAriaLabel}>
           <img src="/icons/x.svg" alt="" aria-hidden="true" />
         </button>

@@ -42,6 +42,13 @@ export const TEXT = {
     removeYes: 'Yes',
     removeNo: 'Cancel',
     replaceConfirm: 'Replace your current cart with this order?',
+    replaceCartDialogAriaLabel: 'Replace cart confirmation',
+    replaceCartIcon: '?',
+    replaceCartTitle: 'REPLACE CART?',
+    replaceCartConfirm: 'REPLACE',
+    replaceCartConfirmAriaLabel: 'Replace current cart with this order',
+    replaceCartCancel: 'CANCEL',
+    replaceCartCancelAriaLabel: 'Keep current cart',
   },
   signUp: {
     dialogAriaLabel: 'Sign up',
