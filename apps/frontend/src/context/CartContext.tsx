@@ -1,10 +1,12 @@
 'use client';
 
 import { createContext, useContext, useState, useEffect, useRef, type ReactNode } from 'react';
+import { usePathname } from 'next/navigation';
 import type { CartItem, Order } from '@org/shared-types';
 import { useAuth } from './AuthContext';
 import { orderToCartItems } from '../lib/orderMapping';
 import { loadCartForUser, saveCartForUser } from '../lib/cartStorage';
+import { dispatchOpenCart, PENDING_NAV_KEY } from '../lib/events';
 import { CartConflictModal } from '../components/CartConflictModal';
 import { CheckoutSuccessModal } from '../components/checkout/CheckoutSuccessModal';
 
@@ -72,7 +74,8 @@ function readAuthUserId(): number | null {
 }
 
 export function CartProvider({ children }: { children: ReactNode }) {
-  const { user } = useAuth();
+  const { user, redirectPending } = useAuth();
+  const pathname = usePathname();
 
   const initialUserId = readAuthUserId();
 
@@ -116,14 +119,17 @@ export function CartProvider({ children }: { children: ReactNode }) {
         userCart.cartItems.filter(c => !c.pendingRemove).length > 0;
 
       if (hasAnon && hasSaved) {
-        // Both carts have items — let the user decide
+        // Both carts have items — let the user decide; navigation to any
+        // pending destination (e.g. checkout) waits on that choice.
         setCartConflict(userCart);
       } else if (hasSaved) {
-        // No anonymous cart: load user's saved cart
+        // No anonymous cart: load user's saved cart, nothing to resolve
         setState(userCart!);
+        redirectPending();
       } else {
         // No saved cart: adopt the anonymous cart under the user's key
         saveCartForUser(stateRef.current, currId);
+        redirectPending();
       }
     } else if (prevId !== null && currId === null) {
       // LOGOUT — clear in-memory cart; user's cart stays on disk for their next login
@@ -230,8 +236,21 @@ export function CartProvider({ children }: { children: ReactNode }) {
 
   function resolveConflict(keep: 'saved' | 'current') {
     if (!cartConflict || !user) return;
-    if (keep === 'saved') setState(cartConflict);
     setCartConflict(null);
+
+    if (keep === 'current') {
+      // Kept what they had — proceed to wherever they were headed (e.g. checkout).
+      redirectPending();
+      return;
+    }
+
+    // Loaded the saved cart instead — cancel any pending checkout nav (it no
+    // longer reflects what's in the cart) and let them review it in place.
+    setState(cartConflict);
+    sessionStorage.removeItem(PENDING_NAV_KEY);
+    // On /checkout the header never renders the cart panel (it shows its own
+    // order summary instead), so opening it there would be a silent no-op.
+    if (pathname !== '/checkout') dispatchOpenCart();
   }
 
   const committedItems = state.cartItems.filter(c => !c.pendingRemove);

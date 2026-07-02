@@ -23,7 +23,19 @@
     @include reduced-motion { animation: none; transition: none; }
   }
 
-  &__title { font-size: 1.25rem; font-weight: 400; margin-bottom: 0.75rem; }
+  &__icon {
+    width: 44px;
+    height: 44px;
+    border: 1px solid $gold-secondary;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 1rem;
+    img { width: 20px; height: 20px; }
+  }
+
+  &__title { font-size: 1.25rem; font-weight: 500; letter-spacing: 0.04em; margin-bottom: 0.75rem; }
   &__message { color: $gray-primary; font-size: 0.9375rem; margin-bottom: 0.25rem; }
   &__question { color: $gray-primary; font-size: 0.9375rem; margin-bottom: 1.5rem; }
 

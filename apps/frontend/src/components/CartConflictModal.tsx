@@ -17,6 +17,9 @@ export function CartConflictModal({ onLoadSaved, onKeepCurrent }: Props) {
         aria-modal="true"
         aria-label={TEXT.cartConflict.title}
       >
+        <span className="epicure-cart-conflict__icon" aria-hidden="true">
+          <img src="/icons/cart.svg" alt="" />
+        </span>
         <h2 className="epicure-cart-conflict__title">{TEXT.cartConflict.title}</h2>
         <p className="epicure-cart-conflict__message">{TEXT.cartConflict.message}</p>
         <p className="epicure-cart-conflict__question">{TEXT.cartConflict.question}</p>

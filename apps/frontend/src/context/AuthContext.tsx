@@ -17,6 +17,7 @@ interface AuthContextValue extends AuthState {
   login: (email: string, password: string) => Promise<void>;
   register: (name: string, email: string, password: string) => Promise<void>;
   logout: () => void;
+  redirectPending: () => void;
 }
 
 const AuthContext = createContext<AuthContextValue | null>(null);
@@ -69,7 +70,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   async function login(email: string, password: string): Promise<void> {
     const response = await postApi<AuthResponse>('/api/auth/login', { email, password });
     persist({ user: response.user, token: response.jwt });
-    redirectPending();
+    // Not calling redirectPending() here — CartContext's login effect decides:
+    // it defers navigation if there's a saved-cart conflict to resolve first.
   }
 
   async function register(name: string, email: string, password: string): Promise<void> {
@@ -93,7 +95,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, []);
 
   return (
-    <AuthContext.Provider value={{ ...state, login, register, logout }}>
+    <AuthContext.Provider value={{ ...state, login, register, logout, redirectPending }}>
       {children}
     </AuthContext.Provider>
   );

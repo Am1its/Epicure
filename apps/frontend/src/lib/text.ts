@@ -207,7 +207,7 @@ export const TEXT = {
     closeAriaLabel: 'Close',
   },
   cartConflict: {
-    title: 'Saved Cart Found',
+    title: 'SAVED CART FOUND',
     message: 'You have items saved from a previous session.',
     question: 'What would you like to do?',
     loadSaved: 'LOAD SAVED CART',
