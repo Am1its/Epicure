@@ -39,6 +39,16 @@ export class StrapiClientService {
     return body.data ?? [];
   }
 
+  // Resolves + validates the caller's user id via Strapi's own JWT check, independent
+  // of whichever token (user or admin) is used for the actual read/write that follows.
+  async getUserId(token: string): Promise<number> {
+    const res = await this.request('/api/users/me', { headers: { Authorization: `Bearer ${token}` } });
+    if (res.status === 401) throw new UnauthorizedException('Strapi token rejected');
+    if (!res.ok) throw new ServiceUnavailableException(`Strapi returned ${res.status}`);
+    const body = await this.parseJson<{ id: number }>(res);
+    return body.id;
+  }
+
   async getById<T>(path: string): Promise<T> {
     const res = await this.request(path);
     if (res.status === 404) throw new NotFoundException('Resource not found');

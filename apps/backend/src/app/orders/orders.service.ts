@@ -7,13 +7,16 @@ import type { StrapiOrder, StrapiSingleResponse } from '../strapi-client/strapi-
 export class OrdersService {
   constructor(private readonly strapiClient: StrapiClientService) {}
 
-  // Use admin token from env for Strapi writes — avoids "Invalid key user" when
-  // the user's Strapi JWT doesn't match the current DB (e.g. after a DB reset).
+  // Use admin token from env for the actual Strapi read/write — avoids "Invalid key user"
+  // when the user's Strapi JWT doesn't match the current DB (e.g. after a DB reset).
+  // The admin token authenticates as no particular Strapi user though, so we still resolve
+  // the caller's real user id via getUserId() and pass it explicitly for ownership/filtering.
   private get adminToken(): string | undefined {
     return process.env['STRAPI_ADMIN_TOKEN'] ?? undefined;
   }
 
   async create(userToken: string, req: CreateOrderRequest): Promise<Order> {
+    const userId = await this.strapiClient.getUserId(userToken);
     const payload = {
       data: {
         restaurantId: req.restaurantId,
@@ -24,6 +27,7 @@ export class OrdersService {
         deliveryName: req.delivery.name,
         deliveryAddress: req.delivery.address,
         deliveryPhone: req.delivery.phone,
+        user: userId,
       },
     };
     const token = this.adminToken ?? userToken;
@@ -32,8 +36,12 @@ export class OrdersService {
   }
 
   async findForUser(userToken: string): Promise<Order[]> {
+    const userId = await this.strapiClient.getUserId(userToken);
     const token = this.adminToken ?? userToken;
-    const items = await this.strapiClient.get<StrapiOrder>('/api/orders?sort=createdAt:desc&pagination[pageSize]=100', token);
+    const items = await this.strapiClient.get<StrapiOrder>(
+      `/api/orders?sort=createdAt:desc&pagination[pageSize]=100&filters[user]=${userId}`,
+      token,
+    );
     return items.map(o => this.transform(o));
   }
 
