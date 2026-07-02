@@ -29,9 +29,14 @@
 @use 'components/hero';
 @use 'components/chef-week';
 @use 'components/app-section';
+@use 'components/checkout';
+@use 'components/checkout-success';
+@use 'components/order-summary-modal';
+@use 'components/cart-conflict-modal';
 
 // Pages
 @use 'pages/home';
 @use 'pages/restaurants';
 @use 'pages/chefs';
 @use 'pages/restaurant-detail';
+@use 'pages/order-history';

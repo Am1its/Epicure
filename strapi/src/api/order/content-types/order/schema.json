@@ -1,0 +1,28 @@
+{
+  "kind": "collectionType",
+  "collectionName": "orders",
+  "info": {
+    "singularName": "order",
+    "pluralName": "orders",
+    "displayName": "Order"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "restaurantId": { "type": "integer", "required": true },
+    "restaurantName": { "type": "string", "required": true },
+    "items": { "type": "json", "required": true },
+    "comment": { "type": "text" },
+    "total": { "type": "decimal", "required": true },
+    "deliveryName": { "type": "string" },
+    "deliveryAddress": { "type": "string" },
+    "deliveryPhone": { "type": "string" },
+    "user": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "plugin::users-permissions.user"
+    }
+  }
+}

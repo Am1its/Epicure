@@ -1,0 +1,73 @@
+@use '../setup/variables' as *;
+@use '../setup/mixins' as *;
+
+// Scoped to this page so the shared Header/Footer only get the shadow here.
+// Header is position:fixed (out of flow), so this flex column only governs
+// the footer + page content, pinning the footer to the viewport bottom
+// when the order list is shorter than the page.
+body:has(.epicure-order-history) {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+
+  .epicure-header { box-shadow: 0 4px 12px $shadow-subtle; }
+  .epicure-footer { box-shadow: 0 -4px 12px $shadow-subtle; flex-shrink: 0; }
+}
+
+.epicure-order-history {
+  flex: 1;
+  background: $white;
+  min-height: 60vh;
+
+  &__inner {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 2rem 1.25rem 3rem;
+  }
+
+  &__title {
+    text-align: center;
+    font-size: 1.5rem;
+    font-weight: 500;
+    margin-bottom: 2.5rem;
+  }
+
+  &__empty { text-align: center; color: $gray-primary; }
+  &__loading { min-height: 200px; }
+  &__list { display: flex; flex-direction: column; }
+
+  @include for-normal-layout {
+    &__inner { padding: 3rem 2rem 4rem; }
+  }
+}
+
+.epicure-order-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr auto auto;
+  align-items: center;
+  gap: 1rem;
+  width: 100%;
+  background: none;
+  border: none;
+  border-bottom: 1px solid $border-light;
+  padding: 1.25rem 0.5rem;
+  cursor: pointer;
+  text-align: left;
+  font-family: inherit;
+  transition: background $duration-fast $ease-out;
+
+  &:hover { background: $cream-secondary; }
+
+  @include reduced-motion { transition: none; &:hover { background: none; } }
+
+  &__name { font-size: 1.125rem; font-weight: 700; color: $black-primary; }
+  &__date { color: $gray-primary; font-size: 1rem; }
+  &__total { white-space: nowrap; font-size: 1rem; }
+  &__shekel { width: 8px; height: 10px; vertical-align: middle; margin-right: 0.1rem; }
+  &__chevron { width: 16px; height: 16px; justify-self: end; }
+
+  @include for-normal-layout {
+    grid-template-columns: 1fr 1fr 120px 24px;
+    padding: 1.5rem 1rem;
+  }
+}

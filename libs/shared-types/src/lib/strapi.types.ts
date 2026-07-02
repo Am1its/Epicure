@@ -76,6 +76,35 @@ export interface SearchResults {
   cuisines: { label: string }[];
 }
 
+export interface OrderItem {
+  dishId: number;
+  name: string;
+  price: number;
+  quantity: number;
+  imageUrl: string;
+  selectedSide?: string;
+  selectedChanges: string[];
+}
+
+export interface Order {
+  id: number;
+  restaurantId: number;
+  restaurantName: string;
+  items: OrderItem[];
+  comment?: string;
+  total: number;
+  createdAt: string;
+}
+
+export interface CreateOrderRequest {
+  restaurantId: number;
+  restaurantName: string;
+  items: OrderItem[];
+  comment?: string;
+  total: number;
+  delivery: { name: string; address: string; phone: string };
+}
+
 export interface AuthUser {
   id: number;
   name: string;

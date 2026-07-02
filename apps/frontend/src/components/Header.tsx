@@ -2,7 +2,7 @@
 
 import { useState, useRef, useCallback, useEffect } from 'react';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { NavDrawer } from './NavDrawer';
 import { SearchOverlay } from './SearchOverlay';
 import { CartPanel } from './CartPanel';
@@ -16,7 +16,7 @@ import { useSearch } from '../hooks/useSearch';
 import { useClickOutside } from '../hooks/useClickOutside';
 import type { NavLink } from '@org/shared-types';
 import { strapiImageUrl } from '../lib/api';
-import { dispatchCuisineFilter, dispatchChefHighlight } from '../lib/events';
+import { dispatchCuisineFilter, dispatchChefHighlight, PENDING_NAV_KEY, OPEN_CART_EVENT } from '../lib/events';
 
 type ActivePanel = 'none' | 'drawer' | 'search' | 'cart' | 'signin' | 'signup' | 'userdropdown';
 
@@ -30,6 +30,7 @@ interface HeaderProps {
 export default function Header({ brandName, logoUrl, navLinks, footerLinks }: HeaderProps) {
   const [activePanel, setActivePanel] = useState<ActivePanel>('none');
   const pathname = usePathname();
+  const router = useRouter();
   const [searchQuery, setSearchQuery] = useState('');
   const { totalItems } = useCart();
   const { user } = useAuth();
@@ -62,6 +63,22 @@ export default function Header({ brandName, logoUrl, navLinks, footerLinks }: He
   function handleUserIconClick() {
     toggle(user ? 'userdropdown' : 'signin');
   }
+
+  function gatedNav(dest: string) {
+    setActivePanel('none');
+    if (user) {
+      router.push(dest);
+      return;
+    }
+    sessionStorage.setItem(PENDING_NAV_KEY, dest);
+    setActivePanel('signin');
+  }
+
+  useEffect(() => {
+    const handler = () => setActivePanel('cart');
+    window.addEventListener(OPEN_CART_EVENT, handler);
+    return () => window.removeEventListener(OPEN_CART_EVENT, handler);
+  }, []);
 
   return (
     <>
@@ -215,7 +232,7 @@ export default function Header({ brandName, logoUrl, navLinks, footerLinks }: He
             <button aria-label={TEXT.nav.cartAriaLabel} onClick={() => toggle('cart')}>
               <span className="epicure-nav__cart-wrap">
                 <img src="/icons/cart.svg" alt="" aria-hidden="true" width={22} height={22} />
-                {totalItems > 0 && (
+                {mounted && totalItems > 0 && (
                   <span className="epicure-nav__cart-badge" aria-label={`${totalItems} items in cart`}>
                     {totalItems}
                   </span>
@@ -228,7 +245,13 @@ export default function Header({ brandName, logoUrl, navLinks, footerLinks }: He
 
       {activePanel === 'drawer' && <NavDrawer onClose={() => setActivePanel('none')} navLinks={resolvedNavLinks} footerLinks={footerLinks} />}
       {activePanel === 'search' && <SearchOverlay onClose={() => setActivePanel('none')} />}
-      {activePanel === 'cart' && <CartPanel onClose={() => setActivePanel('none')} />}
+      {activePanel === 'cart' && (
+        <CartPanel
+          onClose={() => setActivePanel('none')}
+          onCheckout={() => gatedNav('/checkout')}
+          onOrderHistory={() => gatedNav('/orders')}
+        />
+      )}
       {activePanel === 'signin' && (
         <SignInModal
           onClose={() => setActivePanel('none')}

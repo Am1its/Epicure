@@ -9,9 +9,11 @@ import { CartFooter } from './cart-panel/CartFooter';
 
 interface CartPanelProps {
   onClose: () => void;
+  onCheckout: () => void;
+  onOrderHistory: () => void;
 }
 
-export function CartPanel({ onClose }: CartPanelProps) {
+export function CartPanel({ onClose, onCheckout, onOrderHistory }: CartPanelProps) {
   const { cartItems, restaurantName, totalPrice, totalItems, comment, setComment } = useCart();
 
   useEffect(() => {
@@ -61,7 +63,7 @@ export function CartPanel({ onClose }: CartPanelProps) {
             </div>
           </div>
         )}
-        <CartFooter totalPrice={totalPrice} hasItems={totalItems > 0} />
+        <CartFooter totalPrice={totalPrice} hasItems={totalItems > 0} onCheckout={onCheckout} onOrderHistory={onOrderHistory} />
       </div>
     </>
   );

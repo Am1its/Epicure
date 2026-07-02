@@ -1,7 +1,9 @@
 'use client';
 
 import { createContext, useContext, useState, useEffect, useRef, type ReactNode } from 'react';
+import { useRouter } from 'next/navigation';
 import { postApi, setAuthToken, setOnUnauthorized } from '../lib/api';
+import { PENDING_NAV_KEY } from '../lib/events';
 import type { AuthUser, AuthResponse } from '@org/shared-types';
 
 const AUTH_STORAGE_KEY = 'epicure_auth';
@@ -15,6 +17,7 @@ interface AuthContextValue extends AuthState {
   login: (email: string, password: string) => Promise<void>;
   register: (name: string, email: string, password: string) => Promise<void>;
   logout: () => void;
+  redirectPending: () => void;
 }
 
 const AuthContext = createContext<AuthContextValue | null>(null);
@@ -31,6 +34,7 @@ function isValidAuthState(val: unknown): val is AuthState {
 }
 
 export function AuthProvider({ children }: { children: ReactNode }) {
+  const router = useRouter();
   const [state, setState] = useState<AuthState>(() => {
     if (typeof window === 'undefined') return { user: null, token: null };
     const stored = localStorage.getItem(AUTH_STORAGE_KEY);
@@ -55,14 +59,25 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     localStorage.setItem(AUTH_STORAGE_KEY, JSON.stringify(next));
   }
 
+  function redirectPending() {
+    const pending = sessionStorage.getItem(PENDING_NAV_KEY);
+    if (pending) {
+      sessionStorage.removeItem(PENDING_NAV_KEY);
+      router.push(pending);
+    }
+  }
+
   async function login(email: string, password: string): Promise<void> {
     const response = await postApi<AuthResponse>('/api/auth/login', { email, password });
     persist({ user: response.user, token: response.jwt });
+    // Not calling redirectPending() here — CartContext's login effect decides:
+    // it defers navigation if there's a saved-cart conflict to resolve first.
   }
 
   async function register(name: string, email: string, password: string): Promise<void> {
     const response = await postApi<AuthResponse>('/api/auth/register', { name, email, password });
     persist({ user: response.user, token: response.jwt });
+    redirectPending();
   }
 
   function logout(): void {
@@ -80,7 +95,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, []);
 
   return (
-    <AuthContext.Provider value={{ ...state, login, register, logout }}>
+    <AuthContext.Provider value={{ ...state, login, register, logout, redirectPending }}>
       {children}
     </AuthContext.Provider>
   );

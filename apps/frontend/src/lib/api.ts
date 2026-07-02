@@ -1,4 +1,4 @@
-import type { Restaurant, SearchResults } from '@org/shared-types';
+import type { Restaurant, SearchResults, Order, CreateOrderRequest } from '@org/shared-types';
 
 export const BACKEND_URL = process.env['NEXT_PUBLIC_BACKEND_URL'] ?? 'http://localhost:3333';
 export const STRAPI_URL = process.env['NEXT_PUBLIC_STRAPI_URL'] ?? 'http://localhost:1337';
@@ -82,4 +82,24 @@ export function strapiImageUrl(url?: string): string {
   if (!url) return '/icons/logo.svg';
   if (url.startsWith('http')) return url;
   return `${STRAPI_URL}${url}`;
+}
+
+export async function createOrder(body: CreateOrderRequest): Promise<Order> {
+  const res = await fetch(`${BACKEND_URL}/api/orders`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...authHeaders() },
+    body: JSON.stringify(body),
+    cache: 'no-store',
+  });
+  if (!res.ok) throw new Error(await extractErrorMessage(res, '/api/orders'));
+  return res.json() as Promise<Order>;
+}
+
+export async function fetchOrders(): Promise<Order[]> {
+  const res = await fetch(`${BACKEND_URL}/api/orders`, {
+    cache: 'no-store',
+    headers: authHeaders(),
+  });
+  if (!res.ok) return [];
+  return res.json() as Promise<Order[]>;
 }

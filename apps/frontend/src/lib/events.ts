@@ -1,3 +1,10 @@
+export const PENDING_NAV_KEY = 'epicure_pending_nav';
+export const OPEN_CART_EVENT = 'epicure:open-cart';
+
+export function dispatchOpenCart(): void {
+  window.dispatchEvent(new CustomEvent(OPEN_CART_EVENT));
+}
+
 export const CUISINE_FILTER_EVENT = 'epicure:cuisine-filter';
 export const CHEF_HIGHLIGHT_EVENT = 'epicure:chef-highlight';
 export const PENDING_CUISINE_KEY = 'epicure_pending_cuisine_filter';
